@@ -5,8 +5,9 @@ import { SidebarTrigger } from './ui/sidebar'
 
 const Navbar = () => {
   return (
-    <div className='my-1 flex-grow '>
-      <div className='bg-slate-950 flex justify-between rounded h-14 items-center  '>
+    
+    
+      <div className='bg-slate-950 flex justify-between rounded h-14 items-center my-2 flex-grow   '>
         <div >
             <div className='flex  items-center  '>
                 <SidebarTrigger className='text-white'/>
@@ -23,7 +24,7 @@ const Navbar = () => {
             </div>
         </div>
       </div>
-    </div>
+    
   )
 }
 
