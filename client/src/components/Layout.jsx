@@ -4,7 +4,7 @@ import { AppSidebar } from "./ui/app-sidebar";
 import { Separator } from "@/components/ui/separator";
 import Navbar from "./Navbar";
 
-const Layout = ({ children }) => {
+const Layout = ({ children, pathname }) => {
   return (
     <SidebarProvider>
       
@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
         
           
       <main className="p-2 flex-grow">
-        <Navbar/>
+        <Navbar pathname={pathname}/>
         {children}
         </main>
       
