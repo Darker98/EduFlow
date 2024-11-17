@@ -5,21 +5,22 @@ import Navbar from "@/components/Navbar";
 import {User} from 'lucide-react'
 const HomePage = () => {
   return (
-    <div className="bg-slate-300">
+    <div  >
       <Layout>
       
-      <div className=" border flex justify-center  flex-wrap gap-10">
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        <HomeCards title={"Profile"} content={<User height={'9rem'} width={'9rem'}/>}/>
-        
+      <div className="  flex border justify-around flex-wrap gap-10">
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
+        <HomeCards title={"Profile"} content={<User height={'4rem'} width={'4rem'}/>}/>
   
         </div>  
       

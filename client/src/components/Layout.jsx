@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
         
           
       <main className="p-2 flex-grow">
-      <Navbar/>
+        <Navbar/>
         {children}
         </main>
       
