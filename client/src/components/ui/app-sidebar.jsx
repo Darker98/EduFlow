@@ -1,5 +1,6 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
+import { Calendar, Home, List, Scroll, Search, Settings, Library , User} from "lucide-react";
 import { NavLink } from "react-router-dom";
+import Navbar from "../Navbar";
 import {
   Sidebar,
   SidebarContent,
@@ -21,9 +22,9 @@ const items = [
     icon: Home,
   },
   {
-    title: "Inbox",
+    title: "Profile",
     url: "/",
-    icon: Inbox,
+    icon: User,
   },
   {
     title: "Calendar",
@@ -31,23 +32,23 @@ const items = [
     icon: Calendar,
   },
   {
-    title: "Search",
+    title: "Attendance",
     url: "/",
-    icon: Search,
+    icon: Scroll,
   },
  
   {
-    title: "Settings",
+    title: "Courses",
     url: "/",
-    icon: Settings,
+    icon: Library,
   }
 ];
 
 export function AppSidebar() {
   return (
 
-    <Sidebar variant='floating' collapsible='icon'>
-      
+    <div>
+    <Sidebar variant='floating' collapsible='icon' >
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-2xl font-bold text-black mb-10">
@@ -77,6 +78,8 @@ export function AppSidebar() {
           </p>
         </div>
       </SidebarFooter>
+    
     </Sidebar>
+    </div>
   );
 }
