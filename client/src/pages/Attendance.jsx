@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const studnets = [
   {
@@ -89,10 +90,16 @@ const studnets = [
   },
 ];
 
+const classes = [
+  { value: "cs101", label: "CS101" },
+  { value: "cs102", label: "CS102" },
+  { value: "cs103", label: "CS103" },
+  { value: "cs104", label: "CS104" },
+];
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState();
-  const {pathname} = useLocation();
+  const { pathname } = useLocation();
 
   return (
     <div>
@@ -102,29 +109,50 @@ const Attendance = () => {
           <div className=" my-5 rounded-lg p-3 text-center text-4xl font-bold bg-black text-white">
             <h1>Student Attendance</h1>
           </div>
+          <div className=" mb-3 w-[200px]  ">
 
-          <div className="border">
+          <Select >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Class" />
+            </SelectTrigger>
+            <SelectContent>
+            {classes.map((classItem) => (
+                <SelectItem value={classItem.value} key={classItem.value}>{classItem.label}</SelectItem>
+              ))}
+            </SelectContent>
+
+          </Select>
+            </div>
+          
+        <form>
+          <div className="">
             <Table>
               <TableCaption>List of students in the class.</TableCaption>
               <TableHeader>
                 <TableRow className="text-lg  ">
-                  <TableHead className="text-black font-bold">Student Id</TableHead>
-                  <TableHead className="text-black font-bold">Student Name</TableHead>
-                  <TableHead className="text-black font-bold">Class Id</TableHead>
-                  <TableHead className="text-black font-bold">Attendance</TableHead>
+                  <TableHead className="text-black font-bold">
+                    Student Id
+                  </TableHead>
+                  <TableHead className="text-black font-bold">
+                    Student Name
+                  </TableHead>
+                  <TableHead className="text-black font-bold">
+                    Class Id
+                  </TableHead>
+                  <TableHead className="text-black font-bold">
+                    Attendance
+                  </TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody >
+              <TableBody>
                 {studnets.map((student) => (
-                  <TableRow  key={student.classId}>
-                    <TableCell >
-                      {student.studentId}
-                    </TableCell>
+                  <TableRow key={student.classId}>
+                    <TableCell>{student.studentId}</TableCell>
                     <TableCell>{student.name}</TableCell>
                     <TableCell>{student.classId}</TableCell>
                     <TableCell className="text-right">
-                      <Select  >
-                        <SelectTrigger >
+                      <Select>
+                        <SelectTrigger>
                           <SelectValue placeholder="Attendance" />
                         </SelectTrigger>
                         <SelectContent>
@@ -136,9 +164,15 @@ const Attendance = () => {
                     </TableCell>
                   </TableRow>
                 ))}
+               
               </TableBody>
             </Table>
+            <div className=" flex justify-end ">
+            <Button>Submit</Button>
+          </div>  
           </div>
+         
+          </form>
         </div>
       </Layout>
     </div>
