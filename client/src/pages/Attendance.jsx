@@ -101,6 +101,10 @@ const Attendance = () => {
   const [attendance, setAttendance] = useState();
   const { pathname } = useLocation();
 
+  const handleAttendance = ()=>{
+
+  }
+
   return (
     <div>
       <Layout pathname={pathname}>
@@ -124,7 +128,7 @@ const Attendance = () => {
           </Select>
             </div>
           
-        <form>
+        <form onSubmit={handleAttendance}>
           <div className="">
             <Table>
               <TableCaption>List of students in the class.</TableCaption>
@@ -167,8 +171,8 @@ const Attendance = () => {
                
               </TableBody>
             </Table>
-            <div className=" flex justify-end ">
-            <Button>Submit</Button>
+            <div className=" flex my-5 justify-end ">
+            <Button className = 'w-[200px]'>Submit</Button>
           </div>  
           </div>
          

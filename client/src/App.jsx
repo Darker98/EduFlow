@@ -5,6 +5,7 @@ import SignUp from './pages/Signup'
 import NotFound from './pages/NotFound'
 import {Routes, Route} from 'react-router-dom'
 import Attendance from './pages/Attendance'
+import Results from './pages/Results'
 
 
 const App = () => {
@@ -15,6 +16,7 @@ const App = () => {
       <Route path='/login' element={<Login />} />
       <Route path='/signup' element={<SignUp />} />
       <Route path='/attendance' element={<Attendance />} />
+      <Route path ='/result' element={<Results />}/>
       <Route path='/*' element={<NotFound />} />
     </Routes>
     
