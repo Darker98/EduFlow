@@ -7,7 +7,7 @@ const ProfilePage = () => {
         <div>
             <Layout>
                 <div className="flex h-screen">
-                    <ProfileCard/>
+                    <ProfileCard fullname="Tom Cruise" username="tomcruise_" email="tomcruise1@gmail.com" role="Insructor"/>
                 </div>
             </Layout>
         </div>
