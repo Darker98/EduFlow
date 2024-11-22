@@ -1,4 +1,4 @@
-import { Calendar, Home, List, Scroll, Search, Settings, Library , User} from "lucide-react";
+import { Calendar, Home, List, Scroll, Search, Settings, Library , User, ListCheck} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import Navbar from "../Navbar";
 import {
@@ -33,7 +33,7 @@ const items = [
   },
   {
     title: "Attendance",
-    url: "/",
+    url: "/attendance",
     icon: Scroll,
   },
  
@@ -41,6 +41,11 @@ const items = [
     title: "Courses",
     url: "/",
     icon: Library,
+  },
+  {
+    title: "Result",
+    url: '/result',
+    icon: ListCheck
   }
 ];
 
