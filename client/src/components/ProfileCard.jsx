@@ -13,7 +13,7 @@ const DetailCard = ({ title, value }) => {
 const ProfileCard = ({ fullname, username, role, email }) => {
     return (
         <div className="w-full relative flex flex-col items-center">
-            <div className="w-full relative h-2/5 rounded-lg border border-neutral-200 m-2 flex">
+            <div className="w-full relative h-full rounded-lg border border-neutral-200 m-2 flex">
                 <div className="user-div p-5 flex justify-center items-center w-1/3">
                     <CircleUser height={'13rem'} width={'13rem'} />
                 </div>
