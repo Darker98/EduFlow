@@ -1,5 +1,6 @@
 import express from "express";
 import userRouter from "./server/routers/userRouter.js";
+import cors from "cors";
 
 
 const app= express();
@@ -8,8 +9,9 @@ const port=3000;
 
 //middleware
 app.use(express.json()); 
-
-
+app.use(cors({withCredentials:true, origin:'http://localhost:5173', allowedHeaders: 'Content-Type, Authorization', methods:'GET,HEAD,PUT,PATCH,POST,DELETE' }));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.use("/user",userRouter);
 

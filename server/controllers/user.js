@@ -1,5 +1,5 @@
 
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import Users from "../models/user.js";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
@@ -27,11 +27,18 @@ export const signup = async (req,res)=>{
 
         console.log(hashedPassword);
         
-         return res.status(201).send({message : 'User created successfully'});
+         return res.status(201).json({
+            success: true,
+            message:"The user was created succesfully",
+            newUser
+         });
 
     }
-    catch{
-        res.status(500).send();
+    catch(err){
+        res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
     }
 };
 
@@ -45,7 +52,9 @@ export const login = async (req,res)=> {
     //find user in the array
     const foundUser = Users.find(user => user.email === email);
     if(!foundUser){
-        return res.status(400).send({message : 'User not found'});
+        return res.status(400).json({
+            message: 'User not found'
+        });
     }
 
 
@@ -59,11 +68,14 @@ export const login = async (req,res)=> {
 
     //if the user is authneticated correctly, then an access token is generated
     const accessToken=jwt.sign({email: foundUser.email, name : foundUser.name}, process.env.ACCESS_TOKEN_SECRET, {expiresIn:'1h'});
-     res.status(200).json({ message: 'Login successful' , accessToken});
+     res.status(200).json({ success: true, message: 'Login successful' ,accessToken});
     }
 
-    catch{
-        res.status(500).send();
+    catch(error){
+        res.status(500).send({
+            success: false,
+            message: 'Internal server error'
+        });
     }
 
 };

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import {
@@ -16,21 +17,30 @@ import { Label } from "@/components/ui/label";
 
 function LoginForm() {
   const navigate = useNavigate();
-
-  const handleSignIn = async (e) =>{
-    e.preventDefault();
+  const { toast } = useToast();
+  const handleSignIn = async () =>{
     try{
   const res = await axios.post('http://localhost:3000/user/login', {
     email,
     password
-  }, {withCredentials: true});
+  });
   if(res.data.status){
     console.log(res.data.message);
+    toast({
+      title: res.data.message,
+      description: "Welcome back",
+      type: "success"
+    })
     navigate('/'); // Redirect to home page
   }
+
     }
     catch(err){
-      console.log(err);
+      toast({
+        title: err.response.data.message,
+        description: "Please try again",
+        variant: "destructive"
+      })
     }
   }
   
@@ -67,7 +77,7 @@ function LoginForm() {
             </div>
             <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
           </div>
-          <Button  type="submit" className="w-full" >
+          <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
             Login
           </Button>
           <Button variant="outline" className="w-full">
