@@ -1,4 +1,4 @@
-import { Calendar, Home, List, Scroll, Search, Settings, Library , User, ListCheck} from "lucide-react";
+import { Calendar, Home, List, Scroll, Search, Settings, Library , User, ListCheck, Grid2x2Check, Grid} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import Navbar from "../Navbar";
 import {
@@ -46,6 +46,11 @@ const items = [
     title: "Result",
     url: '/result',
     icon: ListCheck
+  },
+  {
+    title: "Room",
+    url: '/room',
+    icon: Grid2x2Check 
   }
 ];
 
