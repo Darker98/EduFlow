@@ -2,6 +2,14 @@ import React, { Profiler } from "react";
 import Layout from "../components/Layout";
 import HomeCards from "@/components/HomeCards";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import {useState} from 'react';
 import { Input } from "@/components/ui/input";
 import {
@@ -44,15 +52,18 @@ const HomePage = () => {
           <div className="flex justify-end">
           <TooltipProvider>
             <Tooltip>
-                <Popover >
-                  <PopoverTrigger>
+                <Dialog >
+                  <DialogTrigger>
               <TooltipTrigger>
                   <Button onClick = {handleButtonClick}>
                   <Plus />
                 </Button>
               </TooltipTrigger>
-                  </PopoverTrigger>
-                  <PopoverContent className= 'w-[500px]' >
+                  </DialogTrigger>
+                  <DialogContent className= 'w-[500px] ' >
+                    <DialogHeader>
+                      <DialogTitle className='text-xl font-bold'>Add Class</DialogTitle>
+                    </DialogHeader>
                     <div>
                       <form className="flex flex-col gap-10" >
 
@@ -77,8 +88,8 @@ const HomePage = () => {
                       </div>
                       </form>
                     </div>
-                    </PopoverContent>
-                </Popover>
+                    </DialogContent>
+                </Dialog>
               <TooltipContent>Click to add a new class</TooltipContent>
             </Tooltip>
           </TooltipProvider>

@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound'
 import {Routes, Route} from 'react-router-dom'
 import Attendance from './pages/Attendance'
 import Results from './pages/Results'
+import Classwork from './pages/Classwork'
 import Room from './pages/Room'
 
 
@@ -19,6 +20,7 @@ const App = () => {
       <Route path='/attendance' element={<Attendance />} />
       <Route path ='/result' element={<Results />}/>
       <Route path='/room' element={<Room />}/>
+      <Route path='/classwork' element={<Classwork />} />
       <Route path='/*' element={<NotFound />} />
     </Routes>
     
