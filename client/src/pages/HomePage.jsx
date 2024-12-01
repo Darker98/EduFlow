@@ -71,10 +71,10 @@ const HomePage = () => {
                         <Label>Class Name</Label>
                         <Input type="text" value={className} onChange={(e)=>setClassName(e.target.value)} />
                       </div>
-                      <div className="flex flex-col gap-4">
+                      {/* <div className="flex flex-col gap-4">
                         <Label>Room Number</Label>
                         <Input type="number" value={roomNumber} onChange= {(e)=>setRoomNumber(e.target.value)} />
-                      </div>
+                      </div> */}
                       <div className="flex flex-col gap-4">
                         <Label>Section</Label>
                         <Input type="text" value={section} onChange={(e)=>setSection(e.target.value)}/>
