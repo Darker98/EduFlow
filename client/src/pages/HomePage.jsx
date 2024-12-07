@@ -81,10 +81,10 @@ const HomePage = () => {
                       </div>
 
                       <div className="flex justify-between">
-                        <Button onClick={()=>navigate('/room')}>
-                          Add Class
-                        </Button>
                         <Button className='' onClick={(e)=>handleClear(e)}>Clear</Button>
+                        <Button onClick={()=>navigate('/room')}>
+                          Add Room
+                        </Button>
                       </div>
                       </form>
                     </div>
