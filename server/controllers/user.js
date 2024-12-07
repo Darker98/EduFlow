@@ -13,7 +13,7 @@ const saltRounds=10;
 export const signup = async (req,res)=>{
    
     try{
-        const { name, email, password } = req.body;
+        const { first_name, last_email, user_name, email, password } = req.body;
         const userExists= Users.some(user=> user.email===email);
         if(userExists){
             return res.status(400).send({message : 'You already have an account'});

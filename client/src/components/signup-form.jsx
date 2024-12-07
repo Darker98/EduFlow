@@ -18,6 +18,8 @@ const SignUp = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [username, setUsername] = useState();
+  const [first_name, setFirstName] = useState();
+  const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -50,7 +52,7 @@ const SignUp = () => {
   }
 
     return (
-        <Card className="mx-auto max-w-sm">
+        <Card className="mx-auto max-w-md shadow-lg">
           <CardHeader>
             <CardTitle className="text-4xl font-bold">Sign Up</CardTitle>
             <CardDescription>
@@ -60,7 +62,25 @@ const SignUp = () => {
           <CardContent>
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Name</Label>
+                <Label>First Name</Label>
+                <Input
+                  type="text"
+                  required
+                  value={first_name}
+                  onChange = {(e) => setFirstName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Last Name</Label>
+                <Input
+                  type="text"
+                  required
+                  value={last_name}
+                  onChange = {(e) => setLastName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Username</Label>
                 <Input
                   type="text"
                   required
