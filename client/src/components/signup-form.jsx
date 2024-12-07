@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast"
 import { useState } from 'react';
 import axios from 'axios';
 import {
@@ -13,7 +15,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 const SignUp = () => {
-
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [username, setUsername] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -21,12 +24,28 @@ const SignUp = () => {
   const handleSignUp = async ()=> {
     try{
       const res = await axios.post('http://localhost:3000/user/signup', {
-        
+        name: username,
+        email,
+        password
       })
 
+      if(res.data.success){
+        console.log(res.data.message);
+        toast({
+          title: res.data.message,
+          description: "You can now login to your account",
+          variant: "success",
+        })
+        navigate('/login');
+      }
+      
     }
     catch(err){
-      console.log(err)
+      toast({
+        title: err.response.data.message,
+        description: "Please try again",
+        variant: "destructive"
+      })
     }
   }
 
@@ -46,7 +65,7 @@ const SignUp = () => {
                   type="text"
                   required
                   value={username}
-                  onChange = {(e) => setEmail(e.target.value)}
+                  onChange = {(e) => setUsername(e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -68,7 +87,7 @@ const SignUp = () => {
                 onChange = {(e) => setPassword(e.target.value)}
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" onClick={()=>handleSignUp()}>
                 Sign Up
               </Button>
               <Button variant="outline" className="w-full">
