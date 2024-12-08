@@ -77,9 +77,14 @@ function LoginForm() {
             </div>
             <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
           </div>
+          <div className="flex gap-2">
           <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
-            Login
+            Login as Student
           </Button>
+          <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
+            Login as Instructor
+          </Button>
+          </div>
           <Button variant="outline" className="w-full">
             Login with Google
           </Button>
