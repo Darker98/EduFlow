@@ -1,12 +1,4 @@
-// import { createClient } from '@supabase/supabase-js';
-// import dotenv from "dotenv";
-// dotenv.config();
-
-// const supabaseUrl = process.env.CONNECTION_URL;
-// const supabaseKey = process.env.CONNECTION_STRING;
-// const supabase = createClient(supabaseUrl, supabaseKey);
-
-export const createProfile = async (profileData, role) => {
+export const createProfile = async (profileData, role, supabase) => {
     const { id, first_name, last_name, email, date_of_birth } = profileData;
 
     let tableName;
@@ -27,7 +19,7 @@ export const createProfile = async (profileData, role) => {
     return data;
 };
 
-export const getProfile = async (id, role) => {
+export const getProfile = async (id, role, supabase) => {
     let tableName;
     if (role === "student") {
         tableName = "student";
@@ -47,7 +39,7 @@ export const getProfile = async (id, role) => {
     return data;
 };
 
-export const updateProfile = async (profileData, role) => {
+export const updateProfile = async (profileData, role, supabase) => {
     const { id, first_name, last_name, email, date_of_birth } = profileData;
 
     let tableName;
@@ -61,7 +53,8 @@ export const updateProfile = async (profileData, role) => {
 
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
-        Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth })
+        Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : 
+            date_of_birth })
             .filter(([_, value]) => value != null)
     );
 
@@ -79,7 +72,7 @@ export const updateProfile = async (profileData, role) => {
     return data;
 };
 
-export const deleteProfile = async (id, role) => {
+export const deleteProfile = async (id, role, supabase) => {
     let tableName;
     if (role === "student") {
         tableName = "student";
@@ -102,7 +95,7 @@ export const deleteProfile = async (id, role) => {
 // const profileData = {
 //     id: "2a3743c6-e8b6-4a73-9096-7e64670bc600",
 //     first_name: "Zaid",
-//     last_name: "Sidd",
+//     last_name: "",
 //     email: "someone@example.com",
 //     date_of_birth: "2000-10-27",
 // };
