@@ -25,9 +25,6 @@ import {
 const SignUp = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [username, setUsername] = useState();
-  const [first_name, setFirstName] = useState();
-  const [last_name, setLastName] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
   const [role, setRole] = useState();
@@ -35,12 +32,9 @@ const SignUp = () => {
   const handleSignUp = async () => {
     try {
       const res = await axios.post("http://localhost:3000/user/signup", {
-        first_name,
-        last_name,
-        username,
-        role,
         email,
         password,
+        role,
       });
 
       if (res.data.success) {
@@ -69,33 +63,7 @@ const SignUp = () => {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          <div className="grid gap-2">
-            <Label>First Name</Label>
-            <Input
-              type="text"
-              required
-              value={first_name}
-              onChange={(e) => setFirstName(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>Last Name</Label>
-            <Input
-              type="text"
-              required
-              value={last_name}
-              onChange={(e) => setLastName(e.target.value)}
-            />
-          </div>
-          <div className="grid gap-2">
-            <Label>Username</Label>
-            <Input
-              type="text"
-              required
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-          </div>
+          
           <div className="grid gap-2">
             <Label>Select Role</Label>
             <select value={role} onChange={(e) => setRole(e.target.value)} className="border h-11 rounded-lg">
