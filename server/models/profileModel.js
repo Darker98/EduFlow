@@ -1,5 +1,7 @@
-export const createProfile = async (profileData, role, supabase) => {
-    const { id, first_name, last_name, email, date_of_birth } = profileData;
+import supabase from './createClient.js';
+
+export const createProfile = async (profileData, role) => {
+    const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
 
     let tableName;
     if (role == "student") {
@@ -12,14 +14,14 @@ export const createProfile = async (profileData, role, supabase) => {
 
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
         .select();
 
     if (error) throw new Error(error.message);
     return data;
 };
 
-export const getProfile = async (id, role, supabase) => {
+export const getProfile = async (id, role) => {
     let tableName;
     if (role === "student") {
         tableName = "student";
@@ -39,8 +41,8 @@ export const getProfile = async (id, role, supabase) => {
     return data;
 };
 
-export const updateProfile = async (profileData, role, supabase) => {
-    const { id, first_name, last_name, email, date_of_birth } = profileData;
+export const updateProfile = async (profileData, role) => {
+    const { id, first_name, user_name, last_name, email, date_of_birth } = profileData;
 
     let tableName;
     if (role === "student") {
@@ -54,7 +56,7 @@ export const updateProfile = async (profileData, role, supabase) => {
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
         Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : 
-            date_of_birth })
+            date_of_birth, user_name : user_name })
             .filter(([_, value]) => value != null)
     );
 
@@ -72,7 +74,7 @@ export const updateProfile = async (profileData, role, supabase) => {
     return data;
 };
 
-export const deleteProfile = async (id, role, supabase) => {
+export const deleteProfile = async (id, role) => {
     let tableName;
     if (role === "student") {
         tableName = "student";

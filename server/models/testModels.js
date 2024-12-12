@@ -1,12 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import supabase from './createClient.js';
 import { createProfile, updateProfile, getProfile, deleteProfile } from './profileModel.js';
 import { login, signup } from './authModel.js';
-import dotenv from 'dotenv';
-dotenv.config();
-
-const supabaseUrl = process.env.CONNECTION_URL;
-const supabaseKey = process.env.CONNECTION_STRING;
-const supabase = createClient(supabaseUrl, supabaseKey);
 
 const email = "someone@example.com";
 const credentials = { email: email, password: "pass123" };

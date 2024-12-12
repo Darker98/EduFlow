@@ -1,4 +1,6 @@
-export const login = async (credentials, supabase) => {
+import supabase from './createClient.js'; 
+
+export const login = async (credentials) => {
     const { email, password } = credentials;
 
     // Sign in using email and password
@@ -15,7 +17,7 @@ export const login = async (credentials, supabase) => {
     return { userId };
 }
 
-export const signup = async (credentials, supabase) => {
+export const signup = async (credentials) => {
     const { email, password } = credentials;
 
     // Signup using email and password
