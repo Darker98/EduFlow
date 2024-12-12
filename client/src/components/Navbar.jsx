@@ -1,16 +1,19 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Info, Bell } from "lucide-react";
 import { SidebarTrigger } from "./ui/sidebar";
 
 const Navbar = ({ pathname }) => {
+
+  const location = useLocation();
+
   return (
     <div className="bg-slate-950 flex justify-between rounded h-14 items-center my-2  ">
       <div>
         <div className="flex  items-center  ">
           <SidebarTrigger className="text-white" />
           <h1 className="font-bold text-2xl text-white">
-            {pathname
+            {location.pathname
               .split("/")
               .filter((segment) => segment)
               .map(
