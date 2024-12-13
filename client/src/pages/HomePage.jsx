@@ -1,6 +1,7 @@
 import React, { Profiler } from "react";
 import Layout from "../components/Layout";
 import HomeCards from "@/components/HomeCards";
+import { CircleUser } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -9,14 +10,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import {useState} from 'react';
+} from "@/components/ui/dialog";
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from "@/components/ui/popover";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Label, Pie, PieChart } from "recharts";
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import {
@@ -25,88 +32,137 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Label } from "@/components/ui/label";
 import Navbar from "@/components/Navbar";
 import { User } from "lucide-react";
+import ProfileCard from "@/components/ProfileCard";
+import RoomCards from "@/components/RoomCards";
+
+const chartData = [
+  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
+  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
+  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
+  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
+  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+];
+
+const chartConfig = {
+  visitors: {
+    label: "Visitors",
+  },
+  chrome: {
+    label: "Chrome",
+    color: "hsl(var(--chart-1))",
+  },
+  safari: {
+    label: "Safari",
+    color: "hsl(var(--chart-2))",
+  },
+  firefox: {
+    label: "Firefox",
+    color: "hsl(var(--chart-3))",
+  },
+  edge: {
+    label: "Edge",
+    color: "hsl(var(--chart-4))",
+  },
+  other: {
+    label: "Other",
+    color: "hsl(var(--chart-5))",
+  },
+};
+
 const HomePage = () => {
-
-  const [className, setClassName] = useState('');
+  const [className, setClassName] = useState("");
   const [roomNumber, setRoomNumber] = useState();
-  const [section, setSection] = useState('');
+  const [section, setSection] = useState("");
   const navigate = useNavigate();
-  const handleButtonClick = ()=>{
-    
-  }
+  const handleButtonClick = () => {};
 
-  const handleClear = (e)=>{
+  const handleClear = (e) => {
     e.preventDefault();
-    setClassName('');
-    setRoomNumber('');
-    setSection('');
-  }
+    setClassName("");
+    setRoomNumber("");
+    setSection("");
+  };
 
   return (
-    <div >
+    <div>
       <Layout pathname={"Home"}>
         <div className="  ">
           <div className="flex justify-end">
-          <TooltipProvider>
-            <Tooltip>
-                <Dialog >
+            <TooltipProvider>
+              <Tooltip>
+                <Dialog>
                   <DialogTrigger>
-              <TooltipTrigger>
-                  <Button onClick = {handleButtonClick}>
-                  <Plus />
-                </Button>
-              </TooltipTrigger>
+                    <TooltipTrigger>
+                      <Button onClick={handleButtonClick}>
+                        <Plus />
+                      </Button>
+                    </TooltipTrigger>
                   </DialogTrigger>
-                  <DialogContent className= 'w-[500px] ' >
+                  <DialogContent className="w-[500px] ">
                     <DialogHeader>
-                      <DialogTitle className='text-xl font-bold'>Add Class</DialogTitle>
+                      <DialogTitle className="text-xl font-bold">
+                        Add Class
+                      </DialogTitle>
                     </DialogHeader>
                     <div>
-                      <form className="flex flex-col gap-10" >
+                      <form className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-4">
+                          <Label>Class Name</Label>
+                          <Input
+                            type="text"
+                            value={className}
+                            onChange={(e) => setClassName(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Section</Label>
+                          <Input
+                            type="text"
+                            value={section}
+                            onChange={(e) => setSection(e.target.value)}
+                          />
+                        </div>
 
-                      <div className="flex flex-col gap-4">
-                        <Label>Class Name</Label>
-                        <Input type="text" value={className} onChange={(e)=>setClassName(e.target.value)} />
-                      </div>
-                      {/* <div className="flex flex-col gap-4">
-                        <Label>Room Number</Label>
-                        <Input type="number" value={roomNumber} onChange= {(e)=>setRoomNumber(e.target.value)} />
-                      </div> */}
-                      <div className="flex flex-col gap-4">
-                        <Label>Section</Label>
-                        <Input type="text" value={section} onChange={(e)=>setSection(e.target.value)}/>
-                      </div>
-
-                      <div className="flex justify-between">
-                        <Button className='' onClick={(e)=>handleClear(e)}>Clear</Button>
-                        <Button onClick={()=>navigate('/room')}>
-                          Add Room
-                        </Button>
-                      </div>
+                        <div className="flex justify-between">
+                          <Button className="" onClick={(e) => handleClear(e)}>
+                            Clear
+                          </Button>
+                          <Button onClick={() => navigate("/room")}>
+                            Add Room
+                          </Button>
+                        </div>
                       </form>
                     </div>
-                    </DialogContent>
+                  </DialogContent>
                 </Dialog>
-              <TooltipContent>Click to add a new class</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+                <TooltipContent>Click to add a new class</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
-          <div className="flex gap-4 justify-center flex-wrap">
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
-          <HomeCards content={<User height={'6rem'} width={'6rem'}/>} title={"Profile"} />
+          <div className="flex gap-4 my-3 flex-wrap border">
+            <div className=" flex p-12 gap-10  text-2xl">
+              <div className=" flex gap-10 hover:cursor-pointer transition p-10">
+                <div className="border rounded-full shadow-lg">
+                  <CircleUser height={"13rem"} width={"13rem"} onClick={()=>navigate('/profile')} />
+                </div>
+                <div className="flex justify-center flex-col gap-6 font-semibold">
+                  <p>Musa Riaz</p>
+                  <p>musariaz</p>
+                  <p>13123kjansfajsn</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex p-6 border justify-center flex-wrap gap-4">
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+            </div>
           </div>
         </div>
       </Layout>
