@@ -1,23 +1,31 @@
-import express from "express";
-import userRouter from "./server/routers/userRouter.js";
-import cors from "cors";
+import express from 'express';
+import dotenv from 'dotenv';
+import authRouter from './server/routers/authRouter.js';
+import profileRouter from './server/routers/profileRouter.js';
 
+// Initialize environment variables
+dotenv.config();
 
-const app= express();
-const port=3000;
+// Initialize the app
+const app = express();
 
-
-//middleware
-app.use(express.json()); 
-app.use(cors({withCredentials:true, origin:'http://localhost:5173', allowedHeaders: 'Content-Type, Authorization', methods:'GET,HEAD,PUT,PATCH,POST,DELETE' }));
-app.use(express.urlencoded({ extended: true }));
+// Middleware for parsing JSON requests
 app.use(express.json());
 
-app.use("/user",userRouter);
+// Base route for authentication
+app.use('/auth', authRouter);
 
+// Base route for profiles
+app.use('/profile', profileRouter);
 
-
-app.listen(port,()=>{
-    console.log(`Server running on port ${port}`);
- 
+// Default route for unknown endpoints
+app.use((req, res) => {
+    res.status(404).json({ success: false, message: 'Route not found' });
 });
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
