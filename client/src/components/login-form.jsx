@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
 import {setUserId} from "../redux/features/userSlice"
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 
 function LoginForm() {
   const navigate = useNavigate();
@@ -23,11 +24,12 @@ function LoginForm() {
   const selector = useSelector((state) => state.user_id);
   const handleSignIn = async () =>{
     try{
+  dispatch(setLoading());
   const res = await axios.post('http://localhost:3000/auth/login', {
     email,
     password
   });
-  console.log(res?.data?.data?.userId);
+  dispatch(hideLoading());
   if(res.data.success){
     toast({
       title: res?.data?.message,
@@ -40,6 +42,7 @@ function LoginForm() {
 
     }
     catch(err){
+      dispatch(hideLoading());
       toast({
         title: err.response.data.message,
         description: "Please try again",

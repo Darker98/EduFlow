@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import axios from "axios";
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import { useDispatch } from "react-redux";
 import {
   Card,
   CardContent,
@@ -18,6 +20,7 @@ import { Label } from "@/components/ui/label";
 
 const SignUp = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { toast } = useToast();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
@@ -25,12 +28,13 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
+      dispatch(setLoading());
       const res = await axios.post("http://localhost:3000/auth/signup", {
         email,
         password,
         role,
       });
-
+      dispatch(hideLoading());
       if (res.data.success) {
         console.log(res.data.message);
         toast({
@@ -41,6 +45,7 @@ const SignUp = () => {
         navigate("/login");
       }
     } catch (err) {
+      dispatch(hideLoading());
       toast({
         title: err.response.data.message,
         description: "Please try again",

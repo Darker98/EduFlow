@@ -5,6 +5,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import {setLoading, hideLoading} from "@/redux/features/loadingSlice";
 import { useToast } from "@/hooks/use-toast";
 import { setUserId, setUserData } from "@/redux/features/userSlice";
 const Navbar = ({ pathname }) => {
@@ -14,8 +15,9 @@ const Navbar = ({ pathname }) => {
   const { toast } = useToast();
   const handleLogout = async() => {
   try{
-    
+    dispatch(setLoading());
     const res = await axios.get("http://localhost:3000/auth/logout");
+    dispatch(hideLoading());
     if(res.data.success){
       console.log(res.data)
       dispatch(setUserId(null));
@@ -29,6 +31,7 @@ const Navbar = ({ pathname }) => {
     }
   }
   catch(err){
+    dispatch(hideLoading());
     console.log(err);
     toast({
       title: "Error",

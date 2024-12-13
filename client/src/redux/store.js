@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./features/userSlice";
+import { loadingSlice } from "./features/loadingSlice";
 import { combineReducers } from "redux";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
 const rootReducer = combineReducers ({
-    user: userSlice.reducer
+    user: userSlice.reducer,
+    loading: loadingSlice.reducer
 })
 
 const persistConfig = {
