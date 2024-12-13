@@ -1,4 +1,4 @@
-import { login, signup } from '../models/authModel.js';
+import { login, signup, logout } from '../models/authModel.js';
 
 export const handleLogin = async (req, res) => {
     try {
@@ -19,3 +19,12 @@ export const handleSignup = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+export const handleLogout = async (req, res) => {
+    try {
+        await logout();
+        res.status(200).json({ success: true, message:"User logged out successfully"});
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
