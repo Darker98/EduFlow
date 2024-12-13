@@ -30,6 +30,12 @@ export const signup = async (credentials) => {
     return data;
 }
 
+export const logout = async () => {
+  let { error } = await supabase.auth.signOut();
+
+  if (error) throw new Error(error.message);
+}
+
 
 // Example usage
 // const credentials = { email: "someone@example.com", password: "pass123" };
