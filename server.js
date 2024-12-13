@@ -3,6 +3,7 @@ import userRouter from "./server/routers/userRouter.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
+//Intialize dotenv
 dotenv.config({path: "./.env"});
 
 const app= express();
@@ -15,11 +16,20 @@ app.use(cors({credentials:true, origin:'http://localhost:5173', allowedHeaders: 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use("/user",userRouter);
+// Base route for authentication
+app.use('/auth', authRouter);
 
+// Base route for profiles
+app.use('/profile', profileRouter);
 
-
-app.listen(port,()=>{
-    console.log(`Server running on port ${port}`);
- 
+// Default route for unknown endpoints
+app.use((req, res) => {
+    res.status(404).json({ success: false, message: 'Route not found' });
 });
+
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
+
