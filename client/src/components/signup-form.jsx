@@ -14,13 +14,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -31,7 +25,7 @@ const SignUp = () => {
 
   const handleSignUp = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/user/signup", {
+      const res = await axios.post("http://localhost:3000/auth/signup", {
         email,
         password,
         role,

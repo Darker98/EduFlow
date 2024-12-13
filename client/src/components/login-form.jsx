@@ -13,25 +13,29 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useDispatch, useSelector } from "react-redux";
+import {setUserId} from "../redux/features/userSlice"
 
 function LoginForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const dispatch = useDispatch();
+  const selector = useSelector((state) => state.user_id);
   const handleSignIn = async () =>{
     try{
-  const res = await axios.post('http://localhost:3000/user/login', {
+  const res = await axios.post('http://localhost:3000/auth/login', {
     email,
     password
   });
-  if(res.data.status){
-    console.log(res.data.message);
+  console.log(res?.data?.data?.userId);
+  if(res.data.success){
     toast({
-      title: res.data.message,
+      title: res?.data?.message,
       description: "Welcome back",
       type: "success"
     })
-    navigate('/'); // Redirect to home page
+    dispatch(setUserId(res?.data?.data?.userId));
+    navigate('/');
   }
 
     }
@@ -79,10 +83,7 @@ function LoginForm() {
           </div>
           <div className="flex gap-2">
           <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
-            Login as Student
-          </Button>
-          <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
-            Login as Instructor
+            Login 
           </Button>
           </div>
           <Button variant="outline" className="w-full">

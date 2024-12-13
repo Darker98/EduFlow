@@ -1,5 +1,7 @@
 import express from "express";
 import userRouter from "./server/routers/userRouter.js";
+import authRouter from "./server/routers/authRouter.js";
+import profileRouter from "./server/routers/profileRouter.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
