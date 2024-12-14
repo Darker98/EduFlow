@@ -41,23 +41,13 @@ const Navbar = ({ pathname }) => {
   }
   }
 
-  const location = useLocation();
-
   return (
     <div className="bg-slate-950 flex justify-between rounded h-14 items-center my-2  ">
       <div>
-        <div className="flex  items-center  ">
+        <div className="flex gap-4 items-center  ">
           <SidebarTrigger className="text-white" />
           <h1 className="font-bold text-2xl text-white">
-            {location.pathname
-              .split("/")
-              .filter((segment) => segment)
-              .map(
-                (segment) =>
-                  segment.charAt(0).toUpperCase() +
-                  segment.slice(1).toLowerCase()
-              )
-              .join(" ")}
+            {pathname}
           </h1>
         </div>
       </div>

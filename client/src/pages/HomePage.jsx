@@ -1,7 +1,8 @@
 import React, { Profiler } from "react";
 import Layout from "../components/Layout";
-import HomeCards from "@/components/HomeCards";
-import { CircleUser } from "lucide-react";
+import { CircleUser, Pi } from "lucide-react";
+import { Label } from "@radix-ui/react-label";
+import { Pie, PieChart } from "recharts";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,11 +20,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import {
+  
   ChartContainer,
-  ChartTooltip,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltipContent,
-} from "@/components/ui/chart";
-import { Label, Pie, PieChart } from "recharts";
+  ChartTooltip
+} from "@/components/ui/chart"
+
 import { useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
 import {
@@ -36,13 +40,15 @@ import Navbar from "@/components/Navbar";
 import { User } from "lucide-react";
 import ProfileCard from "@/components/ProfileCard";
 import RoomCards from "@/components/RoomCards";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSelector } from "react-redux";
 
 const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-  { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-  { browser: "other", visitors: 190, fill: "var(--color-other)" },
+  { name: "Chrome", visitors: 275 },
+  { name: "Safari", visitors: 200 },
+  { name: "Firefox", visitors: 287 },
+  { name: "Edge", visitors: 173 },
+  { name: "Other", visitors: 190 },
 ];
 
 const chartConfig = {
@@ -72,6 +78,7 @@ const chartConfig = {
 };
 
 const HomePage = () => {
+  const { user_data} = useSelector((state) => state.user)
   const [className, setClassName] = useState("");
   const [roomNumber, setRoomNumber] = useState();
   const [section, setSection] = useState("");
@@ -141,11 +148,15 @@ const HomePage = () => {
               </Tooltip>
             </TooltipProvider>
           </div>
-          <div className="flex gap-4 my-3 flex-wrap border">
-            <div className=" flex p-12 gap-10  text-2xl">
-              <div className=" flex gap-10 hover:cursor-pointer transition p-10">
-                <div className="border rounded-full shadow-lg">
-                  <CircleUser height={"13rem"} width={"13rem"} onClick={()=>navigate('/profile')} />
+          <div className="flex border rounded-lg gap-4 my-3 flex-wrap ">
+            <div className=" flex w-full justify-between p-12 gap-10  text-2xl">
+              <div className=" flex items-center gap-10 hover:cursor-pointer transition p-10">
+                <div className="border flex h-[13rem] w-[13rem] rounded-full shadow-lg">
+                  <CircleUser
+                    height={"13rem"}
+                    width={"13rem"}
+                    onClick={() => navigate("/profile")}
+                  />
                 </div>
                 <div className="flex justify-center flex-col gap-6 font-semibold">
                   <p>Musa Riaz</p>
@@ -153,9 +164,40 @@ const HomePage = () => {
                   <p>13123kjansfajsn</p>
                 </div>
               </div>
+              {user_data?.role === "student" ? (
+                <Card className="border-hidden ">  
+                <CardHeader>
+                  <CardTitle className="text-center">Attendance Graph</CardTitle>
+                </CardHeader>
+                <CardContent>
+                <ChartContainer
+                  config={chartConfig}
+                  className="min-h-[300px] w-full "
+                >
+                  <PieChart data={chartData}>
+                    <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />}/>
+                    <Pie
+                      data={chartData}
+                      dataKey="visitors"
+                      nameKey="name"
+                      cx="50%"
+                      cy="50%"
+                      label
+                    />
+                  </PieChart>
+                </ChartContainer>
+                </CardContent>
+                <CardFooter className="flex justify-center ">
+                  <div>
+                    Attendance this month
+                  </div>
+                </CardFooter>
+              </Card>
+              ) : null}
+              
             </div>
 
-            <div className="flex p-6 border justify-center flex-wrap gap-4">
+            <div className="flex p-6  justify-center flex-wrap gap-4">
               <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
               <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
               <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
