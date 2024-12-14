@@ -29,7 +29,7 @@ const Navbar = ({ pathname }) => {
         variant:"success"
       });
       navigate("/login");
-      window.location.reload();
+    
     }
   }
   catch(err){

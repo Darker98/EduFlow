@@ -4,7 +4,7 @@ import CreateProfileForm from "../components/CreateProfileForm";
 const EditProfilePage = () => {
     return (
         <div>
-            <Layout>
+            <Layout pathname={"Create Profile"}>
                 <div className="flex h-screen">
                     <CreateProfileForm />
                 </div>
