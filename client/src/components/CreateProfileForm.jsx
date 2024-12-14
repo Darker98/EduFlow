@@ -4,14 +4,33 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-
+import { useToast } from '@/hooks/use-toast'
+import { useDispatch, useSelector } from 'react-redux'
+import { setLoading, hideLoading } from '@/redux/features/loadingSlice'
+import { setUserData } from '@/redux/features/userSlice'
+import {
+    Select,
+    SelectContent,
+    SelectGroup,
+    SelectItem,
+    SelectLabel,
+    SelectTrigger,
+    SelectValue,
+  } from "@/components/ui/select"
+import axios from 'axios'
 export default function EditProfilePage() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const {toast} = useToast();
+    const {user_id} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+
+
     const [username, setUsername] = useState('')
-    const [email, setEmail] = useState('john.doe@example.com')
+    const [email, setEmail] = useState('')
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
     const [dateOfBirth, setDateOfBirth] = useState('')
+    const [role, setRole] = useState('student')
     const [profilePicture, setProfilePicture] = useState(null)
     const [profilePicturePreview, setProfilePicturePreview] = useState(null)
 
@@ -28,21 +47,43 @@ export default function EditProfilePage() {
         setProfilePicturePreview(null);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit =async (e) => {
         e.preventDefault();
-
-        // Have to impplement
-        const formData = new FormData();
-        formData.append('username', username);
-        formData.append('email', email);
-        formData.append('firstName', firstName);
-        formData.append('lastName', lastName);
-        formData.append('dateOfBirth', dateOfBirth);
-        if (profilePicture) {
-            formData.append('profilePicture', profilePicture);
+    try{
+        dispatch(setLoading());
+        const res = await axios.post("http://localhost:3000/profile/create", {
+            id: user_id,
+            user_name: username,
+            email,
+            first_name: firstName,
+            last_name: lastName,
+            date_of_birth: dateOfBirth,
+            pfp_url: profilePicture,
+            role: role
+        }, 
+        );
+        dispatch(hideLoading());
+        if(res.data.success){
+            toast({
+                title:"Profile Created",
+                variant:"success"
+            });
+            console.log(res.data)
+            dispatch(setUserData(res.data.data[0]));
+            navigate('/home')
         }
-        console.log('Form submitted:', Object.fromEntries(formData));
-        navigate('/profile');
+     
+    }
+    catch(err){
+        dispatch(hideLoading())
+        console.log(err)
+        toast({
+            title:"Error",
+            description:err.response.data.message,
+            variant:"destructive"
+        });
+    }
+    
     };
 
 
@@ -138,7 +179,14 @@ export default function EditProfilePage() {
                                     onChange={(e) => setDateOfBirth(e.target.value)}
                                 />
                             </div>
-                            <Button type="submit" className="w-full">
+                            <div className="space-y-2">
+                                <Label>Select Role</Label>
+                                <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full p-2 border border-300 rounded-md">
+                                    <option value="student">Student</option>
+                                    <option value="instructor">Instructor</option> 
+                                </select>
+                            </div>
+                            <Button type ="submit" className="w-full">
                                 Save Changes
                             </Button>
                         </form>

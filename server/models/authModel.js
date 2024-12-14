@@ -20,7 +20,7 @@ export const login = async (credentials) => {
 
 if(student?.data !== null){
   console.log(student)
-  return {user_data:student, role: "student"};
+  return {...student.data, role: "student"};
 }
 
 const instructor = await supabase
@@ -31,7 +31,7 @@ const instructor = await supabase
 
 if(instructor?.data !== null){
   console.log(instructor)
-  return {user_data:instructor, role: "instructor"};
+  return {...instructor.data , role: "instructor"};
 }
 
     // Retrieve and return the user ID
