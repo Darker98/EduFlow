@@ -18,7 +18,7 @@ export const login = async (credentials) => {
     .eq('id', data.user?.id)
     .single()
 
-if(student){
+if(student?.data !== null){
   console.log(student)
   return {user_data:student, role: "student"};
 }
@@ -29,7 +29,7 @@ const instructor = await supabase
 .eq('id', data.user?.id)
 .single()
 
-if(instructor){
+if(instructor?.data !== null){
   console.log(instructor)
   return {user_data:instructor, role: "instructor"};
 }

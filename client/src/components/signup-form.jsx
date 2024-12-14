@@ -24,7 +24,7 @@ const SignUp = () => {
   const { toast } = useToast();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  const [role, setRole] = useState();
+
 
   const handleSignUp = async () => {
     try {
@@ -32,7 +32,6 @@ const SignUp = () => {
       const res = await axios.post("http://localhost:3000/auth/signup", {
         email,
         password,
-        role,
       });
       dispatch(hideLoading());
       if (res.data.success) {
@@ -62,14 +61,6 @@ const SignUp = () => {
       </CardHeader>
       <CardContent>
         <div className="grid gap-4">
-          
-          <div className="grid gap-2">
-            <Label>Select Role</Label>
-            <select value={role} onChange={(e) => setRole(e.target.value)} className="border h-11 rounded-lg">
-              <option value="student">Student</option>
-              <option value="instructor">Instructor</option>
-            </select>
-          </div>
           <div className="grid gap-2">
             <div className="flex items-center">
               <Label htmlFor="password">Email</Label>

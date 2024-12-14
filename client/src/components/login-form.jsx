@@ -42,7 +42,7 @@ function LoginForm() {
       navigate('/home');
     }
     else{
-      navigate('/profile');
+      navigate('/create/profile');
     }
   }
 
