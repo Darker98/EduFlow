@@ -7,11 +7,11 @@ import { Label } from "@/components/ui/label"
 
 export default function EditProfilePage() {
     const navigate = useNavigate()
-    const [username, setUsername] = useState('johndoe123')
+    const [username, setUsername] = useState('')
     const [email, setEmail] = useState('john.doe@example.com')
-    const [firstName, setFirstName] = useState('John')
-    const [lastName, setLastName] = useState('Doe')
-    const [dateOfBirth, setDateOfBirth] = useState('1995-05-15')
+    const [firstName, setFirstName] = useState('')
+    const [lastName, setLastName] = useState('')
+    const [dateOfBirth, setDateOfBirth] = useState('')
     const [profilePicture, setProfilePicture] = useState(null)
     const [profilePicturePreview, setProfilePicturePreview] = useState(null)
 
@@ -51,7 +51,7 @@ export default function EditProfilePage() {
             <main className="container mx-auto px-4 py-8">
                 <Card className="w-full max-w-2xl mx-auto">
                     <CardHeader className="pb-6">
-                        <CardTitle className="text-2xl font-semibold">Update Your Information</CardTitle>
+                        <CardTitle className="text-2xl font-semibold">Create Your Profile</CardTitle>
                     </CardHeader>
                     <CardContent>
                         <form onSubmit={handleSubmit} className="space-y-6">
@@ -136,7 +136,6 @@ export default function EditProfilePage() {
                                     type="date"
                                     value={dateOfBirth}
                                     onChange={(e) => setDateOfBirth(e.target.value)}
-                                    required
                                 />
                             </div>
                             <Button type="submit" className="w-full">

@@ -4,6 +4,7 @@ import Login from './pages/Login'
 import SignUp from './pages/Signup'
 import ProfilePage from './pages/ProfilePage'
 import EditProfilePage from './pages/EditProfilePage'
+import CreateProfilePage from './pages/CreateProfilePage'
 import NotFound from './pages/NotFound'
 import {Routes, Route} from 'react-router-dom'
 import Attendance from './pages/Attendance'
@@ -18,7 +19,8 @@ const App = () => {
     <Routes>
       <Route path='/' element={<HomePage />} />
       <Route path='/profile' element={<ProfilePage />} />
-      <Route path='/edit-profile' element={<EditProfilePage />} />
+      <Route path='/edit/profile' element={<EditProfilePage />} />
+      <Route path='/create/profile' element={<CreateProfilePage />} />
       <Route path='/login' element={<Login />} />
       <Route path='/signup' element={<SignUp />} />
       <Route path='/room' element={<Room />} />
