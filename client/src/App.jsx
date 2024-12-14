@@ -5,7 +5,7 @@ import SignUp from "./pages/Signup";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import NotFound from "./pages/NotFound";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Attendance from "./pages/Attendance";
 import Results from "./pages/Results";
 import Classwork from "./pages/Classwork";
@@ -21,7 +21,8 @@ const App = () => {
         <Spinner />
       ) : (
         <Routes>
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<Navigate to='/login' />} />
+          <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/edit-profile" element={<EditProfilePage />} />
           <Route path="/login" element={<Login />} />

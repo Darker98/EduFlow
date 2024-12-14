@@ -12,6 +12,7 @@ const Navbar = ({ pathname }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user_id } = useSelector((state) => state.user);
+  const {user_data} = useSelector((state) => state.user);
   const { toast } = useToast();
   const handleLogout = async() => {
   try{
@@ -28,6 +29,7 @@ const Navbar = ({ pathname }) => {
         variant:"success"
       });
       navigate("/login");
+      window.location.reload();
     }
   }
   catch(err){
@@ -54,7 +56,7 @@ const Navbar = ({ pathname }) => {
       {/* this will be for not */}
       <div className=" mr-5">
         <div className="flex items-center gap-4">
-          {user_id ? (
+          {user_id || user_data ? (
             <div onClick={handleLogout} className="hover:cursor-pointer hover:underline   text-white p-2 rounded-md">Logout</div>
           ) : (
             <>

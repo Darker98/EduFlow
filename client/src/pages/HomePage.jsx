@@ -79,6 +79,7 @@ const chartConfig = {
 
 const HomePage = () => {
   const { user_data} = useSelector((state) => state.user)
+  const {user_id} = useSelector((state) => state.user)
   const [className, setClassName] = useState("");
   const [roomNumber, setRoomNumber] = useState();
   const [section, setSection] = useState("");
@@ -159,9 +160,9 @@ const HomePage = () => {
                   />
                 </div>
                 <div className="flex justify-center flex-col gap-6 font-semibold">
-                  <p>Musa Riaz</p>
-                  <p>musariaz</p>
-                  <p>13123kjansfajsn</p>
+                  <p>Student Name: {user_data?.user_data?.data?.first_name} {user_data?.user_data?.data?.last_name}</p>
+                  <p>User Name: {user_data?.user_data?.data?.username}</p>
+                  <p>Student Id: {user_data?.user_data?.data?.id}</p>
                 </div>
               </div>
               {user_data?.role === "student" ? (

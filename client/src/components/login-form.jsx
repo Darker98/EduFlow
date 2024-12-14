@@ -14,14 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
-import {setUserId} from "../redux/features/userSlice"
+import {setUserData, setUserId} from "../redux/features/userSlice"
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 
 function LoginForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const selector = useSelector((state) => state.user_id);
   const handleSignIn = async () =>{
     try{
   dispatch(setLoading());
@@ -37,7 +36,14 @@ function LoginForm() {
       type: "success"
     })
     dispatch(setUserId(res?.data?.data?.userId));
-    navigate('/');
+    if(res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor"){
+      dispatch(setUserId(res?.data?.data?.userId));
+      dispatch(setUserData(res?.data?.data));
+      navigate('/home');
+    }
+    else{
+      navigate('/profile');
+    }
   }
 
     }

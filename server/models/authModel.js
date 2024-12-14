@@ -11,6 +11,29 @@ export const login = async (credentials) => {
 
     if (error) throw new Error(error.message);
     
+    //we shall check if the user exists in the student or instructor table
+    const student = await supabase
+    .from('student')
+    .select('*')
+    .eq('id', data.user?.id)
+    .single()
+
+if(student){
+  console.log(student)
+  return {user_data:student, role: "student"};
+}
+
+const instructor = await supabase
+.from('student')
+.select('*')
+.eq('id', data.user?.id)
+.single()
+
+if(instructor){
+  console.log(instructor)
+  return {user_data:instructor, role: "instructor"};
+}
+
     // Retrieve and return the user ID
     const userId = data.user?.id; // Check if `user` exists
     if (!userId) throw new Error("User ID could not be retrieved");
