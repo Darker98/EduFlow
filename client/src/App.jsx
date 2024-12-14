@@ -5,6 +5,7 @@ import SignUp from "./pages/Signup";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
 import NotFound from "./pages/NotFound";
+import CreateProfilePage from './pages/CreateProfilePage';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Attendance from "./pages/Attendance";
 import Results from "./pages/Results";
@@ -14,7 +15,7 @@ import Spinner from "./components/Spinner";
 import { useSelector } from "react-redux";
 
 const App = () => {
-  const { isloading } = useSelector((state) => state.loading);
+  const {isloading} = useSelector((state) => state.loading);
   return (
     <>
       {isloading ? (
@@ -25,6 +26,7 @@ const App = () => {
           <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/edit-profile" element={<EditProfilePage />} />
+          <Route path='/create/profile' element={<CreateProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/room" element={<Room />} />
@@ -35,7 +37,7 @@ const App = () => {
         </Routes>
       )}
     </>
-  );
-};
+  )
+}
 
-export default App;
+export default App
