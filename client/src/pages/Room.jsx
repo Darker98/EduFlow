@@ -45,11 +45,11 @@ const classWork = [{
 ]
 
 const Room = () => {
-  const { pathname } = useLocation();
+  
   return (
     <>
       <div>
-        <Layout pathname={pathname}>
+        <Layout pathname={"Room"}>
           <div>
             {/* upper bar */}
             <div className="border">

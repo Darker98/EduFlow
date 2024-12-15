@@ -61,7 +61,7 @@ export default function EditProfilePage() {
  
     return (
         <div className="min-h-screen bg-white w-full">
-            <main className="w-full px-4 py-5">
+            <main className="w-full ">
                 <Card className="w-full bg-gray-50 border-gray-200">
                     <CardHeader className="pb-6">
                         <CardTitle className="text-2xl font-semibold">Update Your Information</CardTitle>
