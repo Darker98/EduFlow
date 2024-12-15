@@ -2,7 +2,7 @@ import React, { Profiler } from "react";
 import Layout from "../components/Layout";
 import { CircleUser, Pi } from "lucide-react";
 import { Label } from "@radix-ui/react-label";
-import { Pie, PieChart } from "recharts";
+import { Cell, Pie, PieChart } from "recharts";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -37,44 +37,29 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import Navbar from "@/components/Navbar";
-import { User } from "lucide-react";
-import ProfileCard from "@/components/ProfileCard";
 import RoomCards from "@/components/RoomCards";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSelector } from "react-redux";
 
 const chartData = [
-  { name: "Chrome", visitors: 275 },
-  { name: "Safari", visitors: 200 },
-  { name: "Firefox", visitors: 287 },
-  { name: "Edge", visitors: 173 },
-  { name: "Other", visitors: 190 },
+  { name: "Present", total: 40, color:"#1b8af3" },
+  { name: "Absent", total: 30, color: "#f52424" },
+  { name: "Leave", total: 12, color: "#e8f143" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  present: {
+    label: "Present",
+   
   },
-  chrome: {
-    label: "Chrome",
-    color: "hsl(var(--chart-1))",
+  absent: {
+    label: "Absent",
+    
   },
-  safari: {
-    label: "Safari",
-    color: "hsl(var(--chart-2))",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "hsl(var(--chart-3))",
-  },
-  edge: {
-    label: "Edge",
-    color: "hsl(var(--chart-4))",
-  },
-  other: {
-    label: "Other",
-    color: "hsl(var(--chart-5))",
-  },
+  leave: {
+    label: "Leave",
+    
+  }
 };
 
 const HomePage = () => {
@@ -159,10 +144,10 @@ const HomePage = () => {
                     onClick={() => navigate("/profile")}
                   />
                 </div>
-                <div className="flex justify-center flex-col gap-6 font-semibold">
-                  <p>Student Name: {user_data?.first_name} {user_data?.last_name}</p>
-                  <p>User Name: {user_data?.user_name}</p>
-                  <p>Student Id: {user_data?.id}</p>
+                <div className="flex justify-center flex-col gap-6 ">
+                  <p><span className="font-semibold">Student Name:</span> {user_data?.first_name} {user_data?.last_name}</p>
+                  <p><span className="font-semibold">User Name:</span> {user_data?.user_name}</p>
+                  <p><span className="font-semibold">Student Id:</span> {user_data?.id}</p>
                 </div>
               </div>
               {user_data?.role === "student" ? (
@@ -179,12 +164,16 @@ const HomePage = () => {
                     <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />}/>
                     <Pie
                       data={chartData}
-                      dataKey="visitors"
+                      dataKey="total"
                       nameKey="name"
                       cx="50%"
                       cy="50%"
                       label
-                    />
+                    >
+                      {chartData.map((entry, index) => (
+                        <Cell key={index} fill={entry.color} />
+                      ))}
+                    </Pie>
                   </PieChart>
                 </ChartContainer>
                 </CardContent>

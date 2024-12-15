@@ -1,7 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
+import { useSelector } from "react-redux";
 
-export function ProfileCard({ user }) {
+export function ProfileCard() {
+
+    const {user_data} = useSelector((state) => state.user);
+
     return (
         <Card className="bg-gray-50 border-gray-200 mb-2">
             <CardContent className="flex items-center justify-center">
@@ -11,16 +15,16 @@ export function ProfileCard({ user }) {
                             <AvatarImage src="/placeholder.svg?height=128&width=128" alt="User" />
                             <AvatarFallback>JD</AvatarFallback>
                         </Avatar>
-                        <h2 className="text-2xl font-semibold mb-2">{user.firstname + user.lastname}</h2>
-                        <p className="text-gray-600 mb-4">{user.role}</p>
+                        <h2 className="text-2xl font-semibold mb-2">{user_data?.first_name + user_data?.last_name}</h2>
+                        <p className="text-gray-600 mb-4">{user_data?.role}</p>
                     </div>
                     <div className="w-full space-y-2">
-                        <p><strong>Username:</strong> {user.username}</p>
-                        <p><strong>Email:</strong> {user.email}</p>
-                        <p><strong>First Name:</strong> {user.firstname}</p>
-                        <p><strong>Last Name:</strong> {user.lastname}</p>
-                        <p><strong>Role:</strong> {user.role}</p>
-                        <p><strong>Date of Birth:</strong> {user.dob}</p>
+                        <p><strong>Username:</strong> {user_data?.user_name}</p>
+                        <p><strong>Email:</strong> {user_data?.email}</p>
+                        <p><strong>First Name:</strong> {user_data?.first_name}</p>
+                        <p><strong>Last Name:</strong> {user_data?.last_name}</p>
+                        <p><strong>Role:</strong> {user_data?.role}</p>
+                        <p><strong>Date of Birth:</strong> {user_data?.date_of_birth}</p>
                         <p><strong>Courses Enrolled:</strong> 3</p>
                     </div>
                 </div>

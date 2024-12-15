@@ -4,29 +4,61 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import axios from 'axios'
+import {useDispatch, useSelector} from 'react-redux'
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import { setUserData } from "@/redux/features/userSlice";
+import { useToast } from '@/hooks/use-toast'
+
 
 export default function EditProfilePage() {
-    const navigate = useNavigate()
-    const [formData, setFormData] = useState({
-        username: 'johndoe123',
-        email: 'john.doe@example.com',
-        firstName: 'John',
-        lastName: 'Doe',
-        role: 'student',
-        dateOfBirth: '1995-05-15',
-    })
+    const {toast} = useToast();
+    const navigate = useNavigate();
+    const {user_data} = useSelector((state) => state.user);
+    const [user_name, setUserName] = useState(user_data?.user_name)
+    const [email, setEmail] = useState(user_data?.email)
+    const [first_name, setFirstName] = useState(user_data?.first_name)
+    const [last_name, setLastName] = useState(user_data?.last_name)
+    const [date_of_birth, setDateOfBirth] = useState(user_data?.date_of_birth)
+    const dispatch = useDispatch()
+    
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value })
-    }
 
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        // Here you would typically send the formData to your backend
-        console.log('Form submitted:', formData)
-        navigate('/profile')
-    }
+    const handleUpdate = async () => {
+        dispatch(setLoading());
+        try{
+        const res = await axios.put("http://localhost:3000/profile/update", {
+            role:user_data?.role,
+            id:user_data?.id,
+            user_name,
+            email,
+            first_name,
+            last_name,
+            date_of_birth
+        });
+        dispatch(hideLoading());
+        if(res.data.success){
+            toast({
+                title:"Success",
+                description: "Profile updated successfully",
+            });
+            dispatch(setUserData(res.data.data));
+            navigate("/profile");
+        }
 
+        }
+        catch(err){
+            dispatch(hideLoading());
+            console.log(err);
+            toast({
+                title: "Error",
+                description: err.response.data.message,
+                variant:"destructive"
+            })
+        }
+        }
+
+ 
     return (
         <div className="min-h-screen bg-white w-full">
             <main className="w-full px-4 py-5">
@@ -35,15 +67,15 @@ export default function EditProfilePage() {
                         <CardTitle className="text-2xl font-semibold">Update Your Information</CardTitle>
                     </CardHeader>
                     <CardContent className="px-6 pb-6">
-                        <form onSubmit={handleSubmit} className="space-y-6">
+                        <form onSubmit={handleUpdate} className="space-y-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="username">Username</Label>
                                     <Input
                                         id="username"
                                         name="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
+                                        value={user_name}
+                                        onChange={(e) => setUserName(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -53,8 +85,8 @@ export default function EditProfilePage() {
                                         id="email"
                                         name="email"
                                         type="email"
-                                        value={formData.email}
-                                        onChange={handleChange}
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -65,8 +97,8 @@ export default function EditProfilePage() {
                                     <Input
                                         id="firstName"
                                         name="firstName"
-                                        value={formData.firstName}
-                                        onChange={handleChange}
+                                        value={first_name}
+                                        onChange={(e) => setFirstName(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -75,8 +107,8 @@ export default function EditProfilePage() {
                                     <Input
                                         id="lastName"
                                         name="lastName"
-                                        value={formData.lastName}
-                                        onChange={handleChange}
+                                        value={last_name}
+                                        onChange={(e) => setLastName(e.target.value)}
                                         required
                                     />
                                 </div>
@@ -87,8 +119,8 @@ export default function EditProfilePage() {
                                     id="dateOfBirth"
                                     name="dateOfBirth"
                                     type="date"
-                                    value={formData.dateOfBirth}
-                                    onChange={handleChange}
+                                    value={date_of_birth}
+                                    onChange={(e) => setDateOfBirth(e.target.value)}
                                     required
                                 />
                             </div>

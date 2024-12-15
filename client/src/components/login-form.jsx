@@ -61,7 +61,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <Card className="mx-auto max-w-sm ">
+    <Card className="mx-auto max-w-sm  ">
       <CardHeader>
         <CardTitle className="text-4xl font-bold">Login</CardTitle>
         <CardDescription className='font-semibold'>

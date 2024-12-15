@@ -5,20 +5,11 @@ import React from "react";
 
 const ProfilePage = () => {
 
-    const user = {
-        firstname: "Tom",
-        lastname: "Cruise",
-        username: "tomcruise_",
-        email: "tomcruise1@gmail.com",
-        role: "Instructor",
-        dob: "July 3, 1962",
-    }
-
     return (
         <div>
             <Layout pathname={"Profile"}>
                 <div className="flex flex-col h-screen">
-                    <ProfileCard user={user} />
+                    <ProfileCard  />
                     <ProfileSettings />
                 </div>
             </Layout>
