@@ -4,7 +4,7 @@ import EditProfileForm from "../components/EditProfileForm";
 const EditProfilePage = () => {
     return (
         <div>
-            <Layout>
+            <Layout pathname={"Edit Profile"}>
                 <div className="flex h-screen">
                     <EditProfileForm />
                 </div>

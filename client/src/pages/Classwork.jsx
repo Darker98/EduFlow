@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowDown, ClipboardList } from "lucide-react";
 import { AArrowDown } from "lucide-react";
 import Layout from "@/components/Layout";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import {
   Collapsible,
@@ -53,10 +54,17 @@ const classwork = [
 ];
 
 const Classwork = () => {
+  const {user_data} = useSelector((state) => state.user);
+
   return (
     <Layout pathname={"Classwork"}>
-      <div className="flex flex-col gap-4 mx-40 p-14">
-        <div className=" flex flex-col  gap-4  p-1 my-10">
+      <div className="flex flex-col gap-4 mx-40 p-14 ">
+        {user_data?.role === "instructor" && (
+          <div>
+          <Button>Add Classwork</Button>
+        </div>)}
+        
+        <div className=" flex flex-col  gap-4 p-1 my-10">
           {classwork.map((item, index) => (
             <Collapsible
               key={index}

@@ -9,9 +9,7 @@ const Layout = ({ children, pathname }) => {
     <SidebarProvider>
       
       <AppSidebar />
-        
-          
-      <main className="p-2 flex-grow">
+      <main className="p-2 flex-grow ">
         <Navbar pathname={pathname}/>
         {children}
         </main>

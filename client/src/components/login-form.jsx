@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -13,29 +13,42 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { useDispatch, useSelector } from "react-redux";
+import {setUserData, setUserId} from "../redux/features/userSlice"
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 
 function LoginForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const dispatch = useDispatch();
   const handleSignIn = async () =>{
     try{
-  const res = await axios.post('http://localhost:3000/user/login', {
+  dispatch(setLoading());
+  const res = await axios.post('http://localhost:3000/auth/login', {
     email,
     password
   });
-  if(res.data.status){
-    console.log(res.data.message);
+  dispatch(hideLoading());
+  if(res.data.success){
     toast({
-      title: res.data.message,
+      title: res?.data?.message,
       description: "Welcome back",
       type: "success"
     })
-    navigate('/'); // Redirect to home page
+    dispatch(setUserId(res?.data?.data?.userId));
+    if(res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor"){
+      dispatch(setUserId(res?.data?.data?.userId));
+      dispatch(setUserData(res?.data?.data));
+      navigate('/home');
+    }
+    else{
+      navigate('/create/profile');
+    }
   }
 
     }
     catch(err){
+      dispatch(hideLoading());
       toast({
         title: err.response.data.message,
         description: "Please try again",
@@ -43,12 +56,12 @@ function LoginForm() {
       })
     }
   }
-  
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   return (
-    <Card className="mx-auto max-w-sm ">
+    <Card className="mx-auto max-w-sm  ">
       <CardHeader>
         <CardTitle className="text-4xl font-bold">Login</CardTitle>
         <CardDescription className='font-semibold'>
@@ -77,9 +90,11 @@ function LoginForm() {
             </div>
             <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
           </div>
+          <div className="flex gap-2">
           <Button  type="submit" className="w-full" onClick={()=>handleSignIn()} >
-            Login
+            Login 
           </Button>
+          </div>
           <Button variant="outline" className="w-full">
             Login with Google
           </Button>

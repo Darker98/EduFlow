@@ -1,51 +1,111 @@
-import { createClient } from '@supabase/supabase-js'
-const supabaseUrl = 'https://atbslsglwtyaamyszvme.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF0YnNsc2dsd3R5YWFteXN6dm1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzIwMzg0MTIsImV4cCI6MjA0NzYxNDQxMn0.si38mDjqblQZ46wsNw3havc7vwGdcr_UoDDj7tlyGes'
-const supabase = createClient(supabaseUrl, supabaseKey)
+import supabase from './createClient.js';
 
-const createProfile = async (profileData) => {
-    const { first_name, last_name, email, date_of_birth, password } = profileData;
+export const createProfile = async (profileData, role) => {
+    const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
 
-    const { data, error } = await supabase
-        .from('student') 
-        .insert([
-            { first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, password : password }
-        ])
-        .select(); 
-
-    if (error) throw new Error(error.message);
-};
-
-const getProfile = async (email) => {
-    const { data, error } = await supabase
-        .from('student')
-        .select('*')
-        .eq('email', email)
-        .single();
-    if (error) throw new Error(error.message);
-    return data;
-};
-
-const updateProfile = async (profileData) => {
-    const { first_name, last_name, email, date_of_birth, password } = profileData;
+    let tableName;
+    if (role == "student") {
+        tableName = "student";
+    } else if (role == "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
 
     const { data, error } = await supabase
-        .from('student')
-        .update({ first_name: first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, password : password })
-        .eq('email', email)
+        .from(tableName)
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
         .select();
-    
+
     if (error) throw new Error(error.message);
     return data;
-}
+};
 
-const deleteProfile = async (email) => {
-    const { error } = await supabase
-        .from('student')
-        .delete()
-        .eq('email', email);
-    
+export const getProfile = async (id, role) => {
+    let tableName;
+    if (role === "student") {
+        tableName = "student";
+    } else if (role === "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
+
+    const { data, error } = await supabase
+        .from(tableName)
+        .select('*')
+        .eq('id', id)
+        .single();
+
     if (error) throw new Error(error.message);
-}
+    return data;
+};
 
-module.exports = { createProfile, getProfile, updateProfile, deleteProfile };
+export const updateProfile = async (profileData, role) => {
+    const { id, first_name, user_name, last_name, email, date_of_birth } = profileData;
+
+    let tableName;
+    if (role === "student") {
+        tableName = "student";
+    } else if (role === "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
+
+    // Remove null or undefined values from the update object
+    const updateData = Object.fromEntries(
+        Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : 
+            date_of_birth, user_name : user_name })
+            .filter(([_, value]) => value != null)
+    );
+
+    if (Object.keys(updateData).length === 0) {
+        throw new Error("No valid fields provided for update.");
+    }
+
+    const { data, error } = await supabase
+        .from(tableName)
+        .update(updateData)
+        .eq('id', id)
+        .select();
+
+    if (error) throw new Error(error.message);
+    return data[0];
+};
+
+export const deleteProfile = async (id, role) => {
+    let tableName;
+    if (role === "student") {
+        tableName = "student";
+    } else if (role === "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
+
+    const { error } = await supabase
+        .from(tableName)
+        .delete()
+        .eq('id', id);
+
+    if (error) throw new Error(error.message);
+};
+
+
+// Example usage
+// const profileData = {
+//     id: "2a3743c6-e8b6-4a73-9096-7e64670bc600",
+//     first_name: "Zaid",
+//     last_name: "",
+//     email: "someone@example.com",
+//     date_of_birth: "2000-10-27",
+// };
+
+// createProfile(profileData, "student")
+//     .then((data) => {
+//         console.log("Profile created successfully:", data);
+//     })
+//     .catch((error) => {
+//         console.error("Error creating profile:", error.message);
+//     });

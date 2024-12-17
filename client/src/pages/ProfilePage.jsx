@@ -4,11 +4,12 @@ import ProfileSettings from "../components/ProfileSettings";
 import React from "react";
 
 const ProfilePage = () => {
+
     return (
         <div>
-            <Layout>
+            <Layout pathname={"Profile"}>
                 <div className="flex flex-col h-screen">
-                    <ProfileCard fullname="Tom Cruise" username="tomcruise_" email="tomcruise1@gmail.com" role="Insructor"/>
+                    <ProfileCard  />
                     <ProfileSettings />
                 </div>
             </Layout>
