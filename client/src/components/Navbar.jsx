@@ -57,7 +57,7 @@ const Navbar = ({ pathname }) => {
       <div className=" mr-5">
         <div className="flex items-center gap-4">
           {user_id || user_data ? (
-            <div onClick={handleLogout} className="hover:cursor-pointer hover:underline   text-white p-2 rounded-md">Logout</div>
+            <div onClick={handleLogout} className="hover:cursor-pointer hover:underline text-white p-2 rounded-md">Logout</div>
           ) : (
             <>
               <NavLink to="/login" className=" text-white p-2 rounded-md">
