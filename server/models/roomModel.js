@@ -6,7 +6,7 @@ export const createRoom = async (roomData) => {
     const { data, error } = await supabase
         .from('room')
         .insert([{ section_name : section_name, room_name : room_name, enrollment_key : enrollment_key, instructor_id : instructor_id }])
-        .select(id);
+        .select('id');
 
     if (error) throw new Error(error.message);
     return data;
