@@ -187,6 +187,9 @@ const HomePage = () => {
               ) : null}
               
             </div>
+            <div className="flex  ml-20">
+            <p className="text-xl font-semibold ">Current Rooms:</p>
+            </div>
 
             <div className="flex p-6  justify-center flex-wrap gap-4">
               <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
