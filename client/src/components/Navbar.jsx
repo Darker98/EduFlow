@@ -26,7 +26,7 @@ const Navbar = ({ pathname }) => {
       toast({
         title:"Success",
         description:res.data.message,
-        variant:"success"
+        variant:"default"
       });
       navigate("/login");
     

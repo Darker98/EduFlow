@@ -66,7 +66,7 @@ export default function EditProfilePage() {
         if(res.data.success){
             toast({
                 title:"Profile Created",
-                variant:"success"
+                variant:"default"
             });
             console.log(res.data)
             dispatch(setUserData(res.data.data[0]));

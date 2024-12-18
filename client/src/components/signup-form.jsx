@@ -39,7 +39,7 @@ const SignUp = () => {
         toast({
           title: res.data.message,
           description: "You can now login to your account",
-          variant: "success",
+          variant: "default",
         });
         navigate("/login");
       }
