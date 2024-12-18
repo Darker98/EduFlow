@@ -7,7 +7,7 @@ const router = express.Router();
 router.post('/createRoom', handleCreateRoom);
 
 // Route to get rooms for a specific instructor
-router.get('/instructorRoom', handleGetRooms);
+router.post('/instructorRoom/:id', handleGetRooms); //made this a post request, each room will have an id and instructor_id will be sent in the body so thats why made it a post request
 
 // Route to update a room's details
 router.put('/updateRoom', handleUpdateRoom);

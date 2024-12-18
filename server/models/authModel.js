@@ -24,7 +24,7 @@ if(student?.data !== null){
 }
 
 const instructor = await supabase
-.from('student')
+.from('instructor')
 .select('*')
 .eq('id', data.user?.id)
 .single()

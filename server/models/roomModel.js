@@ -9,17 +9,17 @@ export const createRoom = async (roomData) => {
         .select('id');
 
     if (error) throw new Error(error.message);
-    return data;
+    return data[0]; //should return the first row of the result
 };
 
 export const getRooms = async (instructor_id) => {
     const { data, error } = await supabase
         .from('room')
-        .select('id')
+        .select('*') //made the change of returing all the room data of that specfic id
         .eq('instructor_id', instructor_id);
 
     if (error) throw new Error(error.message);
-    return data;
+    return data[0];
 };
 
 export const updateRoom = async (roomData, room_id) => {

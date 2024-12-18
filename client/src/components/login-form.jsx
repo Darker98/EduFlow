@@ -36,6 +36,7 @@ function LoginForm() {
       type: "success"
     })
     dispatch(setUserId(res?.data?.data?.userId));
+    console.log(res.data);
     if(res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor"){
       dispatch(setUserId(res?.data?.data?.userId));
       dispatch(setUserData(res?.data?.data));

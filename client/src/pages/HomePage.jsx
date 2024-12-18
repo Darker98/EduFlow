@@ -4,6 +4,11 @@ import { CircleUser, Pi } from "lucide-react";
 import { Label } from "@radix-ui/react-label";
 import { Cell, Pie, PieChart } from "recharts";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { setRoomId } from "@/redux/features/roomSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import axios from 'axios';
 import {
   Dialog,
   DialogContent,
@@ -15,12 +20,6 @@ import {
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -39,7 +38,7 @@ import {
 import Navbar from "@/components/Navbar";
 import RoomCards from "@/components/RoomCards";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { useSelector } from "react-redux";
+
 
 const chartData = [
   { name: "Present", total: 40, color:"#1b8af3" },
@@ -63,25 +62,58 @@ const chartConfig = {
 };
 
 const HomePage = () => {
+
+  const {toast} = useToast();
+  const dispatch = useDispatch();
+  const {room_id} = useSelector((state) => state.room);
   const { user_data} = useSelector((state) => state.user)
   const {user_id} = useSelector((state) => state.user)
-  const [className, setClassName] = useState("");
-  const [roomNumber, setRoomNumber] = useState();
+  const [roomName, setRoomName] = useState("");
   const [section, setSection] = useState("");
   const navigate = useNavigate();
   const handleButtonClick = () => {};
 
   const handleClear = (e) => {
     e.preventDefault();
-    setClassName("");
-    setRoomNumber("");
+    setRoomName("");
     setSection("");
   };
+  
+  const handleRoomCreation =async () => {
+try{
+dispatch(setLoading());
+const res = await axios.post("http://localhost:3000/rooms/createRoom", {
+  instructor_id:user_data?.id,
+  room_name: roomName,
+  section_name:section
+});
+dispatch(hideLoading());
+if(res.data.success){
+  toast({
+    title:"Success",
+    description:"Room created successfully",
+    variant:"default"
+  });
+dispatch(setRoomId(res?.data?.data?.id));
+navigate(`/room/${res.data.data.id}`);
+}
+    }
+    catch(err){
+      dispatch(hideLoading())
+      console.log(err);
+      toast({
+        title: "Error",
+        description: err.response.data.message,
+        variant:"destructive"
+      })
+    }
+  }
 
   return (
+ 
     <div>
       <Layout pathname={"Home"}>
-        <div className="  ">
+        <div>
           {user_data?.role === "instructor" && ( <div className="flex justify-end">
             <TooltipProvider>
               <Tooltip>
@@ -105,8 +137,8 @@ const HomePage = () => {
                           <Label>Class Name</Label>
                           <Input
                             type="text"
-                            value={className}
-                            onChange={(e) => setClassName(e.target.value)}
+                            value={roomName}
+                            onChange={(e) => setRoomName(e.target.value)}
                           />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -122,7 +154,7 @@ const HomePage = () => {
                           <Button className="" onClick={(e) => handleClear(e)}>
                             Clear
                           </Button>
-                          <Button onClick={() => navigate("/room")}>
+                          <Button onClick={() => handleRoomCreation("/room")}>
                             Add Room
                           </Button>
                         </div>

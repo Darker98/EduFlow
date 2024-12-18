@@ -3,7 +3,13 @@ import { useLocation } from "react-router-dom";
 import Layout from "../components/Layout";
 import { NavLink } from "react-router-dom";
 import {ClipboardList} from 'lucide-react'
-import { Description } from "@radix-ui/react-dialog";
+import axios from 'axios'
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { setRoomData } from "@/redux/features/roomSlice";
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import {useSelector ,useDispatch } from "react-redux";
 
 const classWork = [{
   icon: ClipboardList,
@@ -45,7 +51,36 @@ const classWork = [{
 ]
 
 const Room = () => {
+  const toast = useToast(); 
+  const dispatch = useDispatch();
+  const { id } = useParams(); 
+  const {user_data} = useSelector((state) => state.user);
+  const {room_data} = useSelector((state) => state.room);
+
+  useEffect(() => {
+async function getRoom(){
+  try{
   
+  const res =await axios.post(`http://localhost:3000/rooms/instructorRoom/${id}`, {
+    instructor_id: user_data.id
+  });
+  console.log(res)
+  if(res.data.success){
+    dispatch(setRoomData(res.data.data));
+  }
+  }
+  catch(err){
+    toast({
+      title: "Error",
+      description: err?.response?.data?.message,
+      variant:"destructive"
+    })
+  }
+}
+
+getRoom();
+}, [])
+
   return (
     <>
       <div>
@@ -69,8 +104,8 @@ const Room = () => {
               {/* banner */}
               <div className="border h-[250px] flex items-end p-6 rounded-lg " style={{background: 'url(/banner.jpg)'}}>
               <div className="text-4xl text-white font-bold flex gap-4 flex-col">
-              <p>ClassName</p>
-              <p>Section</p>
+              <p>{room_data?.room_name}</p>
+              <p>{room_data?.section_name}</p>
               </div>
               </div>
               {/* banner */}
