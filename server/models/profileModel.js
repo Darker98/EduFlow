@@ -71,7 +71,7 @@ export const updateProfile = async (profileData, role) => {
         .select();
 
     if (error) throw new Error(error.message);
-    return data[0];
+    return {...data[0], role}
 };
 
 export const deleteProfile = async (id, role) => {
