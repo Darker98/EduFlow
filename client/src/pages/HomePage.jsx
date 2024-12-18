@@ -82,7 +82,7 @@ const HomePage = () => {
     <div>
       <Layout pathname={"Home"}>
         <div className="  ">
-          <div className="flex justify-end">
+          {user_data?.role === "instructor" && ( <div className="flex justify-end">
             <TooltipProvider>
               <Tooltip>
                 <Dialog>
@@ -133,7 +133,8 @@ const HomePage = () => {
                 <TooltipContent>Click to add a new class</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-          </div>
+          </div>)}
+         
           <div className="flex border rounded-lg gap-4 my-3 flex-wrap ">
             <div className=" flex w-full justify-between p-12 gap-10  text-2xl">
               <div className=" flex items-center gap-10 hover:cursor-pointer transition p-10">
@@ -145,9 +146,9 @@ const HomePage = () => {
                   />
                 </div>
                 <div className="flex justify-center flex-col gap-6 ">
-                  <p><span className="font-semibold">Student Name:</span> {user_data?.first_name} {user_data?.last_name}</p>
+                  <p>{user_data?.role === 'instructor' ? (<span className="font-semibold">Instructor Name:</span>) : (<span className="font-semibold">Student Name:</span>)} {user_data?.first_name} {user_data?.last_name}</p>
                   <p><span className="font-semibold">User Name:</span> {user_data?.user_name}</p>
-                  <p><span className="font-semibold">Student Id:</span> {user_data?.id}</p>
+                  <p>{user_data?.role === 'instructor' ? (<span className="font-semibold">Instructor Id:</span>) : (<span className="font-semibold">Student Id:</span>)} {user_data?.id}</p>
                 </div>
               </div>
               {user_data?.role === "student" ? (

@@ -37,8 +37,8 @@ const SignUp = () => {
       if (res.data.success) {
         console.log(res.data.message);
         toast({
-          title: res.data.message,
-          description: "You can now login to your account",
+          title: "Success",
+          description: "Check your email to verify your account",
           variant: "default",
         });
         navigate("/login");

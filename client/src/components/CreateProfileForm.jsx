@@ -65,11 +65,12 @@ export default function EditProfilePage() {
         dispatch(hideLoading());
         if(res.data.success){
             toast({
-                title:"Profile Created",
+                title:"Successful",
+                description:"User profile successfully created",
                 variant:"default"
             });
-            console.log(res.data)
-            dispatch(setUserData(res.data.data[0]));
+            console.log(res.data.data)
+            dispatch(setUserData(res.data.data));
             navigate('/home')
         }
      

@@ -18,7 +18,8 @@ export const createProfile = async (profileData, role) => {
         .select();
 
     if (error) throw new Error(error.message);
-    return data;
+    return {...data[0], role}
+
 };
 
 export const getProfile = async (id, role) => {
