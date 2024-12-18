@@ -10,6 +10,6 @@ router.post('/signup', handleSignup);
 router.post('/login', handleLogin);
 
 // Route for user logout
-router.get('/logout', handleLogout )
+router.get('/logout', handleLogout );
 
 export default router;
