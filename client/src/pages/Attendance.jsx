@@ -90,19 +90,11 @@ const studnets = [
   },
 ];
 
-const classes = [
-  { value: "cs101", label: "CS101" },
-  { value: "cs102", label: "CS102" },
-  { value: "cs103", label: "CS103" },
-  { value: "cs104", label: "CS104" },
-];
+
 
 const Attendance = () => {
   const [attendance, setAttendance] = useState();
-  const { pathname } = useLocation();
-
   const handleAttendance = ()=>{
-
   }
 
   return (
@@ -113,21 +105,7 @@ const Attendance = () => {
           <div className=" my-5 rounded-lg p-3 text-center text-4xl font-bold bg-black text-white">
             <h1>Student Attendance</h1>
           </div>
-          <div className=" mb-3 w-[200px]  ">
-
-          <Select >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Class" />
-            </SelectTrigger>
-            <SelectContent>
-            {classes.map((classItem) => (
-                <SelectItem value={classItem.value} key={classItem.value}>{classItem.label}</SelectItem>
-              ))}
-            </SelectContent>
-
-          </Select>
-            </div>
-          
+     
         <form onSubmit={handleAttendance}>
           <div className="">
             <Table>

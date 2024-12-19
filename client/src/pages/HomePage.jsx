@@ -177,7 +177,7 @@ getRooms();
                           <Button className="" onClick={(e) => handleClear(e)}>
                             Clear
                           </Button>
-                          <Button onClick={() => handleRoomCreation("/room")}>
+                          <Button onClick={() => handleRoomCreation(`/room/${room_id}`)}>
                             Add Room
                           </Button>
                         </div>

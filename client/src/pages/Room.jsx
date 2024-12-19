@@ -10,7 +10,18 @@ import { useToast } from "@/hooks/use-toast";
 import { setRoomData } from "@/redux/features/roomSlice";
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import {useSelector ,useDispatch } from "react-redux";
-
+import { Label } from "@radix-ui/react-label";
+import { Input } from "@/components/ui/input";
+import {useState} from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 const classWork = [{
   icon: ClipboardList,
   name: 'Assignment 1',
@@ -51,6 +62,8 @@ const classWork = [{
 ]
 
 const Room = () => {
+  const [startingTime, setStartingTime] = useState('');
+  const [endingTime, setEndingTime] = useState('');
   const toast = useToast(); 
   const dispatch = useDispatch();
   const { id } = useParams(); 
@@ -77,7 +90,17 @@ async function getRoom(){
 }
 
 getRoom();
-}, [])
+}, []);
+
+const handleClear = (e) => {
+e.preventDefault()
+setStartingTime('');
+setEndingTime('');
+}
+
+const handleSessionCreation = async () => {
+
+}
 
   return (
     <>
@@ -92,7 +115,45 @@ getRoom();
                     Stream
                   </NavLink>
                   <NavLink to="/classwork">Classwork</NavLink>
-                  <NavLink to="">Room</NavLink>
+                  <Dialog>
+                    <DialogTrigger>
+                      <button >Attendance</button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Create a session</DialogTitle>
+                      </DialogHeader>
+                      <div>
+                      <form className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-4">
+                          <Label>Starting Time</Label>
+                          <Input
+                            type="time"
+                            value={startingTime}
+                            onChange = {(e) => setStartingTime(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Ending Time</Label>
+                          <Input
+                            type="time"
+                            value={endingTime}
+                            onChange = {(e) => setEndingTime(e.target.value)}
+                          />
+                        </div>
+
+                        <div className="flex justify-between">
+                          <Button onClick={(e) => handleClear(e)}>
+                            Clear
+                          </Button>
+                          <Button onClick={() => handleSessionCreation}>
+                            Create Session
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                    </DialogContent>
+                  </Dialog>
                 </ul>
               </div>
             </div>
