@@ -72,6 +72,7 @@ const HomePage = () => {
   const {user_id} = useSelector((state) => state.user)
   const [roomName, setRoomName] = useState("");
   const [section, setSection] = useState("");
+  const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
   const handleButtonClick = () => {};
 
@@ -115,13 +116,20 @@ navigate(`/room/${res.data.data.id}`);
   useEffect(() => {
 async function getRooms(){
   try{
-    cosnt res = await axios.post("http://localhost:3000/rooms/")
+    const res = await axios.post("http://localhost:3000/rooms/instructorRoom",{
+      instructor_id:user_data?.id
+    })
+    if(res.data.success){
+      setRooms(res.data.data);
+    }
   }
   catch(err){
     console.log(err);
 
   }
+
 }
+getRooms();
   }, [])
 
   return (
@@ -238,13 +246,16 @@ async function getRooms(){
             <p className="text-xl font-semibold ">Current Rooms:</p>
             </div>
 
-            <div className="flex p-6  justify-center flex-wrap gap-4">
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
-              <RoomCards courseName={"Math"} instructorName={"Sarfaraz"} />
+            <div className="flex p-6 w-full  justify-center flex-wrap gap-4">
+              {rooms.map((room) => {
+                  return (
+                    <RoomCards key={room.id}
+                    roomName={room.room_name}
+                    sectionName={room.section_name}
+                    room_id={room.id}
+                    />
+                  )
+              })}
             </div>
           </div>
         </div>

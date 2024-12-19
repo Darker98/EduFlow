@@ -61,9 +61,7 @@ const Room = () => {
 async function getRoom(){
   try{
   
-  const res =await axios.post(`http://localhost:3000/rooms/instructorRoom/${id}`, {
-    instructor_id: user_data.id
-  });
+  const res =await axios.get(`http://localhost:3000/rooms/getRoom/${id}`);
   console.log(res)
   if(res.data.success){
     dispatch(setRoomData(res.data.data));
@@ -109,6 +107,15 @@ getRoom();
               </div>
               </div>
               {/* banner */}
+
+              {/* enrollment key display */}
+              {user_data?.role === 'instructor' && (
+                <div className="flex gap-4 my-10 h-10 justify-center items-center">
+                  <p className="text-lg font-semibold">Enrollment Key:</p>
+                  <p className="text-lg">{room_data?.enrollment_key}</p>
+                </div>
+              )}
+              {/* enrollment key display */}
 
               {/* classwork */}
               <div className=" flex flex-col gap-4  p-1 my-10">
