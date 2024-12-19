@@ -1,6 +1,8 @@
 import express from "express";
 import authRouter from "./server/routers/authRouter.js";
 import profileRouter from "./server/routers/profileRouter.js";
+import attendanceRouter from "./server/routers/attendanceRouter.js";
+import sessionRouter from "./server/routers/sessionRouter.js";
 import roomRouter from "./server/routers/roomRouter.js";
 import enrollmentRouter from "./server/routers/enrollmentRouter.js";
 import cors from "cors";
@@ -24,10 +26,6 @@ app.use('/auth', authRouter);
 
 // Base route for profiles
 app.use('/profile', profileRouter);
-
-
-app.use('/rooms',roomRouter);
-app.use('/enrollment',enrollmentRouter);
 
 // Default route for unknown endpoints
 app.use((req, res) => {
