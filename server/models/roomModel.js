@@ -12,6 +12,17 @@ export const createRoom = async (roomData) => {
     return data[0]; //should return the first row of the result
 };
 
+//making this function here to get one specific room
+export const getRoom = async (room_id) => {
+    const {data, error} = await supabase
+    .from("room")
+    .select("*")
+    .eq("id", room_id);
+    
+    if(error) throw new Error(error.message);
+    return data[0];
+}
+
 export const getRooms = async (instructor_id) => {
     const { data, error } = await supabase
         .from('room')
@@ -19,7 +30,7 @@ export const getRooms = async (instructor_id) => {
         .eq('instructor_id', instructor_id);
 
     if (error) throw new Error(error.message);
-    return data[0];
+    return data;
 };
 
 export const updateRoom = async (roomData, room_id) => {

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { setRoomId } from "@/redux/features/roomSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import axios from 'axios';
 import {
@@ -37,6 +38,7 @@ import {
 } from "@/components/ui/tooltip";
 import Navbar from "@/components/Navbar";
 import RoomCards from "@/components/RoomCards";
+import { setRoomData } from "@/redux/features/roomSlice";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
 
@@ -95,6 +97,7 @@ if(res.data.success){
     variant:"default"
   });
 dispatch(setRoomId(res?.data?.data?.id));
+dispatch(setRoomData(res?.data?.data));
 navigate(`/room/${res.data.data.id}`);
 }
     }
@@ -108,6 +111,18 @@ navigate(`/room/${res.data.data.id}`);
       })
     }
   }
+
+  useEffect(() => {
+async function getRooms(){
+  try{
+    cosnt res = await axios.post("http://localhost:3000/rooms/")
+  }
+  catch(err){
+    console.log(err);
+
+  }
+}
+  }, [])
 
   return (
  
@@ -128,13 +143,13 @@ navigate(`/room/${res.data.data.id}`);
                   <DialogContent className="w-[500px] ">
                     <DialogHeader>
                       <DialogTitle className="text-xl font-bold">
-                        Add Class
+                        Add Room
                       </DialogTitle>
                     </DialogHeader>
                     <div>
                       <form className="flex flex-col gap-10">
                         <div className="flex flex-col gap-4">
-                          <Label>Class Name</Label>
+                          <Label>Room Name</Label>
                           <Input
                             type="text"
                             value={roomName}
@@ -162,7 +177,7 @@ navigate(`/room/${res.data.data.id}`);
                     </div>
                   </DialogContent>
                 </Dialog>
-                <TooltipContent>Click to add a new class</TooltipContent>
+                <TooltipContent>Click to add a new room</TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>)}

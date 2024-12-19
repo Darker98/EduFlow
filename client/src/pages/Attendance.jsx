@@ -107,7 +107,7 @@ const Attendance = () => {
 
   return (
     <div>
-      <Layout pathname={pathname}>
+      <Layout pathname={"Attendance"}>
         
         <div>
           <div className=" my-5 rounded-lg p-3 text-center text-4xl font-bold bg-black text-white">
