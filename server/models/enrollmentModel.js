@@ -39,11 +39,16 @@ export const unenroll = async (student_id, room_id) => {
 };
 
 export const getStudents = async (room_id) => {
-    const { data, error } = await supabase
+    const { studentIds, error } = await supabase
         .from('enrollment')
         .select('student_id')
         .eq('room_id', room_id);
-
+    
     if (error) throw new Error(error.message);
+    const { data, error : newError } = await supabase
+        .from('student')
+        .select('*')
+        .in('id', studentIds);
+    
     return data;
-}
+};
