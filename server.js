@@ -2,6 +2,8 @@ import express from "express";
 import userRouter from "./server/routers/userRouter.js";
 import authRouter from "./server/routers/authRouter.js";
 import profileRouter from "./server/routers/profileRouter.js";
+import attendanceRouter from "./server/routers/attendanceRouter.js";
+import sessionRouter from "./server/routers/sessionRouter.js";
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -23,6 +25,12 @@ app.use('/auth', authRouter);
 
 // Base route for profiles
 app.use('/profile', profileRouter);
+
+//Base route for attendance
+app.use('/attendance',attendanceRouter);
+
+//Base route for session
+app.use('/session',sessionRouter)
 
 // Default route for unknown endpoints
 app.use((req, res) => {
