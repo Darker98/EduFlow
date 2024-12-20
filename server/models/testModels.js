@@ -2,15 +2,11 @@ import supabase from './createClient.js';
 import { createProfile, updateProfile, getProfile, deleteProfile } from './profileModel.js';
 import { login, signup } from './authModel.js';
 
-const email = "someone@example.com";
+const email = "zmsiddiqui321@gmail.com";
 const credentials = { email: email, password: "pass123" };
 
 (async () => {
     try {
-        // Signup
-        const signupData = await signup(credentials, supabase);
-        console.log("Signup successful:", signupData);
-
         // Login
         const loginData = await login(credentials, supabase);
         const userID = loginData.userId;
@@ -19,10 +15,10 @@ const credentials = { email: email, password: "pass123" };
         // Create Profile
         const profileData = { 
             id: userID, 
-            first_name: "Zaid", 
-            last_name: "", 
+            first_name: "Musa", 
+            last_name: "Man", 
             email: email, 
-            date_of_birth: "2002-11-20" 
+            date_of_birth: "2004-11-20" 
         };
         await createProfile(profileData, "student", supabase);
         console.log("Profile created successfully.");

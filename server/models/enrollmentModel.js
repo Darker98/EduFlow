@@ -39,16 +39,24 @@ export const unenroll = async (student_id, room_id) => {
 };
 
 export const getStudents = async (room_id) => {
-    const { studentIds, error } = await supabase
+    // Fetching student IDs from the enrollment table
+    const { data: enrollmentData, error } = await supabase
         .from('enrollment')
         .select('student_id')
         .eq('room_id', room_id);
     
     if (error) throw new Error(error.message);
-    const { data, error : newError } = await supabase
+
+    // Extracting student IDs into an array
+    const studentIds = enrollmentData.map((record) => record.student_id);
+
+    // Fetching student details using the extracted IDs
+    const { data: students, error: newError } = await supabase
         .from('student')
         .select('*')
         .in('id', studentIds);
     
-    return data;
+    if (newError) throw new Error(newError.message);
+
+    return students;
 };
