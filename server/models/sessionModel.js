@@ -10,7 +10,7 @@ export const createSession = async (sessionData, room_id) => {
         .select('id');
 
     if (error) throw new Error(error.message);
-    return data;
+    return data[0];
 };
 
 export const getSession = async (id) => {

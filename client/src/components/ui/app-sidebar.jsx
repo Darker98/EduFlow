@@ -1,4 +1,4 @@
-import { Calendar, Home, List, Scroll, Search, Settings, Library , User, ListCheck, Grid2x2Check, Grid} from "lucide-react";
+import { Calendar, Home, List, Scroll, Search, Settings, Library , User, ListCheck, Grid2x2Check, Plus} from "lucide-react";
 import { NavLink } from "react-router-dom";
 import Navbar from "../Navbar";
 import {
@@ -13,6 +13,8 @@ import {
   SidebarMenuItem,
   SidebarTrigger
 } from "@/components/ui/sidebar";
+import {useSelector} from 'react-redux';
+import { useEffect } from "react";
 
 // Menu items.
 const items = [
@@ -44,7 +46,11 @@ const items = [
   }
 ];
 
+
 export function AppSidebar() {
+const {user_data} = useSelector(state => state.user);
+
+  
   return (
 
     <div>

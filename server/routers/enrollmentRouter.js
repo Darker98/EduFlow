@@ -7,12 +7,12 @@ const router = express.Router();
 router.post('/enroll', handleEnroll);
 
 // Route to get enrollments of a specific student
-router.get('/studentEnrollment', handleGetEnrollments);
+router.post('/studentEnrollment', handleGetEnrollments); //made this a post request
 
 // Route to unenroll a student from a room
 router.delete('/unenroll', handleUnenroll);
 
 // Route to get all students enrolled in a room
-router.get('/students', handleGetStudents);
+router.post('/students', handleGetStudents);
 
 export default router;

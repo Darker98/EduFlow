@@ -23,7 +23,7 @@ export const handleGetRoom = async (req, res) => {
         res.status(200).json({success: true, data});
     }
     catch(err){
-        res.status(400).json({success: false, message: error.message});
+        res.status(400).json({success: false, message: err.message});
     }
 }
 

@@ -12,7 +12,9 @@ import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import {useSelector ,useDispatch } from "react-redux";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
+import { useNavigate } from "react-router-dom";
 import {useState} from "react";
+import { setSessionId } from "@/redux/features/sessionSlice";
 import {
   Dialog,
   DialogContent,
@@ -62,9 +64,11 @@ const classWork = [{
 ]
 
 const Room = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { session_id } = useSelector((state) => state.session);
   const [startingTime, setStartingTime] = useState('');
   const [endingTime, setEndingTime] = useState('');
-  const toast = useToast(); 
   const dispatch = useDispatch();
   const { id } = useParams(); 
   const {user_data} = useSelector((state) => state.user);
@@ -98,8 +102,33 @@ setStartingTime('');
 setEndingTime('');
 }
 
-const handleSessionCreation = async () => {
-
+const handleSessionCreation = async (e) => {
+  e.preventDefault();
+try{
+const res = await axios.post("http://localhost:3000/session/create", {
+  start_time: startingTime,
+  end_time: endingTime,
+  room_id: id
+});
+if(res.data.success){
+  toast({
+    title:"Success",
+    description:"Session created successfully",
+    variant:"default"
+  })
+  console.log("session data ",res.data.data.id);
+  dispatch(setSessionId(res.data.data.id));
+  navigate("/attendance")
+}
+}
+catch(err){
+  console.log(err);
+  toast({
+    title: "Error",
+    description: err?.response?.data?.message,
+    variant:"destructive"
+  })
+}
 }
 
   return (
@@ -146,7 +175,7 @@ const handleSessionCreation = async () => {
                           <Button onClick={(e) => handleClear(e)}>
                             Clear
                           </Button>
-                          <Button onClick={() => handleSessionCreation}>
+                          <Button onClick={handleSessionCreation}>
                             Create Session
                           </Button>
                         </div>

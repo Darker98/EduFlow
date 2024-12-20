@@ -2,6 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "./features/userSlice";
 import { roomSlice } from "./features/roomSlice";
 import { loadingSlice } from "./features/loadingSlice";
+import { sessionSlice } from "./features/sessionSlice";
 import { combineReducers } from "redux";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
@@ -9,7 +10,8 @@ import storage from 'redux-persist/lib/storage' // defaults to localStorage for 
 const rootReducer = combineReducers ({
     user: userSlice.reducer,
     loading: loadingSlice.reducer,
-    room: roomSlice.reducer
+    room: roomSlice.reducer,
+    session: sessionSlice.reducer
 })
 
 const persistConfig = {

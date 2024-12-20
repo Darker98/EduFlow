@@ -69,9 +69,9 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const {room_id} = useSelector((state) => state.room);
   const { user_data} = useSelector((state) => state.user)
-  const {user_id} = useSelector((state) => state.user)
   const [roomName, setRoomName] = useState("");
   const [section, setSection] = useState("");
+  const [enrollmentKey, setEnrollmentKey] = useState("");
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
   const handleButtonClick = () => {};
@@ -80,6 +80,7 @@ const HomePage = () => {
     e.preventDefault();
     setRoomName("");
     setSection("");
+    setEnrollmentKey("");
   };
   
   const handleRoomCreation =async () => {
@@ -113,6 +114,7 @@ navigate(`/room/${res.data.data.id}`);
     }
   }
 
+
   useEffect(() => {
 async function getRooms(){
   try{
@@ -130,14 +132,60 @@ async function getRooms(){
 
 }
 getRooms();
-  }, [])
+  }, []);
+
+useEffect(() => {
+  async function getEnrollments(){
+    try{
+      const res = await axios.post("http://localhost:3000/enrollment/studentEnrollment",{
+        student_id: user_data.id
+      });
+      if(res.data.success){
+        setRooms(res.data.data);
+      }
+    }
+    catch(err){
+      console.log(err);
+      
+    }
+  }
+  if(user_data.role === 'student')
+  getEnrollments();
+}, []);
+
+  const handleRoomEnrollment = async (e) => {
+    e.preventDefault();
+    try{
+      const res = await axios.post("http://localhost:3000/enrollment/enroll", {
+        student_id: user_data.id,
+        enrollment_key: enrollmentKey
+      });
+      if(res.data.success){
+        console.log("res", res)
+        toast({
+          title: "Success",
+          description: "Enrolled successfully",
+          variant: "default"
+        });
+         navigate(`/room/${res.data.data.room_id}`);
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        title: "Error",
+        description: err.response.data.message,
+        variant:"destructive"
+      })
+    }
+  }
 
   return (
  
     <div>
       <Layout pathname={"Home"}>
         <div>
-          {user_data?.role === "instructor" && ( <div className="flex justify-end">
+          {user_data?.role === "instructor" ? ( <div className="flex justify-end">
             <TooltipProvider>
               <Tooltip>
                 <Dialog>
@@ -179,6 +227,48 @@ getRooms();
                           </Button>
                           <Button onClick={() => handleRoomCreation(`/room/${room_id}`)}>
                             Add Room
+                          </Button>
+                        </div>
+                      </form>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+                <TooltipContent>Click to add a new room</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>) : (<div className="flex justify-end">
+            <TooltipProvider>
+              <Tooltip>
+                <Dialog>
+                  <DialogTrigger>
+                    <TooltipTrigger>
+                      <Button onClick={handleButtonClick}>
+                        <Plus />
+                      </Button>
+                    </TooltipTrigger>
+                  </DialogTrigger>
+                  <DialogContent className="w-[500px] ">
+                    <DialogHeader>
+                      <DialogTitle className="text-xl font-bold">
+                        Enroll in Room
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div>
+                      <form className="flex flex-col gap-10">
+                        <div className="flex flex-col gap-4">
+                          <Label>Enter Enrollment Key</Label>
+                          <Input
+                            type="text"
+                            value={enrollmentKey}
+                            onChange={(e) => setEnrollmentKey(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex justify-between">
+                          <Button className="" onClick={(e) => handleClear(e)}>
+                            Clear
+                          </Button>
+                          <Button onClick={(e) =>handleRoomEnrollment(e)} >
+                            Enroll
                           </Button>
                         </div>
                       </form>
@@ -242,12 +332,12 @@ getRooms();
               ) : null}
               
             </div>
-            <div className="flex  ml-20">
-            <p className="text-xl font-semibold ">Current Rooms:</p>
+            <div className="flex ml-20">
+            <p className="text-xl font-semibold ">{user_data?.role === 'instructor' ? (<p>Current Rooms: </p>) : (<p>Enrolled Rooms:</p>)}</p>
             </div>
 
             <div className="flex p-6 w-full  justify-center flex-wrap gap-4">
-              {rooms.map((room) => {
+              {rooms != undefined ? rooms.map((room) => {
                   return (
                     <RoomCards key={room.id}
                     roomName={room.room_name}
@@ -255,7 +345,7 @@ getRooms();
                     room_id={room.id}
                     />
                   )
-              })}
+              }):<p className="text-2xl">Loading...</p>}
             </div>
           </div>
         </div>

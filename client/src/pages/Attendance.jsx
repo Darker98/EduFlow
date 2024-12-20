@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "@/components/Layout";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +10,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useSelector } from "react-redux";
+import axios from 'axios'
 import {
   Select,
   SelectContent,
@@ -21,81 +23,64 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const studnets = [
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464455",
-    name: " Jane Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "46125",
-    name: " Batman",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "566124",
-    name: "Marry Jane",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "561102",
-    name: "Dostevosky",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "Young Thug",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "393123",
-    name: "Cartel Member",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "49915",
-    name: "Nigga man",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-];
-
-
-
 const Attendance = () => {
+  const navigate = useNavigate();
+  const {toast} = useToast();
+  const {session_id} = useSelector((state) => state.session); 
   const [attendance, setAttendance] = useState();
-  const handleAttendance = ()=>{
+  const [attendancesData, setAttendancesData] = useState([]);
+  const {room_data} = useSelector((state) => state.room);
+  const [attendanceArray, setAttendanceArray] = useState([]);
+
+  useEffect(() => {
+    async function getData(){
+      const res = await axios.post('http://localhost:3000/enrollment/students', {
+        room_id:room_data.id
+      });
+      if(res.data.success){
+        setAttendancesData(res.data.data);
+        setAttendanceArray(res.data.data.map((attendance)=>({student_id:attendance.id, attended:attendance.attended})))
+        console.log(res.data.data)
+      }
+    }
+    getData();
+  }, []);
+
+  const handleAttendance = async (e)=>{
+    e.preventDefault();
+    try{
+      const res = await axios.post('http://localhost:3000/attendance/mark',{
+        session_id,
+        attendanceArray 
+      });
+      if(res.data.success){
+        toast({
+          title:"Success",
+          description:"Attendance marked successfully",
+          variant:"default"
+        })
+       navigate(`/room/:${room_data.id}`);
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        title:"Error",
+        description:err?.response?.data?.message,
+        variant:"destructive"
+      })
+    }
   }
+
+  const onSelect = (id,value)=>{
+    setAttendanceArray(pre=>pre.map((attendance)=>{
+      if(attendance.student_id === id){
+        return {...attendance, attended:value=='true'?true:false}
+      }
+      return attendance;
+    }))
+  }
+
 
   return (
     <div>
@@ -119,28 +104,23 @@ const Attendance = () => {
                     Student Name
                   </TableHead>
                   <TableHead className="text-black font-bold">
-                    Class Id
-                  </TableHead>
-                  <TableHead className="text-black font-bold">
                     Attendance
                   </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {studnets.map((student) => (
-                  <TableRow key={student.classId}>
-                    <TableCell>{student.studentId}</TableCell>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>{student.classId}</TableCell>
+                {attendancesData.map((attendance) => (
+                  <TableRow key={attendance.id}>
+                    <TableCell>{attendance.id}</TableCell>
+                    <TableCell>{attendance.first_name}</TableCell>
                     <TableCell className="text-right">
-                      <Select>
+                      <Select onValueChange={value=>onSelect(attendance.id, value)} >
                         <SelectTrigger>
                           <SelectValue placeholder="Attendance" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="present">Present</SelectItem>
-                          <SelectItem value="absent">Absent</SelectItem>
-                          <SelectItem value="leave">Leave</SelectItem>
+                          <SelectItem value={'true'}>Present</SelectItem>
+                          <SelectItem value={'false'}>Absent</SelectItem>
                         </SelectContent>
                       </Select>
                     </TableCell>

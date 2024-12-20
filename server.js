@@ -24,6 +24,14 @@ app.use(express.json());
 // Base route for authentication
 app.use('/auth', authRouter);
 
+app.use('/attendance', attendanceRouter);
+
+app.use('/session', sessionRouter);
+
+app.use('/rooms', roomRouter);
+
+app.use('/enrollment', enrollmentRouter);
+
 // Base route for profiles
 app.use('/profile', profileRouter);
 
