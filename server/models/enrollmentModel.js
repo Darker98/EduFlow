@@ -6,7 +6,7 @@ export const enroll = async (student_id, enrollment_key) => {
         .select('id')
         .eq('enrollment_key', enrollment_key)
         .single();
-    if (key_error) throw new Error(key_error.message);
+    if (key_error) throw new Error(error.message);
 
     const { data, error } = await supabase
         .from('enrollment')

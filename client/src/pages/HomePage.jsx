@@ -157,7 +157,7 @@ useEffect(() => {
     e.preventDefault();
     try{
       const res = await axios.post("http://localhost:3000/enrollment/enroll", {
-        student_id: user_data.id,
+        student_id: user_data?.id,
         enrollment_key: enrollmentKey
       });
       if(res.data.success){
@@ -337,7 +337,7 @@ useEffect(() => {
             </div>
 
             <div className="flex p-6 w-full  justify-center flex-wrap gap-4">
-              {rooms != undefined ? rooms.map((room) => {
+              {rooms.length >0 ? rooms.map((room) => {
                   return (
                     <RoomCards key={room.id}
                     roomName={room.room_name}
@@ -345,7 +345,7 @@ useEffect(() => {
                     room_id={room.id}
                     />
                   )
-              }):<p className="text-2xl">Loading...</p>}
+              }):<p className="text-2xl">No Rooms Available</p>}
             </div>
           </div>
         </div>

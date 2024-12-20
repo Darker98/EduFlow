@@ -16,6 +16,6 @@ router.post('/instructorRoom', handleGetRooms);
 router.put('/updateRoom', handleUpdateRoom);
 
 // Route to delete a room
-router.delete('/deleteRoom', handleDeleteRoom);
+router.delete('/deleteRoom/:id', handleDeleteRoom);
 
 export default router;

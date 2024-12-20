@@ -49,8 +49,8 @@ export const handleUpdateRoom = async (req, res) => {
 
 export const handleDeleteRoom = async (req, res) => {
     try {
-        const { room_id } = req.body;
-        await deleteRoom(room_id);
+        const { id } = req.params; //changed from body to params
+        await deleteRoom(id);
         res.status(200).json({ success: true, message: 'Room deleted successfully' });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

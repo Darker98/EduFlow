@@ -14,6 +14,8 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { useSelector } from "react-redux";
 import axios from 'axios'
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import { useDispatch } from "react-redux";
 import {
   Select,
   SelectContent,
@@ -24,6 +26,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const Attendance = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const {toast} = useToast();
   const {session_id} = useSelector((state) => state.session); 
@@ -49,20 +52,23 @@ const Attendance = () => {
   const handleAttendance = async (e)=>{
     e.preventDefault();
     try{
+      dispatch(setLoading());
       const res = await axios.post('http://localhost:3000/attendance/mark',{
         session_id,
         attendanceArray 
       });
+      dispatch(hideLoading());
       if(res.data.success){
         toast({
           title:"Success",
           description:"Attendance marked successfully",
           variant:"default"
         })
-       navigate(`/room/:${room_data.id}`);
+       navigate(`/room/${room_data.id}`);
       }
     }
     catch(err){
+      dispatch(hideLoading());
       console.log(err);
       toast({
         title:"Error",

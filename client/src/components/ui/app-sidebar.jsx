@@ -27,22 +27,11 @@ const items = [
     title: "Profile",
     url: "/profile",
     icon: User,
-  },
-  {
-    title: "Attendance",
-    url: "/attendance",
-    icon: Scroll,
-  },
- 
+  }, 
   {
     title: "Result",
     url: '/result',
     icon: ListCheck
-  },
-  {
-    title: "Room",
-    url: '/room',
-    icon: Grid2x2Check 
   }
 ];
 
