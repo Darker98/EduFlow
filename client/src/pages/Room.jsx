@@ -187,7 +187,8 @@ const Room = () => {
                     Stream
                   </NavLink>
                   <NavLink to="/classwork">Classwork</NavLink>
-                  <Dialog>
+                  {user_data?.role === "instructor" && (
+                    <Dialog>
                     <DialogTrigger>
                       <button>Attendance</button>
                     </DialogTrigger>
@@ -226,6 +227,8 @@ const Room = () => {
                       </div>
                     </DialogContent>
                   </Dialog>
+                  )}
+           
                 </ul>
                 <div>
                   <AlertDialog>
