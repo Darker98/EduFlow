@@ -11,6 +11,8 @@ export const uploadProfilePicture = async (file, userId, role) => {
         throw new Error("Incorrect role provided!");
     }
 
+    const filePath = `profiles/${userId}-${file.name}`;
+
     // Check if the file already exists
     const { data: existingFile, error: existsError } = await supabase.storage
         .from('profile-pictures')
@@ -26,7 +28,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
 
         if (deleteError) throw new Error(deleteError.message);
     }
-    
+
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
