@@ -13,24 +13,24 @@ export const uploadProfilePicture = async (file, userId, role) => {
 
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
-      .from('profile-pictures')
-      .upload(`profiles/${userId}-${file.name}`, file);
-  
+        .from('profile-pictures')
+        .upload(`profiles/${userId}-${file.originalname}`, file);
+
     if (error) throw new Error(error.message);
-  
+
     // Get the URL of the uploaded file
     const { publicURL, error: urlError } = supabase.storage
-      .from('profile-pictures')
-      .getPublicUrl(data.path);
-  
+        .from('profile-pictures')
+        .getPublicUrl(data.path);
+
     if (urlError) throw new Error(error.message);
-  
+
     // Store the URL in the database
-    const { error : databaseError } = await supabase
+    const { error: databaseError } = await supabase
         .from(tableName)
-        .insert([{ pfp_url : publicURL }])
+        .insert([{ pfp_url: publicURL }])
         .eq('id', userId)
-    
+
     if (databaseError) throw new Error(error.message);
 
     return publicURL;
