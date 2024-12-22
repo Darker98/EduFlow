@@ -4,12 +4,24 @@ import { AArrowDown } from "lucide-react";
 import Layout from "@/components/Layout";
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
+import axios from 'axios';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
-
+import {useState, useEffect} from 'react';
 const classwork = [
   {
     icon: ClipboardList,
@@ -55,13 +67,134 @@ const classwork = [
 
 const Classwork = () => {
   const {user_data} = useSelector((state) => state.user);
+  const {room_data} = useSelector((state) => state.room);
+  const {toast} = useToast();
+  const [title, setTitle] = useState();
+  const [maxmarks, setmaxMarks] = useState();
+  const [details, setDetails] = useState();
+  const [dueDate, setDueDate] = useState();
+  const [setVisibleDate, setSetVisibleDate] = useState();
+  const [file, setFile] = useState();
+
+  const handleAddAssignment = async (e) => {
+    e.preventDefault();
+    try{
+     const formData = new FormData();
+      //appending the file to the form data
+      formData.append('file', file);
+      //appending the assignment details to the form data
+      formData.append('assignmentDetails', JSON.stringify({title, maxmarks, details, dueDate, setVisibleDate}));
+      //appending the room id to the form data
+      formData.append('roomID', room_data.id);
+
+      const res = await axios.post('http://localhost:3000/assignments/create', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      if(res.data.success){
+        toast({
+          title: 'Assignment Created',
+          description: 'Assignment has been created successfully',
+          variant: 'default'
+        })
+      }
+    }
+    catch(err){
+      console.log(err);
+      toast({
+        title: 'Error',
+        description: err.response.data.message,
+        variant: 'destructive'
+      })
+    }
+  }
+
+  const handleClear = (e) => {
+    e.preventDefault();
+   
+  };
 
   return (
     <Layout pathname={"Classwork"}>
       <div className="flex flex-col gap-4 mx-40 p-14 ">
         {user_data?.role === "instructor" && (
           <div>
-          <Button>Add Classwork</Button>
+            <Dialog>
+              <DialogTrigger>
+              <Button >Add Assignment</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className='text-2xl'>Add Assignment</DialogTitle>
+                </DialogHeader>
+                <div className="">
+                <form onSubmit={handleAddAssignment} className="flex flex-col gap-5">
+                        <div className="flex flex-col gap-4">
+                          <Label>Title</Label>
+                          <Input
+                            type="text"
+                            value={title}
+                            required
+                            onChange={(e) => setTitle(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Maximum Marks</Label>
+                          <Input
+                            type="number"
+                            value={maxmarks}
+                            required
+                            onChange={(e) => setmaxMarks(e.target.value)} 
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Description</Label>
+                          <Input
+                            required
+                            type="text"
+                            
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Due Date</Label>
+                          <Input
+                            type="date"
+                            value={dueDate}
+                            required
+                            onChange={(e) => setDueDate(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Visible Date</Label>
+                          <Input
+                            type="date"
+                            value={setVisibleDate}
+                            required
+                            onChange={(e) => setSetVisibleDate(e.target.value)}
+                          />
+                        </div>
+                        <div className="flex flex-col gap-4">
+                          <Label>Upload File</Label>
+                          <Input
+                            type="file"
+                            onChange={(e) => setFile(e.target.files[0])}
+                          />
+                        </div>
+
+                        <div className="flex justify-between">
+                          <Button className="" onClick={(e) => handleClear(e)}>
+                            Clear
+                          </Button>
+                          <Button type = 'submit'>
+                            Add Assignment
+                          </Button>
+                        </div>
+                      </form>
+                </div>
+              </DialogContent>
+            </Dialog>
+         
         </div>)}
         
         <div className=" flex flex-col  gap-4 p-1 my-10">

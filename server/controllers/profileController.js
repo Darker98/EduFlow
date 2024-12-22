@@ -50,7 +50,7 @@ export const handleDeleteProfile = async (req, res) => {
             throw new Error("Role is required.");
         }
         await deleteProfile(id, role);
-        res.status(204).send();
+        res.status(204).json({ success: true });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });
     }

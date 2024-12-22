@@ -74,7 +74,7 @@ const HomePage = () => {
   const [enrollmentKey, setEnrollmentKey] = useState("");
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
-  const handleButtonClick = () => {};
+  const [attendanceData, setAttendanceData] = useState([])
 
   const handleClear = (e) => {
     e.preventDefault();
@@ -114,7 +114,7 @@ navigate(`/room/${res.data.data.id}`);
     }
   }
 
-
+  
   useEffect(() => {
 async function getRooms(){
   try{
@@ -132,7 +132,28 @@ async function getRooms(){
 
 }
 getRooms();
-  }, []);
+  }, [user_data.id]);
+
+useEffect(() => {
+    async function getStudentAttendance(){
+      try{
+        const res = await axios.post("http://localhost:3000/attendance/summary",{
+          student_id: user_data.id,
+          room_id
+        });
+        if(res.data.success){
+          console.log(res.data.data)
+          setAttendanceData(res.data.data);
+        }
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    if(user_data.role === 'student')
+    getStudentAttendance();
+  }, [])
+
 
 useEffect(() => {
   async function getEnrollments(){
@@ -191,7 +212,7 @@ useEffect(() => {
                 <Dialog>
                   <DialogTrigger>
                     <TooltipTrigger>
-                      <Button onClick={handleButtonClick}>
+                      <Button >
                         <Plus />
                       </Button>
                     </TooltipTrigger>
@@ -242,7 +263,7 @@ useEffect(() => {
                 <Dialog>
                   <DialogTrigger>
                     <TooltipTrigger>
-                      <Button onClick={handleButtonClick}>
+                      <Button>
                         <Plus />
                       </Button>
                     </TooltipTrigger>
@@ -306,17 +327,17 @@ useEffect(() => {
                   config={chartConfig}
                   className="min-h-[300px] w-full "
                 >
-                  <PieChart data={chartData}>
+                  <PieChart data={attendanceData}>
                     <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />}/>
                     <Pie
-                      data={chartData}
+                      data={attendanceData}
                       dataKey="total"
                       nameKey="name"
                       cx="50%"
                       cy="50%"
                       label
                     >
-                      {chartData.map((entry, index) => (
+                      {attendanceData.map((entry, index) => (
                         <Cell key={index} fill={entry.color} />
                       ))}
                     </Pie>

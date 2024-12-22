@@ -201,6 +201,7 @@ const Room = () => {
                           <div className="flex flex-col gap-4">
                             <Label>Starting Time</Label>
                             <Input
+                            required
                               type="time"
                               value={startingTime}
                               onChange={(e) => setStartingTime(e.target.value)}
@@ -209,6 +210,7 @@ const Room = () => {
                           <div className="flex flex-col gap-4">
                             <Label>Ending Time</Label>
                             <Input
+                              required
                               type="time"
                               value={endingTime}
                               onChange={(e) => setEndingTime(e.target.value)}
@@ -230,7 +232,8 @@ const Room = () => {
                   )}
            
                 </ul>
-                <div>
+                {user_data?.role === "instructor" && (
+                  <div>
                   <AlertDialog>
                     <AlertDialogTrigger>
                       <div>
@@ -255,6 +258,8 @@ const Room = () => {
                     </AlertDialogContent>
                   </AlertDialog>
                 </div>
+                )}
+                
               </div>
             </div>
             {/* upper bar */}

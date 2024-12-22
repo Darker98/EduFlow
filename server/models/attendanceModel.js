@@ -37,10 +37,13 @@ export const getAttendanceData = async (student_id, room_id) => {
     if (attendanceError) throw new Error(attendanceError.message);
 
     // Calculate present and absent counts
-    const summary = {
-        presents: attendanceData.filter(row => row.attended).length,
-        absences: attendanceData.filter(row => !row.attended).length
-    };
+    const summary = 
+        [{name:"Present", total: attendanceData.filter(row => row.attended).length, color:"#1b8af3"},
+          {name:"Absent", total: attendanceData.filter(row => !row.attended).length, color:"#f31b1b"}  
+        ];
+        // presents: attendanceData.filter(row => row.attended).length,
+        // absences: attendanceData.filter(row => !row.attended).length
+    
 
     return summary;
 };

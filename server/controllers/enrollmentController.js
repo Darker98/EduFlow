@@ -6,6 +6,7 @@ export const handleEnroll = async (req, res) => {
         const data = await enroll(student_id, enrollment_key);
         res.status(201).json({ success: true, data });
     } catch (error) {
+        console.log(error)
         res.status(400).json({ success: false, message: error.message });
     }
 };

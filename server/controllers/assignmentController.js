@@ -7,10 +7,14 @@ import {
 
 export const handleCreateAssignment = async (req, res) => {
     try {
-        const { file, assignmentDetails, roomID } = req.body;
+        // const { file, assignmentDetails, roomID } = req.body;
+        const file = req.file // get the file from the request
+        const assignmentDetails = JSON.parse(req.body.assignmentDetails);// parse the stringified JSON
+        const roomID = req.body.roomID 
         const assignmentID = await createAssignment(file, assignmentDetails, roomID);
         res.status(201).json({ success: true, message: 'Assignment created successfully', assignmentID });
     } catch (error) {
+        console.log(error)
         res.status(400).json({ success: false, message: error.message });
     }
 };

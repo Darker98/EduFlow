@@ -5,11 +5,14 @@ import {
     handleDeleteAssignment,
     handleUpdateAssignment,
 } from '../controllers/assignmentController.js';
+import multer from 'multer';
+
+const upload = multer();
 
 const router = express.Router();
 
 // Route to create an assignment
-router.post('/create', handleCreateAssignment);
+router.post('/create', upload.single('file'), handleCreateAssignment);
 
 // Route to get assignments by room ID
 router.post('/', handleGetAssignments);

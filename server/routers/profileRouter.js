@@ -18,6 +18,6 @@ router.get('/get', handleGetProfile);
 router.put('/update', handleUpdateProfile);
 
 // Route for deleting a profile
-router.delete('/delete', handleDeleteProfile);
+router.post('/delete', handleDeleteProfile);
 
 export default router;

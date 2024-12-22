@@ -14,6 +14,7 @@ export const enroll = async (student_id, enrollment_key) => {
         .select('room_id');
 
     if (error) throw new Error(error.message);
+
     return data[0];
 };
 
