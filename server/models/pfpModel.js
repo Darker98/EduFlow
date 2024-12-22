@@ -11,6 +11,22 @@ export const uploadProfilePicture = async (file, userId, role) => {
         throw new Error("Incorrect role provided!");
     }
 
+    // Check if the file already exists
+    const { data: existingFile, error: existsError } = await supabase.storage
+        .from('profile-pictures')
+        .list('profiles', { search: `${userId}-${file.name}` });
+
+    if (existsError) throw new Error(existsError.message);
+
+    // If the file exists, delete it before re-uploading
+    if (existingFile && existingFile.length > 0) {
+        const { error: deleteError } = await supabase.storage
+            .from('profile-pictures')
+            .remove([filePath]);
+
+        if (deleteError) throw new Error(deleteError.message);
+    }
+    
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
