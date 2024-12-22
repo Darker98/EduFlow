@@ -33,7 +33,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
     const { data, error } = await supabase.storage
       .from('profile-pictures')
       .upload(`profiles/${userId}-${file.name}`, file, {
-        contentType : file.type
+        contentType : file.mimetype
       });
   
     if (error) throw new Error(error.message);
@@ -116,7 +116,7 @@ export const updateProfilePicture = async (file, userId, role) => {
     const { error: uploadError } = await supabase.storage
         .from('profile-pictures')
         .update(path, file, {
-            contentType: file.type
+            contentType: file.mimetype
         });
 
     if (uploadError) throw new Error(uploadError.message);
