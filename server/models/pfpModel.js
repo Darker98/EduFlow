@@ -16,7 +16,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
     // Check if the file already exists
     const { data: existingFile, error: existsError } = await supabase.storage
         .from('profile-pictures')
-        .list('profiles', { search: `${userId}-${file.name}` });
+        .list('profiles', { search: `${userId}-${file.originalname}` });
 
     if (existsError) throw new Error(existsError.message);
 
@@ -31,15 +31,17 @@ export const uploadProfilePicture = async (file, userId, role) => {
 
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
-      .from('profile-pictures')
-      .upload(`profiles/${userId}-${file.name}`, file, {
-        contentType : file.mimetype
-      });
-  
+        .from('profile-pictures')
+        .upload(`profiles/${userId}-${file.originalname}`, file, {
+            contentType: file.mimetype
+        });
+
     if (error) throw new Error(error.message);
 
+    console.log(JSON.stringify(data));
+
     // Get the URL of the uploaded file
-    const { publicURL, error: urlError } = supabase.storage
+    const { data: publicURL, error: urlError } = supabase.storage
         .from('profile-pictures')
         .getPublicUrl(data.path);
 
@@ -49,9 +51,9 @@ export const uploadProfilePicture = async (file, userId, role) => {
     const { error: databaseError } = await supabase
         .from(tableName)
         .insert([{ pfp_url: publicURL }])
-        .eq('id', userId)
+        .eq('security_id', userId)
 
-    if (databaseError) throw new Error(error.message);
+    if (databaseError) throw new Error(databaseError.message);
 
     return publicURL;
 }
