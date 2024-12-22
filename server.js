@@ -3,6 +3,8 @@ import authRouter from "./server/routers/authRouter.js";
 import profileRouter from "./server/routers/profileRouter.js";
 import roomRouter from "./server/routers/roomRouter.js";
 import enrollmentRouter from "./server/routers/enrollmentRouter.js";
+import assignmentRouter from './server/routers/assignmentRouter.js';
+import gradeRouter from './server/routers/gradeRouter.js';
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -28,6 +30,9 @@ app.use('/profile', profileRouter);
 
 app.use('/rooms',roomRouter);
 app.use('/enrollment',enrollmentRouter);
+
+app.use('/assignments', assignmentRouter); 
+app.use('/grades', gradeRouter);
 
 // Default route for unknown endpoints
 app.use((req, res) => {
