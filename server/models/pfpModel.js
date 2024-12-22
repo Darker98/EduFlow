@@ -57,3 +57,97 @@ export const getProfilePictureUrl = async (userId, role) => {
 
     return url;
 }
+
+export const updateProfilePicture = async (file, userId, role) => {
+    // Select correct table
+    let tableName;
+    if (role === "student") {
+        tableName = "student";
+    } else if (role === "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
+
+    // Retrieve the current profile picture URL from the database
+    const { data: user, error: fetchError } = await supabase
+        .from(tableName)
+        .select('pfp_url')
+        .eq('id', userId)
+        .single();
+
+    if (fetchError) throw new Error(fetchError.message);
+
+    const currentPfpUrl = user.pfp_url;
+
+    // Validate the URL
+    if (!currentPfpUrl) {
+        throw new Error("No existing profile picture URL found for this user.");
+    }
+
+    // Extract the path from the URL
+    const path = currentPfpUrl.split('/storage/v1/object/public/profile-pictures/')[1];
+
+    if (!path) {
+        throw new Error("Invalid profile picture URL format.");
+    }
+
+    // Overwrite the file in the "profile-pictures" bucket
+    const { error: uploadError } = await supabase.storage
+        .from('profile-pictures')
+        .update(path, file);
+
+    if (uploadError) throw new Error(uploadError.message);
+
+    return currentPfpUrl; // Return the same URL since the file was replaced
+};
+
+export const deleteProfilePicture = async (userId, role) => {
+    // Select correct table
+    let tableName;
+    if (role === "student") {
+        tableName = "student";
+    } else if (role === "instructor") {
+        tableName = "instructor";
+    } else {
+        throw new Error("Incorrect role provided!");
+    }
+
+    // Retrieve the current profile picture URL from the database
+    const { data: user, error: fetchError } = await supabase
+        .from(tableName)
+        .select('pfp_url')
+        .eq('id', userId)
+        .single();
+
+    if (fetchError) throw new Error(fetchError.message);
+
+    const currentPfpUrl = user.pfp_url;
+
+    // Validate the URL
+    if (!currentPfpUrl) {
+        throw new Error("No profile picture URL found for this user.");
+    }
+
+    // Extract the path from the URL
+    const path = currentPfpUrl.split('/storage/v1/object/public/profile-pictures/')[1];
+
+    if (!path) {
+        throw new Error("Invalid profile picture URL format.");
+    }
+
+    // Delete the file from the "profile-pictures" bucket
+    const { error: deleteError } = await supabase.storage
+        .from('profile-pictures')
+        .remove([path]);
+
+    if (deleteError) throw new Error(deleteError.message);
+
+    // Remove the URL from the database
+    const { error: databaseError } = await supabase
+        .from(tableName)
+        .update({ pfp_url: null })
+        .eq('id', userId);
+
+    if (databaseError) throw new Error(databaseError.message);
+};

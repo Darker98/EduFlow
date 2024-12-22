@@ -1,7 +1,8 @@
 import supabase from './createClient.js';
+import { uploadProfilePicture, updateProfilePicture, deleteProfilePicture } from './pfpModel.js';
 
 export const createProfile = async (profileData, role) => {
-    const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
+    const { id, first_name, last_name, email, date_of_birth, user_name, pfpFile } = profileData;
 
     let tableName;
     if (role == "student") {
@@ -12,9 +13,11 @@ export const createProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
+    pfpUrl = await uploadProfilePicture(pfpFile, id, role);
+
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url : pfpUrl }])
         .select();
 
     if (error) throw new Error(error.message);
@@ -42,7 +45,7 @@ export const getProfile = async (id, role) => {
 };
 
 export const updateProfile = async (profileData, role) => {
-    const { id, first_name, user_name, last_name, email, date_of_birth } = profileData;
+    const { id, first_name, user_name, last_name, email, date_of_birth, pfpFile } = profileData;
 
     let tableName;
     if (role === "student") {
@@ -52,6 +55,8 @@ export const updateProfile = async (profileData, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+
+    if (pfpFile != null) await updateProfilePicture(pfpFile, id, role);
 
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
@@ -83,6 +88,8 @@ export const deleteProfile = async (id, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+
+    await deleteProfilePicture(id, role);
 
     const { error } = await supabase
         .from(tableName)
