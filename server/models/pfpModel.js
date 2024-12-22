@@ -14,7 +14,9 @@ export const uploadProfilePicture = async (file, userId, role) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`profiles/${userId}-${file.name}`, file);
+      .upload(`profiles/${userId}-${file.name}`, file, {
+        contentType : file.type
+      });
   
     if (error) throw new Error(error.message);
   
@@ -95,7 +97,9 @@ export const updateProfilePicture = async (file, userId, role) => {
     // Overwrite the file in the "profile-pictures" bucket
     const { error: uploadError } = await supabase.storage
         .from('profile-pictures')
-        .update(path, file);
+        .update(path, file, {
+            contentType: file.type
+        });
 
     if (uploadError) throw new Error(uploadError.message);
 
