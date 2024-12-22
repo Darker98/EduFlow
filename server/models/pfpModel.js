@@ -49,7 +49,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
     const { error : databaseError } = await supabase
         .from(tableName)
         .insert([{ pfp_url : publicURL }])
-        .eq('id', userId)
+        .eq('security_id', userId)
     
     if (databaseError) throw new Error(error.message);
 
