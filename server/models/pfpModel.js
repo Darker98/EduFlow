@@ -16,7 +16,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
     // Check if the file already exists
     const { data: existingFile, error: existsError } = await supabase.storage
         .from('profile-pictures')
-        .list('profiles', { search: `${userId}-${file.name}` });
+        .list('profiles', { search: `${userId}-${file.originalname}` });
 
     if (existsError) throw new Error(existsError.message);
 
@@ -32,7 +32,7 @@ export const uploadProfilePicture = async (file, userId, role) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`profiles/${userId}-${file.name}`, file, {
+      .upload(`profiles/${userId}-${file.originalname}`, file, {
         contentType : file.mimetype
       });
   
