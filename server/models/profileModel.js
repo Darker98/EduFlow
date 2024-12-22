@@ -29,7 +29,7 @@ export const createProfile = async (profileData, file, role) => {
 
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ security_id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url : pfpUrl }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url : pfpUrl }])
         .select();
 
     if (error) throw new Error(error.message);
