@@ -44,10 +44,10 @@ const Navbar = ({ pathname }) => {
   }
 
   return (
-    <div className="bg-slate-950 flex justify-between rounded h-14 items-center my-2  ">
+    <div className="bg-slate-950 flex justify-between rounded-lg h-14 items-center my-2  ">
       <div>
         <div className="flex gap-4 items-center  ">
-          <SidebarTrigger className="text-white" />
+          <SidebarTrigger className="text-white ml-4" />
           <h1 className="font-bold text-2xl text-white">
             {pathname}
           </h1>

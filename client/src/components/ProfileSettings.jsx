@@ -4,6 +4,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import { useToast } from "@/hooks/use-toast";
+import { setRoomData } from "@/redux/features/roomSlice";
+import { setRoomId } from "@/redux/features/roomSlice";
+import { setSessionId } from "@/redux/features/sessionSlice";
 import { setUserId, setUserData } from "@/redux/features/userSlice";
 import {
   AlertDialog,
@@ -29,16 +32,18 @@ const ProfileSettings = () => {
         role: user_data.role,
       });
         dispatch(hideLoading());
-      if (res.data.success) {
         toast({
           title: "Profile Deleted",
           description: "Profile has been deleted successfully",
           variant: "default",
         });
         dispatch(setUserId(null));
+        dispatch(setRoomId(null));
         dispatch(setUserData(null));
+        dispatch(setRoomData(null));
+        dispatch(setSessionId(null));
         navigate("/login");
-      }
+      
     } catch (err) {
     dispatch(hideLoading());
       console.log(err);

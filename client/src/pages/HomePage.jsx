@@ -67,7 +67,7 @@ const HomePage = () => {
 
   const {toast} = useToast();
   const dispatch = useDispatch();
-  const {room_id} = useSelector((state) => state.room);
+  const {room_data} = useSelector((state) => state.room);
   const { user_data} = useSelector((state) => state.user)
   const [roomName, setRoomName] = useState("");
   const [section, setSection] = useState("");
@@ -75,7 +75,7 @@ const HomePage = () => {
   const [rooms, setRooms] = useState([]);
   const navigate = useNavigate();
   const [attendanceData, setAttendanceData] = useState([])
-
+  const room_id = room_data?.id;
   const handleClear = (e) => {
     e.preventDefault();
     setRoomName("");
@@ -137,12 +137,12 @@ getRooms();
 useEffect(() => {
     async function getStudentAttendance(){
       try{
+        console.log(room_id);
         const res = await axios.post("http://localhost:3000/attendance/summary",{
           student_id: user_data.id,
           room_id
         });
         if(res.data.success){
-          console.log(res.data.data)
           setAttendanceData(res.data.data);
         }
       }
