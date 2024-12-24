@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/Signup";
 import ProfilePage from "./pages/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage";
+import AboutPage from "./pages/AboutPage";
 import NotFound from "./pages/NotFound";
 import CreateProfilePage from './pages/CreateProfilePage';
 import { Routes, Route, Navigate } from "react-router-dom";
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/result" element={<Results />} />
           <Route path="/classwork" element={<Classwork />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       )}
