@@ -13,11 +13,11 @@ export const createProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    pfpUrl = await uploadProfilePicture(pfpFile, id, role);
+    await uploadProfilePicture(pfpFile, id);
 
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url : pfpUrl }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
         .select();
 
     if (error) throw new Error(error.message);
@@ -56,7 +56,7 @@ export const updateProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    if (pfpFile != null) await updateProfilePicture(pfpFile, id, role);
+    if (pfpFile != null) await updateProfilePicture(pfpFile, id);
 
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
@@ -89,7 +89,7 @@ export const deleteProfile = async (id, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    await deleteProfilePicture(id, role);
+    await deleteProfilePicture(id);
 
     const { error } = await supabase
         .from(tableName)
