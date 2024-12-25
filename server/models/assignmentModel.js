@@ -14,15 +14,22 @@ export const createAssignment = async (file, assignmentDetails, roomID) => {
         throw new Error("Missing required assignment details.");
     }
 
-    const { data, error } = await supabase.storage
+    const { data, error } = await supabase
+        .storage
         .from('assignments')
-        .upload(`assignments/${roomID}-${file.name}`, file);
+        .upload(`${roomID}-${file.name}.pdf`, file.buffer, {
+            contentType: file.mimetype,
+            cacheControl: 3600,
+            upsert: true
+        }
+        );
 
     if (error) throw new Error(error.message);
 
-    const { publicURL, error: urlError } = supabase.storage
+    const { publicURL, error: urlError } = supabase
+        .storage
         .from('assignments')
-        .getPublicUrl(data.path);
+        .getPublicUrl(`${roomID}-${file.name}.pdf`);
 
     if (urlError) throw new Error(urlError.message);
 
@@ -101,9 +108,30 @@ export const deleteAssignment = async (assignmentID) => {
 };
 
 // Update an assignment
-export const updateAssignment = async (assignmentID, updatedDetails) => {
+export const updateAssignment = async (assignmentID, updatedDetails, file) => {
     if (!assignmentID) {
         throw new Error("assignmentId is required to update an assignment.");
+    }
+
+    if (file) {
+        const { data, error } = await supabase
+        .storage
+        .from('assignments')
+        .upload(`${roomID}-${file.name}.pdf`, file.buffer, {
+            contentType: file.mimetype,
+            cacheControl: 3600,
+            upsert: true
+        }
+        );
+
+        if (error) throw new Error(error.message);
+
+        const { assignment_url, error: urlError } = supabase
+            .storage
+            .from('assignments')
+            .getPublicUrl(`${roomID}-${file.name}.pdf`);
+
+        if (urlError) throw new Error(urlError.message);
     }
 
     const allowedFields = ["title", "max_marks", "details", "due_date", "set_visible_date"];
@@ -113,6 +141,10 @@ export const updateAssignment = async (assignmentID, updatedDetails) => {
         if (allowedFields.includes(key) && updatedDetails[key] !== undefined) {
             updateData[key] = updatedDetails[key];
         }
+    }
+
+    if (assignment_url !== undefined) {
+        updateData["assignment_url"] = assignment_url;
     }
 
     if (Object.keys(updateData).length === 0) {
