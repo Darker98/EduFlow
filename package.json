@@ -13,6 +13,7 @@
     "arg": "^5.0.2",
     "autoprefixer": "^10.4.20",
     "balanced-match": "^1.0.2",
+    "base64-arraybuffer": "^1.0.2",
     "bcryptjs": "^2.4.3",
     "binary-extensions": "^2.3.0",
     "brace-expansion": "^2.0.1",

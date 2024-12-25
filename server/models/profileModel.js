@@ -1,5 +1,5 @@
 import supabase from './createClient.js';
-import { uploadProfilePicture, updateProfilePicture, deleteProfilePicture } from './pfpModel.js';
+import { uploadProfilePicture, deleteProfilePicture } from './pfpModel.js';
 
 export const createProfile = async (profileData, file, role) => {
 
@@ -24,7 +24,6 @@ export const createProfile = async (profileData, file, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
-
     await uploadProfilePicture(pfpFile, id);
 
     const { data, error } = await supabase

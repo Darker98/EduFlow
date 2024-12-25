@@ -1,16 +1,15 @@
-import { decode } from 'base64-arraybuffer'
+import { decode, encode } from 'base64-arraybuffer'
 import supabase from './createClient.js'
 
 export const uploadProfilePicture = async (file, userId) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`${userId}`, decode(file), {
+      .upload(`${userId}`, encode(file.buffer), {
         cacheControl: '3600',
         upsert: true,
         contentType : file.mimetype
       });
-  
     if (error) throw new Error(error.message);
 }
 
