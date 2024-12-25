@@ -1,7 +1,20 @@
 import supabase from './createClient.js';
+import { uploadProfilePicture, deleteProfilePicture } from './pfpModel.js';
 
-export const createProfile = async (profileData, role) => {
+export const createProfile = async (profileData, file, role) => {
+
     const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
+    const pfpFile = file;
+
+    // For testing purposes
+    console.log(`id: ${id}`);
+    console.log(`first_name: ${first_name}`);
+    console.log(`last_name: ${last_name}`);
+    console.log(`email: ${email}`);
+    console.log(`date_of_birth: ${date_of_birth}`);
+    console.log(`user_name: ${user_name}`);
+    console.log(`role: ${role}`);
+    console.log(`pfpFile: ${pfpFile}`);
 
     let tableName;
     if (role == "student") {
@@ -11,6 +24,7 @@ export const createProfile = async (profileData, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+    await uploadProfilePicture(pfpFile, id);
 
     const { data, error } = await supabase
         .from(tableName)
@@ -38,12 +52,17 @@ export const getProfile = async (id, role) => {
         .eq('id', id)
         .single();
 
+    const { pfpUrl } = supabase
+        .storage
+        .from('profile-pictures')
+        .getPublicUrl(`${id}.jpeg`);
+
     if (error) throw new Error(error.message);
-    return data;
+    return { data, pfpUrl };
 };
 
 export const updateProfile = async (profileData, role) => {
-    const { id, first_name, user_name, last_name, email, date_of_birth } = profileData;
+    const { id, first_name, user_name, last_name, email, date_of_birth, pfpFile } = profileData;
 
     let tableName;
     if (role === "student") {
@@ -54,10 +73,14 @@ export const updateProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
+    if (pfpFile != null) await uploadProfilePicture(pfpFile, id);
+
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
-        Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : 
-            date_of_birth, user_name : user_name })
+        Object.entries({
+            first_name: first_name, last_name: last_name, email: email, date_of_birth:
+                date_of_birth, user_name: user_name
+        })
             .filter(([_, value]) => value != null)
     );
 
@@ -84,6 +107,8 @@ export const deleteProfile = async (id, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+
+    await deleteProfilePicture(id);
 
     const { error } = await supabase
         .from(tableName)

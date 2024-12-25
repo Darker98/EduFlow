@@ -14,40 +14,40 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useDispatch, useSelector } from "react-redux";
-import {setUserData, setUserId} from "../redux/features/userSlice"
+import { setUserData, setUserId } from "../redux/features/userSlice"
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 
 function LoginForm() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const dispatch = useDispatch();
-  const handleSignIn = async () =>{
-    try{
-  dispatch(setLoading());
-  const res = await axios.post('http://localhost:3000/auth/login', {
-    email,
-    password
-  });
-  dispatch(hideLoading());
-  if(res.data.success){
-    toast({
-      title: res?.data?.message,
-      description: "Welcome back",
-      type: "success"
-    })
-    dispatch(setUserId(res?.data?.data?.userId));
-    if(res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor"){
-      dispatch(setUserId(res?.data?.data?.userId));
-      dispatch(setUserData(res?.data?.data));
-      navigate('/home');
-    }
-    else{
-      navigate('/create/profile');
-    }
-  }
+  const handleSignIn = async () => {
+    try {
+      dispatch(setLoading());
+      const res = await axios.post('http://localhost:3000/auth/login', {
+        email,
+        password
+      });
+      dispatch(hideLoading());
+      if (res.data.success) {
+        toast({
+          title: res?.data?.message,
+          description: "Welcome back",
+          type: "success"
+        })
+        dispatch(setUserId(res?.data?.data?.userId));
+        if (res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor") {
+          dispatch(setUserId(res?.data?.data?.userId));
+          dispatch(setUserData(res?.data?.data));
+          navigate('/home');
+        }
+        else {
+          navigate('/create/profile');
+        }
+      }
 
     }
-    catch(err){
+    catch (err) {
       dispatch(hideLoading());
       toast({
         title: err.response.data.message,
@@ -77,7 +77,7 @@ function LoginForm() {
               type="email"
               placeholder="m@example.com"
               value={email}
-              onChange = {(e) => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
@@ -88,7 +88,7 @@ function LoginForm() {
                 Forgot your password?
               </Link>
             </div>
-            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)}/>
+            <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <div className="flex gap-2">
           <Button  type="submit" className="w-full" onClick={()=>handleSignIn()}>

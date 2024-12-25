@@ -1,59 +1,32 @@
+import { decode, encode } from 'base64-arraybuffer'
 import supabase from './createClient.js'
 
-export const uploadProfilePicture = async (file, userId, role) => {
-    // Select correct table
-    let tableName;
-    if (role == "student") {
-        tableName = "student";
-    } else if (role == "instructor") {
-        tableName = "instructor";
-    } else {
-        throw new Error("Incorrect role provided!");
-    }
-
+export const uploadProfilePicture = async (file, userId) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`profiles/${userId}-${file.name}`, file);
-  
+      .upload(`${userId}.jpeg`, file.buffer, {
+        cacheControl: '3600',
+        upsert: true,
+        contentType : file.mimetype
+      });
     if (error) throw new Error(error.message);
-  
-    // Get the URL of the uploaded file
-    const { publicURL, error: urlError } = supabase.storage
-      .from('profile-pictures')
-      .getPublicUrl(data.path);
-  
-    if (urlError) throw new Error(error.message);
-  
-    // Store the URL in the database
-    const { error : databaseError } = await supabase
-        .from(tableName)
-        .insert([{ pfp_url : publicURL }])
-        .eq('id', userId)
-    
-    if (databaseError) throw new Error(error.message);
-
-    return publicURL;
 }
 
-export const getProfilePictureUrl = async (userId, role) => {
-    // Select correct table
-    let tableName;
-    if (role == "student") {
-        tableName = "student";
-    } else if (role == "instructor") {
-        tableName = "instructor";
-    } else {
-        throw new Error("Incorrect role provided!");
-    }
-
-    // Store the URL in the database
-    const { url, error } = await supabase
-        .from(tableName)
-        .select('pfp_url')
-        .eq('id', userId)
+export const getProfilePicture = async (userId) => {
+    const { data, error } = await supabase
+        .storage
+        .from('profile-pictures')
+        .download(`${userId}`);
 
     if (error) throw new Error(error.message);
 
-    return url;
+    return data;
 }
+
+export const deleteProfilePicture = async (userId) => {
+    const { data, error } = await supabase
+        .storage
+        .from('profile-pictures')
+        .remove([`${userId}.jpeg`]);
+};
