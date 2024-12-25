@@ -46,7 +46,7 @@ const {user_data} = useSelector(state => state.user);
     <Sidebar variant='floating' collapsible='icon' >
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="text-2xl font-bold text-black mb-10">
+          <SidebarGroupLabel className="text-2xl font-bold  text-black mb-10">
             EduFlow
           </SidebarGroupLabel>
           <SidebarGroupContent>

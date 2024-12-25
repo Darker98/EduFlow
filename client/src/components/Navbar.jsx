@@ -5,6 +5,7 @@ import { SidebarTrigger } from "./ui/sidebar";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios'
+import { ModeToggle } from "./mode-toggle";
 import {setLoading, hideLoading} from "@/redux/features/loadingSlice";
 import { useToast } from "@/hooks/use-toast";
 import { setUserId, setUserData } from "@/redux/features/userSlice";
@@ -68,7 +69,7 @@ const Navbar = ({ pathname }) => {
               </NavLink>
             </>
           )}
-
+          <ModeToggle  />
           <NavLink to="/about">
             <Info className="text-white" />
           </NavLink>

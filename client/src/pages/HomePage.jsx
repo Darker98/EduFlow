@@ -205,7 +205,7 @@ useEffect(() => {
  
     <div>
       <Layout pathname={"Home"}>
-        <div>
+        <div >
           {user_data?.role === "instructor" ? ( <div className="flex justify-end">
             <TooltipProvider>
               <Tooltip>

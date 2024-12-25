@@ -112,7 +112,12 @@ const Classwork = () => {
 
   const handleClear = (e) => {
     e.preventDefault();
-   
+    setDetails('');
+    setTitle('');
+    setmaxMarks('');
+    setDueDate('');
+    setSetVisibleDate('');
+    setFile('');
   };
 
   return (

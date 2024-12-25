@@ -1,8 +1,25 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Card, CardContent } from "@/components/ui/card"
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
+
 
 export function ProfileCard() {
+
+    useEffect(() => {
+        async function fetchCourses () {
+            try{
+            const res = await axios.post("http://localhost:3000/profile/studentEnrollment", {
+                
+            })
+            }
+            catch(err){
+                console.log(err);
+
+            }
+        }
+    })
 
     const {user_data} = useSelector((state) => state.user);
 
