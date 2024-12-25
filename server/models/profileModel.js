@@ -67,7 +67,7 @@ export const updateProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    if (pfpFile != null) await updateProfilePicture(pfpFile, id);
+    if (pfpFile != null) await uploadProfilePicture(pfpFile, id);
 
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(

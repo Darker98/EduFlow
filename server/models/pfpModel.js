@@ -5,7 +5,7 @@ export const uploadProfilePicture = async (file, userId) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`${userId}.jpeg`, decode(file), {
+      .upload(`${userId}.jpeg`, file.buffer, {
         cacheControl: '3600',
         upsert: true,
         contentType : file.mimetype
