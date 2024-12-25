@@ -10,7 +10,7 @@ router.post('/enroll', handleEnroll);
 router.post('/studentEnrollment', handleGetEnrollments); //made this a post request
 
 // Route to unenroll a student from a room
-router.delete('/unenroll', handleUnenroll);
+router.post('/unenroll', handleUnenroll);
 
 // Route to get all students enrolled in a room
 router.post('/students', handleGetStudents);

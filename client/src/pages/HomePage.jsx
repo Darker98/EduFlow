@@ -309,9 +309,9 @@ useEffect(() => {
           <div className="flex border rounded-lg gap-4 my-3 flex-wrap ">
             <div className=" flex w-full justify-between p-12 gap-10  text-2xl">
               <div className=" flex items-center gap-10 hover:cursor-pointer transition p-10">
-                <div className="border flex h-[10rem] w-[18rem] rounded-full shadow-lg">
+                <div className="border flex h-[20rem] w-[20rem] rounded-full shadow-lg">
                  <img 
-                 className="border rounded-full h-full w-full object-cover"
+                 className="border rounded-full h-[20rem] w-[20rem] object-cover"
                  src={user_data?.pfp_url}
                  alt="user profile"
                  />

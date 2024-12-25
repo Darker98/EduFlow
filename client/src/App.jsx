@@ -10,6 +10,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Attendance from "./pages/Attendance";
 import Results from "./pages/Results";
 import Classwork from "./pages/Classwork";
+import ViewStudents from "./pages/ViewStudents";
 import Room from "./pages/Room";
 import Spinner from "./components/Spinner";
 import { useSelector } from "react-redux";
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/result" element={<Results />} />
           <Route path="/classwork" element={<Classwork />} />
+          <Route path="/view-students" element={<ViewStudents />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       )}
