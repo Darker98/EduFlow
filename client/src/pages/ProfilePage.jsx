@@ -1,20 +1,14 @@
-import Layout from "../components/Layout";
-import ProfileCard from "../components/ProfileCard";
-import ProfileSettings from "../components/ProfileSettings";
-import React from "react";
+import Profile from "@/components/Profile";
+import Layout from "@/components/Layout";
 
-const ProfilePage = () => {
-
+function ProfilePage() {
     return (
         <div>
-            <Layout pathname={"Profile"}>
-                <div className="flex flex-col h-screen">
-                    <ProfileCard  />
-                    <ProfileSettings />
-                </div>
+            <Layout>
+                <Profile />
             </Layout>
         </div>
-    );
+    )
 }
 
 export default ProfilePage;
