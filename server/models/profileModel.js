@@ -6,16 +6,6 @@ export const createProfile = async (profileData, file, role) => {
     const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
     const pfpFile = file;
 
-    // For testing purposes
-    console.log(`id: ${id}`);
-    console.log(`first_name: ${first_name}`);
-    console.log(`last_name: ${last_name}`);
-    console.log(`email: ${email}`);
-    console.log(`date_of_birth: ${date_of_birth}`);
-    console.log(`user_name: ${user_name}`);
-    console.log(`role: ${role}`);
-    console.log(`pfpFile: ${pfpFile}`);
-
     let tableName;
     if (role == "student") {
         tableName = "student";
@@ -24,19 +14,23 @@ export const createProfile = async (profileData, file, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
-    await uploadProfilePicture(pfpFile, id);
+     await uploadProfilePicture(pfpFile, id);
+//after storing the image in the storage, we will get the url which will be stored in the respective table using the user id as the image wil stored userid.jpeg
+   const { data: publicUrl}  = supabase
+   .storage
+   .from('profile-pictures')
+   .getPublicUrl(`${id}.jpeg`);
 
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url: publicUrl.publicUrl }]) //storing the profile url as soon as it is fetched
         .select();
-
     if (error) throw new Error(error.message);
     return {...data[0], role}
 
 };
 
-export const getProfile = async (id, role) => {
+export const getProfile = async (id, role, pfp_id) => {
     let tableName;
     if (role === "student") {
         tableName = "student";
@@ -46,19 +40,22 @@ export const getProfile = async (id, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    const { data, error } = await supabase
+    const {data,error} = await supabase
         .from(tableName)
         .select('*')
         .eq('id', id)
         .single();
 
-    const { pfpUrl } = supabase
+    const { data: publicUrl}  = supabase
         .storage
         .from('profile-pictures')
-        .getPublicUrl(`${id}.jpeg`);
+        .getPublicUrl(`${pfp_id}.jpeg`);
+
+        data.pfp_url = publicUrl.publicUrl;
 
     if (error) throw new Error(error.message);
-    return { data, pfpUrl };
+    
+    return { data};
 };
 
 export const updateProfile = async (profileData, role) => {

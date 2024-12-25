@@ -59,6 +59,7 @@ export default function EditProfilePage() {
             formData.append("first_name", firstName);
             formData.append("last_name", lastName);
             formData.append("email", email);
+            formData.append("user_name", username);
             formData.append("date_of_birth", dateOfBirth);
             formData.append("pfpFile", profilePicture);
             formData.append("role", role);
@@ -74,9 +75,10 @@ export default function EditProfilePage() {
             if (res.data.success) {
                 toast({
                     title: "Profile Created",
-                    variant: "success"
+                    description: "Your profile has been created successfully",
+                    variant: "default"
                 });
-                dispatch(setUserData(res.data.data[0]));
+                dispatch(setUserData(res.data.data));
                 navigate('/home')
             }
 

@@ -12,9 +12,12 @@ export const userSlice = createSlice({
         },
         setUserData : (state, action) => {
             state.user_data = action.payload;
+        },
+        setUserPfpUrl : (state, action) => {
+            state.user_data.pfp_url = action.payload;
         }
     }
 });
 
-export const { setUserId, setUserData } = userSlice.actions;
+export const { setUserId, setUserData, setUserPfpUrl } = userSlice.actions;
 export default userSlice.reducer;

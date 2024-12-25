@@ -16,14 +16,16 @@ export const handleCreateProfile = async (req, res) => {
     }
 };
 
+//not using thhis function anywhere
 export const handleGetProfile = async (req, res) => {
     try {
         const { id, role } = req.body;
+        const {pfp_id} = req.body;
 
         if (!role) {
             throw new Error("Role is required.");
         }
-        const data = await getProfile(id, role);
+        const data = await getProfile(id ,role, pfp_id);
         res.status(200).json({ success: true, data });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

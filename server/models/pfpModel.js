@@ -11,6 +11,8 @@ export const uploadProfilePicture = async (file, userId) => {
         contentType : file.mimetype
       });
     if (error) throw new Error(error.message);
+    console.log(data);
+  
 }
 
 export const getProfilePicture = async (userId) => {

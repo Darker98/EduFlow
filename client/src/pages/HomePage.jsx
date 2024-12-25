@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { setRoomId } from "@/redux/features/roomSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useEffect } from "react";
+import { setUserPfpUrl } from "@/redux/features/userSlice";
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import axios from 'axios';
 import {
@@ -40,6 +41,7 @@ import Navbar from "@/components/Navbar";
 import RoomCards from "@/components/RoomCards";
 import { setRoomData } from "@/redux/features/roomSlice";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { setUserData } from "@/redux/features/userSlice";
 
 
 const chartData = [
@@ -69,6 +71,7 @@ const HomePage = () => {
   const dispatch = useDispatch();
   const {room_data} = useSelector((state) => state.room);
   const { user_data} = useSelector((state) => state.user)
+  const {user_id} = useSelector((state) => state.user);
   const [roomName, setRoomName] = useState("");
   const [section, setSection] = useState("");
   const [enrollmentKey, setEnrollmentKey] = useState("");
@@ -114,7 +117,7 @@ navigate(`/room/${res.data.data.id}`);
     }
   }
 
-  
+
   useEffect(() => {
 async function getRooms(){
   try{
@@ -131,6 +134,7 @@ async function getRooms(){
   }
 
 }
+if(user_data.role === 'instructor')
 getRooms();
   }, [user_data.id]);
 
@@ -159,7 +163,7 @@ useEffect(() => {
   async function getEnrollments(){
     try{
       const res = await axios.post("http://localhost:3000/enrollment/studentEnrollment",{
-        student_id: user_data.id
+        student_id: user_data.id || user_id
       });
       if(res.data.success){
         setRooms(res.data.data);
@@ -173,6 +177,7 @@ useEffect(() => {
   if(user_data.role === 'student')
   getEnrollments();
 }, []);
+
 
   const handleRoomEnrollment = async (e) => {
     e.preventDefault();
@@ -304,12 +309,12 @@ useEffect(() => {
           <div className="flex border rounded-lg gap-4 my-3 flex-wrap ">
             <div className=" flex w-full justify-between p-12 gap-10  text-2xl">
               <div className=" flex items-center gap-10 hover:cursor-pointer transition p-10">
-                <div className="border flex h-[13rem] w-[13rem] rounded-full shadow-lg">
-                  <CircleUser
-                    height={"13rem"}
-                    width={"13rem"}
-                    onClick={() => navigate("/profile")}
-                  />
+                <div className="border flex h-[10rem] w-[18rem] rounded-full shadow-lg">
+                 <img 
+                 className="border rounded-full h-full w-full object-cover"
+                 src={user_data?.pfp_url}
+                 alt="user profile"
+                 />
                 </div>
                 <div className="flex justify-center flex-col gap-6 ">
                   <p>{user_data?.role === 'instructor' ? (<span className="font-semibold">Instructor Name:</span>) : (<span className="font-semibold">Student Name:</span>)} {user_data?.first_name} {user_data?.last_name}</p>
@@ -317,8 +322,9 @@ useEffect(() => {
                   <p>{user_data?.role === 'instructor' ? (<span className="font-semibold">Instructor Id:</span>) : (<span className="font-semibold">Student Id:</span>)} {user_data?.id}</p>
                 </div>
               </div>
-              {user_data?.role === "student" ? (
-                <Card className="border-hidden ">  
+              {user_data?.role === "student"  ? (
+                attendanceData.length > 0 ? (
+                  <Card className="border-hidden ">  
                 <CardHeader>
                   <CardTitle className="text-center">Attendance Graph</CardTitle>
                 </CardHeader>
@@ -350,6 +356,10 @@ useEffect(() => {
                   </div>
                 </CardFooter>
               </Card>
+                )
+                : (<div className="flex justify-center items-center h-[300px] w-full">
+                  <p className="text-2xl">No Attendance Data Available</p>
+                </div>)
               ) : null}
               
             </div>
