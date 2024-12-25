@@ -15,7 +15,7 @@ const router = express.Router();
 router.post('/create', upload.single('file'), handleCreateAssignment);
 
 // Route to get assignments by room ID
-router.post('/', handleGetAssignments);
+router.post('/get', handleGetAssignments);
 
 // Route to delete an assignment
 router.delete('/delete', handleDeleteAssignment);

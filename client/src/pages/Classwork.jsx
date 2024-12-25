@@ -8,6 +8,8 @@ import axios from 'axios';
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
+import { useDispatch } from "react-redux";
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 import {
   Dialog,
   DialogContent,
@@ -22,76 +24,49 @@ import {
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
 import {useState, useEffect} from 'react';
-const classwork = [
-  {
-    icon: ClipboardList,
-    name: "Assignment 1",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 2",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/11/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 3",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "2/12/2021",
-    created_at: "12/12/2011",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 4",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/1/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 5",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-];
+
 
 const Classwork = () => {
+
+  const getCurrentDate = () => {
+    const date = new Date(); // Get the current date
+    const year = date.getFullYear(); // Get the year
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get the month (zero-padded)
+    const day = String(date.getDate()).padStart(2, '0'); // Get the day (zero-padded)
+    return `${year}-${month}-${day}`; // Combine into yyyy-mm-dd format
+  };
+
+
   const {user_data} = useSelector((state) => state.user);
   const {room_data} = useSelector((state) => state.room);
   const {toast} = useToast();
   const [title, setTitle] = useState();
-  const [maxmarks, setmaxMarks] = useState();
+  const [maxMarks, setmaxMarks] = useState();
   const [details, setDetails] = useState();
   const [dueDate, setDueDate] = useState();
-  const [setVisibleDate, setSetVisibleDate] = useState();
+  const [setVisibleDate] = useState(getCurrentDate());
   const [file, setFile] = useState();
+  const [assignments, setAsssignments] = useState([]);
+  const dispatch = useDispatch();
 
   const handleAddAssignment = async (e) => {
     e.preventDefault();
     try{
+    dispatch(setLoading());
      const formData = new FormData();
       //appending the file to the form data
       formData.append('file', file);
       //appending the assignment details to the form data
-      formData.append('assignmentDetails', JSON.stringify({title, maxmarks, details, dueDate, setVisibleDate}));
+      formData.append('assignmentDetails', JSON.stringify({title, maxMarks, details, dueDate, setVisibleDate}));
       //appending the room id to the form data
       formData.append('roomID', room_data.id);
-
+      
       const res = await axios.post('http://localhost:3000/assignments/create', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      dispatch(hideLoading());
       if(res.data.success){
         toast({
           title: 'Assignment Created',
@@ -101,6 +76,7 @@ const Classwork = () => {
       }
     }
     catch(err){
+      dispatch(hideLoading());
       console.log(err);
       toast({
         title: 'Error',
@@ -110,13 +86,29 @@ const Classwork = () => {
     }
   }
 
+  useEffect(() => {
+    async function getAssignments(){
+      try{
+        const res = await axios.post('http://localhost:3000/assignments/get', {
+          roomID: room_data.id
+        });
+        if(res.data.success){
+          setAsssignments(res.data.data);
+        }
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    getAssignments();
+  }, []);
+
   const handleClear = (e) => {
     e.preventDefault();
     setDetails('');
     setTitle('');
     setmaxMarks('');
     setDueDate('');
-    setSetVisibleDate('');
     setFile('');
   };
 
@@ -148,7 +140,7 @@ const Classwork = () => {
                           <Label>Maximum Marks</Label>
                           <Input
                             type="number"
-                            value={maxmarks}
+                            value={maxMarks}
                             required
                             onChange={(e) => setmaxMarks(e.target.value)} 
                           />
@@ -158,7 +150,8 @@ const Classwork = () => {
                           <Input
                             required
                             type="text"
-                            
+                            value={details}
+                            onChange={(e) => setDetails(e.target.value)}
                           />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -168,15 +161,6 @@ const Classwork = () => {
                             value={dueDate}
                             required
                             onChange={(e) => setDueDate(e.target.value)}
-                          />
-                        </div>
-                        <div className="flex flex-col gap-4">
-                          <Label>Visible Date</Label>
-                          <Input
-                            type="date"
-                            value={setVisibleDate}
-                            required
-                            onChange={(e) => setSetVisibleDate(e.target.value)}
                           />
                         </div>
                         <div className="flex flex-col gap-4">
@@ -203,7 +187,7 @@ const Classwork = () => {
         </div>)}
         
         <div className=" flex flex-col  gap-4 p-1 my-10">
-          {classwork.map((item, index) => (
+          {assignments.map((item, index) => (
             <Collapsible
               key={index}
               className="hover:shadow-2xl transition duration-300 gap-5 border border-grey p-5 rounded-xl"
@@ -211,9 +195,9 @@ const Classwork = () => {
               <div className=" flex justify-between ">
                 <div className=" flex gap-4 items-center">
                   <div className="rounded-full border border-black p-2">
-                    <item.icon />
+                    <ClipboardList />
                   </div>
-                  <h1 className="text-xl font-bold">{item.name}</h1>
+                  <h1 className="text-xl font-bold">{item.title}</h1>
                 </div>
                 <CollapsibleTrigger>
                   <Button className="bg-white text-black hover:bg-slate-50 border">
@@ -226,14 +210,14 @@ const Classwork = () => {
                   <div className="p-5 flex gap-4">
                     <p>
                       <span className="font-semibold">Task Description: </span>
-                      {item.Description}
+                      {item.details}
                     </p>
                     <p>
                       <span className="font-semibold">Due Date: </span>
                       {item.due_date}
                     </p>
                   </div>
-                  <span className="font-semibold p-5">Posted At: {item.created_at}</span>
+                  <span className="font-semibold p-5">Posted At: {item.set_visible_at}</span>
                 </div>
               </CollapsibleContent>
             </Collapsible>

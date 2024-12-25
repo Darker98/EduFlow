@@ -2,38 +2,38 @@ import supabase from './createClient.js';
 
 // Create a new assignment
 export const createAssignment = async (file, assignmentDetails, roomID) => {
-    const {
-        title,
+    const {title,
         maxMarks,
         details,
         dueDate,
         setVisibleDate
-    } = assignmentDetails;
+    }  = assignmentDetails;
+    
+    const fileName = `${roomID}-assignment-${Date.now()}.pdf`; //setting custom filenames
 
-    if (!roomID || !title || !maxMarks || !dueDate || !setVisibleDate) {
+    if (!roomID || !title || !maxMarks || !dueDate || !setVisibleDate ||!details) {
         throw new Error("Missing required assignment details.");
     }
 
     const { data, error } = await supabase
         .storage
         .from('assignments')
-        .upload(`${roomID}-${file.name}.pdf`, file.buffer, {
+        .upload(fileName, file.buffer, {
             contentType: file.mimetype,
             cacheControl: 3600,
             upsert: true
         }
         );
-
     if (error) throw new Error(error.message);
 
-    const { publicURL, error: urlError } = supabase
+    const { data:publicUrl, error: urlError } = supabase
         .storage
         .from('assignments')
-        .getPublicUrl(`${roomID}-${file.name}.pdf`);
-
+        .getPublicUrl(fileName);
+console.log('public url', publicUrl)
     if (urlError) throw new Error(urlError.message);
 
-    const { error: databaseError } = await supabase
+    const { data:id,error: databaseError } = await supabase
         .from('assignment')
         .insert([{
             room_id: roomID,
@@ -42,13 +42,13 @@ export const createAssignment = async (file, assignmentDetails, roomID) => {
             details: details,
             due_date: dueDate,
             set_visible_at: setVisibleDate,
-            assignment_url: publicURL
+            assignment_url: publicUrl.publicUrl
         }])
         .select('id');
 
     if (databaseError) throw new Error(databaseError.message);
 
-    return id;
+    return id.id;
 };
 
 // Retrieve assignments by roomId

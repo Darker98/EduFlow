@@ -86,6 +86,7 @@ const Room = () => {
   const { session_id } = useSelector((state) => state.session);
   const [startingTime, setStartingTime] = useState("");
   const [endingTime, setEndingTime] = useState("");
+  const [assignments, setAsssignments] = useState([]);
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user_data } = useSelector((state) => state.user);
@@ -137,6 +138,23 @@ const Room = () => {
       })
     }
   }
+
+  useEffect(() => {
+    async function getAssignments(){
+      try{
+        const res = await axios.post('http://localhost:3000/assignments/get', {
+          roomID: room_data.id
+        });
+        if(res.data.success){
+          setAsssignments(res.data.data);
+        }
+      }
+      catch(err){
+        console.log(err);
+      }
+    }
+    getAssignments();
+  }, []);
 
   const handleClear = (e) => {
     e.preventDefault();
@@ -291,22 +309,22 @@ const Room = () => {
 
               {/* classwork */}
               <div className=" flex flex-col gap-4  p-1 my-10">
-                {classWork.map((work) => (
+                {assignments.length > 0 ? assignments.map((work) => (
                   <div
                     key={work.due_date}
                     className="flex items-center hover:cursor-pointer hover:shadow-2xl transition duration-300 gap-5 border border-grey p-5 rounded-xl"
                   >
                     <div className="rounded-full border border-black p-2">
-                      <work.icon />
+                      <ClipboardList />
                     </div>
                     <div>
-                      <h1 className="text-xl font-bold">{work.name}</h1>
+                      <h1 className="text-xl font-bold">{work.title}</h1>
                       <div>
-                        <p>Created At: {work.created_at}</p>
+                        <p>Created At: {work.set_visible_at}</p>
                       </div>
                     </div>
                   </div>
-                ))}
+                )) : (<p>No Assigments For Today</p>)}
               </div>
               {/* classwork */}
             </div>
