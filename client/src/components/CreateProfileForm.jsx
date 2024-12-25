@@ -16,12 +16,12 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-  } from "@/components/ui/select"
+} from "@/components/ui/select"
 import axios from 'axios'
 export default function EditProfilePage() {
     const navigate = useNavigate();
-    const {toast} = useToast();
-    const {user_id} = useSelector((state) => state.user);
+    const { toast } = useToast();
+    const { user_id } = useSelector((state) => state.user);
     const dispatch = useDispatch();
 
 
@@ -47,43 +47,50 @@ export default function EditProfilePage() {
         setProfilePicturePreview(null);
     };
 
-    const handleSubmit =async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-    try{
-        dispatch(setLoading());
-        const res = await axios.post("http://localhost:3000/profile/create", {
-            id: user_id,
-            user_name: username,
-            email,
-            first_name: firstName,
-            last_name: lastName,
-            date_of_birth: dateOfBirth,
-            pfp_url: profilePicture,
-            role: role
-        }, 
-        );
-        dispatch(hideLoading());
-        if(res.data.success){
-            toast({
-                title:"Profile Created",
-                variant:"success"
-            });
-            console.log(res.data)
-            dispatch(setUserData(res.data.data[0]));
-            navigate('/home')
+        try {
+            console.log(profilePicture); // test
+            dispatch(setLoading());
+
+            const formData = new FormData();
+
+            formData.append("id", user_id);
+            formData.append("first_name", firstName);
+            formData.append("last_name", lastName);
+            formData.append("email", email);
+            formData.append("date_of_birth", dateOfBirth);
+            formData.append("pfpFile", profilePicture);
+            formData.append("role", role);
+
+            const res = await axios.post("http://localhost:3000/profile/create",
+                formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            },
+            );
+            dispatch(hideLoading());
+            if (res.data.success) {
+                toast({
+                    title: "Profile Created",
+                    variant: "success"
+                });
+                dispatch(setUserData(res.data.data[0]));
+                navigate('/home')
+            }
+
         }
-     
-    }
-    catch(err){
-        dispatch(hideLoading())
-        console.log(err)
-        toast({
-            title:"Error",
-            description:err.response.data.message,
-            variant:"destructive"
-        });
-    }
-    
+        catch (err) {
+            dispatch(hideLoading())
+            console.log(err)
+            toast({
+                title: "Error",
+                description: err.response.data.message,
+                variant: "destructive"
+            });
+        }
+
     };
 
 
@@ -183,10 +190,10 @@ export default function EditProfilePage() {
                                 <Label>Select Role</Label>
                                 <select value={role} onChange={(e) => setRole(e.target.value)} className="w-full p-2 border border-300 rounded-md">
                                     <option value="student">Student</option>
-                                    <option value="instructor">Instructor</option> 
+                                    <option value="instructor">Instructor</option>
                                 </select>
                             </div>
-                            <Button type ="submit" className="w-full">
+                            <Button type="submit" className="w-full">
                                 Save Changes
                             </Button>
                         </form>
