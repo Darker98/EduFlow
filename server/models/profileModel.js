@@ -52,8 +52,13 @@ export const getProfile = async (id, role) => {
         .eq('id', id)
         .single();
 
+    const { pfpUrl } = supabase
+        .storage
+        .from('profile-pictures')
+        .getPublicUrl(`${id}.jpeg`);
+
     if (error) throw new Error(error.message);
-    return data;
+    return { data, pfpUrl };
 };
 
 export const updateProfile = async (profileData, role) => {
