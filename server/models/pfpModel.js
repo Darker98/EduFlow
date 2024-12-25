@@ -5,7 +5,7 @@ export const uploadProfilePicture = async (file, userId) => {
     // Upload the profile picture to the "profile-pictures" bucket
     const { data, error } = await supabase.storage
       .from('profile-pictures')
-      .upload(`${userId}`, decode(file), {
+      .upload(`${userId}.jpeg`, decode(file), {
         cacheControl: '3600',
         upsert: true,
         contentType : file.mimetype
@@ -29,5 +29,5 @@ export const deleteProfilePicture = async (userId) => {
     const { data, error } = await supabase
         .storage
         .from('profile-pictures')
-        .remove([`${userId}`]);
+        .remove([`${userId}.jpeg`]);
 };
