@@ -107,7 +107,7 @@ const Attendance = () => {
                     Student Id
                   </TableHead>
                   <TableHead className="text-black font-bold">
-                    Student Name
+                    Student 
                   </TableHead>
                   <TableHead className="text-black font-bold">
                     Attendance
@@ -118,7 +118,16 @@ const Attendance = () => {
                 {attendancesData.map((attendance) => (
                   <TableRow key={attendance.id}>
                     <TableCell>{attendance.id}</TableCell>
-                    <TableCell>{attendance.first_name}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-4 flex-col">
+                        <div className="h-16 w-16 border ">
+                        <img  className="h-16 w-16  bg-cover border shadow-lg" src={attendance.pfp_url} alt="picture" />
+                        </div>
+                        <div className="mx-2">
+                        {attendance.first_name} {attendance.last_name}
+                        </div>
+                      </div>
+                      </TableCell>
                     <TableCell className="text-right">
                       <Select onValueChange={value=>onSelect(attendance.id, value)} >
                         <SelectTrigger>

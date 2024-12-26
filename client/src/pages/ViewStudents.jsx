@@ -34,8 +34,8 @@ const ViewStudents = () => {
   const handleKickStudent = async () => {
     try{
     const res = await axios.post('http://localhost:3000/enrollment/unenroll', {
-        studentId: user_data.id,
-        roomId: room_data.id
+        student_id: user_data.id,
+        room_id: room_data.id
     });
     if(res.data.success){
         setStudents(students.filter((student) => student.id !== user_data.id));

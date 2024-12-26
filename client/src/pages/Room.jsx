@@ -37,48 +37,8 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { Button } from "@/components/ui/button";
-const classWork = [
-  {
-    icon: ClipboardList,
-    name: "Assignment 1",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 2",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 3",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 4",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-  {
-    icon: ClipboardList,
-    name: "Assignment 5",
-    Description:
-      "lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua",
-    due_date: "12/12/2021",
-    created_at: "12/12/2021",
-  },
-];
+import { setAssignmentData } from "@/redux/features/assignmentSlice";
+
 
 const Room = () => {
   const navigate = useNavigate();
@@ -86,11 +46,11 @@ const Room = () => {
   const { session_id } = useSelector((state) => state.session);
   const [startingTime, setStartingTime] = useState("");
   const [endingTime, setEndingTime] = useState("");
-  const [assignments, setAsssignments] = useState([]);
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user_data } = useSelector((state) => state.user);
   const { room_data } = useSelector((state) => state.room);
+  const {assignment_data} = useSelector((state)=> state.assignment);
 
   useEffect(() => {
     async function getRoom() {
@@ -98,7 +58,6 @@ const Room = () => {
         const res = await axios.get(
           `http://localhost:3000/rooms/getRoom/${id}`
         );
-        console.log(res);
         if (res.data.success) {
           dispatch(setRoomData(res.data.data));
         }
@@ -142,11 +101,13 @@ const Room = () => {
   useEffect(() => {
     async function getAssignments(){
       try{
+        
         const res = await axios.post('http://localhost:3000/assignments/get', {
           roomID: room_data.id
         });
+
         if(res.data.success){
-          setAsssignments(res.data.data);
+          dispatch(setAssignmentData(res.data.data));
         }
       }
       catch(err){
@@ -154,7 +115,7 @@ const Room = () => {
       }
     }
     getAssignments();
-  }, []);
+  }, [room_data]);
 
   const handleClear = (e) => {
     e.preventDefault();
@@ -248,8 +209,13 @@ const Room = () => {
                     </DialogContent>
                   </Dialog>
                   )}
-                  {user_data?.role === "instructor" && (
+                  {user_data?.role === "instructor" ? (
                     <NavLink to='/view-students'>View Students</NavLink>
+                  ) : (
+                  <>
+                  <NavLink to='/view-instructor'>View Instructor</NavLink>
+                  <NavLink to='/attendance-stats'>View Attendance</NavLink>
+                  </>  
                   )}
                 
                 </ul>
@@ -309,7 +275,7 @@ const Room = () => {
 
               {/* classwork */}
               <div className=" flex flex-col gap-4  p-1 my-10">
-                {assignments.length > 0 ? assignments.map((work) => (
+                {assignment_data?.length > 0 ? assignment_data.map((work) => (
                   <div
                     key={work.due_date}
                     className="flex items-center hover:cursor-pointer hover:shadow-2xl transition duration-300 gap-5 border border-grey p-5 rounded-xl"
@@ -324,7 +290,7 @@ const Room = () => {
                       </div>
                     </div>
                   </div>
-                )) : (<p>No Assigments For Today</p>)}
+                )) : ( user_data.role === 'instructor' ? <p className="font-semibold">Navigate to Classwork page to create assignments</p> : <p className="font-semibold">No Assignments yet</p>)}
               </div>
               {/* classwork */}
             </div>

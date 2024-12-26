@@ -14,6 +14,8 @@ import ViewStudents from "./pages/ViewStudents";
 import Room from "./pages/Room";
 import Spinner from "./components/Spinner";
 import { useSelector } from "react-redux";
+import ViewInstructor from "./pages/ViewInstructor";
+import AttendanceStatistics from "./pages/AttendanceStatistics";
 
 const App = () => {
   const {isloading} = useSelector((state) => state.loading);
@@ -35,6 +37,8 @@ const App = () => {
           <Route path="/result" element={<Results />} />
           <Route path="/classwork" element={<Classwork />} />
           <Route path="/view-students" element={<ViewStudents />} />
+          <Route path="/view-instructor" element={<ViewInstructor />} />
+          <Route path="/attendance-stats" element={<AttendanceStatistics />} />
           <Route path="/*" element={<NotFound />} />
         </Routes>
       )}

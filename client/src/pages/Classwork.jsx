@@ -24,6 +24,7 @@ import {
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
 import {useState, useEffect} from 'react';
+import { NavLink } from "react-router-dom";
 
 
 const Classwork = () => {
@@ -115,8 +116,9 @@ const Classwork = () => {
   return (
     <Layout pathname={"Classwork"}>
       <div className="flex flex-col gap-4 mx-40 p-14 ">
+        
         {user_data?.role === "instructor" && (
-          <div>
+          <div >
             <Dialog>
               <DialogTrigger>
               <Button >Add Assignment</Button>
@@ -206,10 +208,10 @@ const Classwork = () => {
                 </CollapsibleTrigger>
               </div>
               <CollapsibleContent>
-                <div>
-                  <div className="p-5 flex gap-4">
+                <div >
+                  <div className="p-5 flex  justify-between gap-4">
                     <p>
-                      <span className="font-semibold">Task Description: </span>
+                      <span className="font-semibold ">Task Description: </span>
                       {item.details}
                     </p>
                     <p>
@@ -217,7 +219,14 @@ const Classwork = () => {
                       {item.due_date}
                     </p>
                   </div>
-                  <span className="font-semibold p-5">Posted At: {item.set_visible_at}</span>
+                  <div className="flex justify-between p-4 ">
+                  <span className="font-semibold ">Posted At: {item.set_visible_at}</span>
+                  <span className="font-semibold ">
+                  <a target="new" href={item.assignment_url}>View Assignment</a>
+                  </span>
+                 
+                  </div>
+                 
                 </div>
               </CollapsibleContent>
             </Collapsible>
