@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input"
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogFooter,
     DialogHeader,
     DialogTitle,
+    DialogDescription,
 } from "@/components/ui/dialog"
 import {
     AlertDialog,
@@ -37,7 +37,7 @@ function ProfileActions() {
                     </div>
                     <Button
                         onClick={() => setEditOpen(true)}
-                        className="bg-primary hover:bg-accent"
+                        className="bg-primary hover:bg-[#3a30e2]"
                     >
                         <Pencil className="h-4 w-4 mr-2" />
                         Edit Profile
@@ -75,32 +75,41 @@ function ProfileActions() {
 
             {/* Edit Profile Dialog */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent className="sm:max-w-[425px]">
+                <DialogContent className="sm:max-w-[600px]">
                     <DialogHeader>
-                        <DialogTitle>Edit Profile</DialogTitle>
-                        <DialogDescription>
-                            Make changes to your profile information here.
-                        </DialogDescription>
+                        <DialogTitle>Update Your Information</DialogTitle>
                     </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                            <Label htmlFor="firstName">First Name</Label>
-                            <Input id="firstName" defaultValue="Mohammad" />
+                    <div className="grid gap-6 py-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="username">Username</Label>
+                                <Input id="username" defaultValue="subhan" />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input disabled id="email" type="email" defaultValue="mohammad@example.com" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="firstName">First Name</Label>
+                                <Input id="firstName" defaultValue="Mohammad" />
+                            </div>
+                            <div className="grid gap-2">
+                                <Label htmlFor="lastName">Last Name</Label>
+                                <Input id="lastName" defaultValue="Subhan" />
+                            </div>
                         </div>
                         <div className="grid gap-2">
-                            <Label htmlFor="lastName">Last Name</Label>
-                            <Input id="lastName" defaultValue="Subhan" />
-                        </div>
-                        <div className="grid gap-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" defaultValue="mohammad@example.com" />
+                            <Label htmlFor="dob">Date of Birth</Label>
+                            <Input id="dob" type="date" defaultValue="2024-12-25" />
                         </div>
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setEditOpen(false)}>
                             Cancel
                         </Button>
-                        <Button className="bg-purple-600 hover:bg-purple-700">
+                        <Button className="bg-primary hover:bg-[#3a30e2]">
                             Save Changes
                         </Button>
                     </DialogFooter>

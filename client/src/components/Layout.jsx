@@ -9,7 +9,7 @@ function Layout({ children }) {
                 <TopNav />
                 <div className="flex">
                     <SidebarNav />
-                    <main className="flex-1 px-4 pb-8">{children}</main>
+                    <main className="flex justify-center w-full px-4 pb-8">{children}</main>
                 </div>
             </div>
         </SidebarProvider>

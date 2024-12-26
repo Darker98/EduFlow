@@ -10,10 +10,11 @@ import {
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
+    SidebarTrigger
 } from "@/components/ui/sidebar"
 
 const navigation = [
-    { name: "Home", href: "/", icon: Home },
+    { name: "Home", href: "/home", icon: Home },
     { name: "Profile", href: "/profile", icon: User2 },
     { name: "Courses", href: "/courses", icon: GraduationCap },
     { name: "Results", href: "/results", icon: BarChart3 },
@@ -29,6 +30,7 @@ function SidebarNav() {
 
     return (
         <Sidebar className="border-r bg-white/80 backdrop-blur-sm">
+            <SidebarTrigger />
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupLabel>Menu</SidebarGroupLabel>
