@@ -7,6 +7,7 @@ import roomRouter from "./server/routers/roomRouter.js";
 import enrollmentRouter from "./server/routers/enrollmentRouter.js";
 import assignmentRouter from './server/routers/assignmentRouter.js';
 import gradeRouter from './server/routers/gradeRouter.js';
+import submissionRouter from './server/routers/submissionRouter.js';
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -43,6 +44,8 @@ app.use('/enrollment',enrollmentRouter);
 
 app.use('/assignments', assignmentRouter); 
 app.use('/grades', gradeRouter);
+
+app.use('/submission',submissionRouter);
 
 // Default route for unknown endpoints
 app.use((req, res) => {
