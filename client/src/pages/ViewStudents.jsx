@@ -5,9 +5,11 @@ import { Trash } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import Layout from "@/components/Layout";
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
 
 
 const ViewStudents = () => {
+  const dispatch = useDispatch();
   const { room_data } = useSelector((state) => state.room);
   const [students, setStudents] = useState([]);
   const { user_data } = useSelector((state) => state.user);
@@ -33,10 +35,12 @@ const ViewStudents = () => {
 
   const handleKickStudent = async () => {
     try{
+    dispatch(setLoading());
     const res = await axios.post('http://localhost:3000/enrollment/unenroll', {
         student_id: user_data.id,
         room_id: room_data.id
     });
+    dispatch(hideLoading())
     if(res.data.success){
         setStudents(students.filter((student) => student.id !== user_data.id));
         toast({
@@ -47,6 +51,7 @@ const ViewStudents = () => {
     }
 }
     catch(err){
+      dispatch(hideLoading());
         console.log(err); 
         toast({
             title:"Error",

@@ -37,13 +37,11 @@ export const getEnrollments = async (student_id) => {
 };
 
 export const unenroll = async (student_id, room_id) => {
-    const { error } = await supabase
-        
+    const { error } = await supabase 
         .from('enrollment')
         .delete()
         .eq('student_id', student_id)
         .eq('room_id', room_id);
-        
     if (error) throw new Error(error.message);
 };
 
