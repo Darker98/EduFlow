@@ -23,7 +23,7 @@ function TopNav() {
                     <SidebarTrigger className="" />
                     <Link to="/home" className="flex items-center gap-2">
                         <img
-                            src="/placeholder.svg?height=32&width=32"
+                            src="/EduFlow/client/public/EduFlow.svg" //need to add a png here
                             alt="EduFlow Logo"
                             width={32}
                             height={32}

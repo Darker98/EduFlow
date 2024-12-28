@@ -3,9 +3,57 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Link } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-
+import {useState} from 'react'
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserData, setUserId } from "../redux/features/userSlice"
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import axios from 'axios'
 
 function Login() {
+    const navigate = useNavigate();
+  const { toast } = useToast();
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSignIn = async () => {
+    try {
+      dispatch(setLoading());
+      const res = await axios.post('http://localhost:3000/auth/login', {
+        email,
+        password
+      });
+      dispatch(hideLoading());
+      if (res.data.success) {
+        toast({
+          title: res?.data?.message,
+          description: "Welcome back",
+          type: "success"
+        })
+        dispatch(setUserId(res?.data?.data?.userId));
+        if (res?.data?.data?.role === "student" || res?.data?.data?.role === "instructor") {
+          dispatch(setUserId(res?.data?.data?.userId));
+          dispatch(setUserData(res?.data?.data));
+          navigate('/home');
+        }
+        else {
+          navigate('/create/profile');
+        }
+      }
+
+    }
+    catch (err) {
+      dispatch(hideLoading());
+      toast({
+        title: err.response.data.message,
+        description: "Please try again",
+        variant: "destructive"
+      })
+    }
+  }
+
     return (
         <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
             <div className="relative hidden h-full flex-col bg-primary p-10 text-background lg:flex dark:border-r">
@@ -42,6 +90,8 @@ function Login() {
                                     id="email"
                                     placeholder="Email"
                                     type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}  
                                     autoCapitalize="none"
                                     autoComplete="email"
                                     autoCorrect="off"
@@ -52,6 +102,8 @@ function Login() {
                                     id="password"
                                     placeholder="Password"
                                     type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                                 <div className="text-sm">
                                     <Link
@@ -62,7 +114,7 @@ function Login() {
                                     </Link>
                                 </div>
                             </div>
-                            <Button className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white">
+                            <Button onClick={handleSignIn} className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white">
                                 Sign In
                             </Button>
                             <div className="relative">

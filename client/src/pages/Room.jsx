@@ -159,7 +159,7 @@ const Room = () => {
         <Layout pathname={"Room"}>
           <div>
             {/* upper bar */}
-            <div className="border">
+            <div className="border ">
               <div className="flex justify-between items-center mx-12 p-5 ">
                 <ul className="flex gap-10  text-xl font-semibold  text-slate-600 ">
                   <NavLink className="" to="">
@@ -254,7 +254,7 @@ const Room = () => {
             <div className="mx-40 p-10">
               {/* banner */}
               <div
-                className="border h-[250px] flex items-end p-6 rounded-lg "
+                className="border h-[250px] w-[1000px] flex flex-grow-0 items-end p-6 rounded-lg "
                 style={{ background: "url(/banner.jpg)" }}
               >
                 <div className="text-4xl text-white font-bold flex gap-4 flex-col">

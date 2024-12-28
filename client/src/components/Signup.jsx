@@ -1,10 +1,48 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { useNavigate } from "react-router-dom"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { Link } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
+import { Link } from "react-router-dom"
+import { useToast } from "@/hooks/use-toast"
+import { useState } from "react"
+import { FcGoogle } from "react-icons/fc"
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import { useDispatch } from "react-redux"
+import axios from "axios"
 
 function Signup() {
+    const dispatch = useDispatch();
+    const { toast } = useToast();
+    const navigate = useNavigate();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+
+    const handleSignUp = async () => {
+        try {
+            dispatch(setLoading());
+            const res = await axios.post("http://localhost:3000/auth/signup", {
+                email,
+                password,
+            });
+            dispatch(hideLoading());
+            if (res.data.success) {
+                console.log(res.data.message);
+                toast({
+                    title: "Success",
+                    description: "Check your email to verify your account",
+                    variant: "default",
+                });
+                navigate("/login");
+            }
+        } catch (err) {
+            dispatch(hideLoading());
+            toast({
+                title: err?.response?.data?.message,
+                description: "Please try again",
+                variant: "destructive",
+            });
+        }
+    };
 
     return (
         <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -20,7 +58,7 @@ function Signup() {
                     EduFlow
                 </div>
                 <div className="relative z-20 mt-auto">
-                <blockquote className="space-y-2">
+                    <blockquote className="space-y-2">
                         <p className="text-lg">
                             &copy; EduFlow
                         </p>
@@ -42,19 +80,25 @@ function Signup() {
                                     id="email"
                                     placeholder="Email"
                                     type="email"
-                                    autoCapitalize="none"
-                                    autoComplete="email"
-                                    autoCorrect="off"
+                                    required
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
                             <div className="space-y-2">
                                 <Input
-                                    id="password"
-                                    placeholder="Password"
                                     type="password"
+                                    required
+                                    placeholder="Password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-                            <Button className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white">
+                            <Button
+                                type="submit"
+                                className="w-full bg-[#4F46E5] hover:bg-[#4338CA] text-white"
+                                onClick={() => handleSignUp()}
+                            >
                                 Sign Up
                             </Button>
                             <div className="relative">
@@ -74,13 +118,13 @@ function Signup() {
                             <div className="text-center text-sm">
                                 Already have an account?{" "}
                                 <Link to="/login" className="text-[#4F46E5] hover:text-[#4338CA]">
-                                Sign in
-                            </Link>
-                        </div>
-                    </CardContent>
-                </Card>
+                                    Sign in
+                                </Link>
+                            </div>
+                        </CardContent>
+                    </Card>
+                </div>
             </div>
-        </div>
         </div >
     )
 }

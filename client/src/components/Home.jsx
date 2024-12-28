@@ -13,6 +13,12 @@ import {
 } from "recharts"
 import { Clock, GraduationCap, BookOpen, Trophy } from 'lucide-react'
 import { useNavigate } from "react-router-dom"
+import { useState, useEffect } from "react"
+import { setRoomData } from "@/redux/features/roomSlice"
+import { useSelector, useDispatch } from "react-redux"
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import axios from 'axios';
+import { useToast } from "@/hooks/use-toast";
 
 // Sample data for the activity graph
 const activityData = [
@@ -51,8 +57,50 @@ const enrolledCourses = [
 ]
 
 function Home() {
-
+    const dispatch = useDispatch();
+    const { toast } = useToast();
+    const {user_data} = useSelector((state) => state.user);  
+    const [rooms, setRooms] = useState([]);
     const navigate = useNavigate()
+
+useEffect(() => {
+    async function getEnrollments(){
+        try{
+const res = await axios.post("http://localhost:3000/enrollment/studentEnrollment", {
+    student_id: user_data.id
+})
+if(res.data.success){
+    console.log(res);
+    setRooms(res.data.data);
+}
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
+    if(user_data.role === 'student')
+    getEnrollments()
+}, [])
+
+useEffect(() => {
+    async function getRooms(){
+      try{
+        const res = await axios.post("http://localhost:3000/rooms/instructorRoom",{
+          instructor_id:user_data?.id
+        })
+        if(res.data.success){
+          setRooms(res.data.data);
+        }
+      }
+      catch(err){
+        console.log(err);
+    
+      }
+    
+    }
+    if(user_data.role === 'instructor')
+    getRooms();
+      }, [user_data.id]);
 
     return (
         <div className="container py-6">
@@ -63,13 +111,13 @@ function Home() {
                         <div className="flex items-start justify-between">
                             <div className="flex items-center gap-4">
                                 <Avatar className="h-20 w-20 border-2 border-white/20">
-                                    <AvatarImage src="/placeholder.svg" alt="User" />
+                                    <AvatarImage src={user_data.pfp_url} alt="User" />
                                     <AvatarFallback>SK</AvatarFallback>
                                 </Avatar>
                                 <div>
-                                    <h1 className="text-2xl font-bold">Welcome, Subhan Khalid!</h1>
-                                    <p className="text-white/80">Student ID: ae92d695-ef07</p>
-                                    <p className="text-white/80">@subhan</p>
+                                    <h1 className="text-2xl font-bold">Welcome, {user_data.first_name} {user_data.last_name}!</h1>
+                                    <p className="text-white/80">Student ID: {user_data.id}</p>
+                                    <p className="text-white/80">@{user_data.user_name}</p>
                                 </div>
                             </div>
                             <Button variant="secondary" className="bg-white/10 hover:bg-white/20 text-white">
@@ -89,7 +137,7 @@ function Home() {
                                 <BookOpen className="h-6 w-6 text-purple-600" />
                             </div>
                             <div>
-                                <p className="text-sm text-gray-500">Enrolled Courses</p>
+                                <p className="text-sm text-gray-500">Enrolled Courese</p>
                                 <h3 className="text-2xl font-bold">3</h3>
                             </div>
                         </div>
@@ -165,31 +213,31 @@ function Home() {
             {/* Enrolled Courses */}
             <Card>
                 <CardHeader>
-                    <CardTitle>Enrolled Courses</CardTitle>
+                    <CardTitle>{user_data?.role === "student" ? (<p>Enrolled Courese</p>) : (<p>Rooms Created</p>)}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4">
-                        {enrolledCourses.map((course) => (
+                        {rooms.map((room) => (
                             <div
-                                key={course.id}
+                                key={room.id}
                                 className="flex flex-col gap-4 rounded-lg border p-4 hover:bg-gray-50"
                             >
                                 <div className="flex items-start justify-between">
                                     <div>
-                                        <h3 className="font-semibold">{course.name}</h3>
-                                        <p className="text-sm text-gray-500">{course.instructor}</p>
+                                        <h3 className="font-semibold">{room.room_name}</h3>
+                                        <p className="text-sm text-gray-500">Section: {room.section_name}</p>
                                     </div>
-                                    <Button variant="ghost" className="text-primary hover:text-primary hover:bg-primary/10">
-                                        Continue Learning
+                                    <Button onClick={() => navigate(`/room/${room.id}`)} variant="ghost" className="text-primary hover:text-primary hover:bg-primary/10">
+                                        {user_data?.role === "student" ? "Continue Learning" : "View Room"}
                                     </Button>
                                 </div>
                                 <div className="space-y-2">
                                     <div className="flex items-center justify-between text-sm">
                                         <span className="text-gray-500">Progress</span>
-                                        <span className="font-medium">{course.progress}%</span>
+                                        <span className="font-medium">{room.progress}%</span>
                                     </div>
-                                    <Progress value={course.progress} className="h-2" />
-                                    <p className="text-xs text-gray-500">Last accessed {course.lastAccessed}</p>
+                                    <Progress value={room.progress} className="h-2" />
+                                    <p className="text-xs text-gray-500">Last accessed {room.lastAccessed}</p>
                                 </div>
                             </div>
                         ))}

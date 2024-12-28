@@ -7,6 +7,9 @@ import AboutPage from "@/pages/AboutPage";
 import CoursesPage from "@/pages/CoursesPage";
 import StudentAttendancePage from "@/pages/StudentAttendancePage";
 import InstructorAttendancePage from "@/pages/InstructorAttendancePage";
+import Spinner from "@/components/Spinner";
+import Room from "./pages/Room";
+
 import NotFoundPage from "@/pages/NotFoundPage";
 // import EditProfilePage from "./pages/EditProfilePage";
 // import CreateProfilePage from './pages/CreateProfilePage';
@@ -24,12 +27,13 @@ const App = () => {
   return (
     <>
       {isloading ? (
-        <Spinner />
+       <Spinner />
       ) : (
         <Routes>
           <Route path="/" element={<Navigate to='/login' />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/room/:id" element={<Room />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/about" element={<AboutPage />} />

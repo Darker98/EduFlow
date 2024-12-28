@@ -123,7 +123,7 @@ const Classwork = () => {
     try{
       dispatch(setLoading());
        const form_data = new FormData();
-       form_data.append('file', files[0]); // Only handling a single file submission
+      // form_data.append('file', files[0]); // Only handling a single file submission
   
        form_data.append('studentId', user_data.id);
         
