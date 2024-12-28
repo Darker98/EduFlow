@@ -140,7 +140,7 @@ const Room = () => {
           variant: "default",
         });
         dispatch(setSessionId(res.data.data.id));
-        navigate("/attendance");
+        navigate("/instructor/attendance");
       }
     } catch (err) {
       dispatch(hideLoading());
@@ -157,7 +157,7 @@ const Room = () => {
     <>
       <div>
         <Layout pathname={"Room"}>
-          <div>
+          <div className="w-full">
             {/* upper bar */}
             <div className="border ">
               <div className="flex justify-between items-center mx-12 p-5 ">
@@ -213,8 +213,7 @@ const Room = () => {
                     <NavLink to='/view-students'>View Students</NavLink>
                   ) : (
                   <>
-                  <NavLink to='/view-instructor'>View Instructor</NavLink>
-                  <NavLink to='/attendance-stats'>View Attendance</NavLink>
+                  <NavLink to='/student/attendance'>View Attendance</NavLink>
                   </>  
                   )}
                 
@@ -254,7 +253,7 @@ const Room = () => {
             <div className="mx-40 p-10">
               {/* banner */}
               <div
-                className="border h-[250px] w-[1000px] flex flex-grow-0 items-end p-6 rounded-lg "
+                className="border h-[250px] flex flex-grow-0 items-end p-6 rounded-lg "
                 style={{ background: "url(/banner.jpg)" }}
               >
                 <div className="text-4xl text-white font-bold flex gap-4 flex-col">

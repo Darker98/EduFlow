@@ -32,29 +32,7 @@ const activityData = [
 ]
 
 // Sample enrolled courses data
-const enrolledCourses = [
-    {
-        id: 1,
-        name: "Introduction to Computer Science",
-        instructor: "Dr. Sarah Johnson",
-        progress: 75,
-        lastAccessed: "2 hours ago",
-    },
-    {
-        id: 2,
-        name: "Advanced Mathematics",
-        instructor: "Prof. Michael Chen",
-        progress: 45,
-        lastAccessed: "1 day ago",
-    },
-    {
-        id: 3,
-        name: "Digital Marketing Fundamentals",
-        instructor: "Emily Rodriguez",
-        progress: 90,
-        lastAccessed: "5 hours ago",
-    },
-]
+
 
 function Home() {
     const dispatch = useDispatch();
@@ -70,7 +48,6 @@ const res = await axios.post("http://localhost:3000/enrollment/studentEnrollment
     student_id: user_data.id
 })
 if(res.data.success){
-    console.log(res);
     setRooms(res.data.data);
 }
         }
@@ -120,7 +97,7 @@ useEffect(() => {
                                     <p className="text-white/80">@{user_data.user_name}</p>
                                 </div>
                             </div>
-                            <Button variant="secondary" className="bg-white/10 hover:bg-white/20 text-white">
+                            <Button onClick={() => navigate('/profile')} variant="secondary" className="bg-white/10 hover:bg-white/20 text-white">
                                 View Profile
                             </Button>
                         </div>
@@ -137,8 +114,8 @@ useEffect(() => {
                                 <BookOpen className="h-6 w-6 text-purple-600" />
                             </div>
                             <div>
-                                <p className="text-sm text-gray-500">Enrolled Courese</p>
-                                <h3 className="text-2xl font-bold">3</h3>
+                                <p className="text-sm text-gray-500">{user_data.role === 'instructor' ? (<span>Current Rooms</span>) : (<span>Enrolled Coureses</span>)}</p>
+                                <h3 className="text-2xl font-bold">{rooms.length}</h3>
                             </div>
                         </div>
                     </CardContent>

@@ -154,13 +154,13 @@ const Classwork = () => {
 
   return (
     <Layout pathname={"Classwork"}>
-      <div className="flex flex-col gap-4 mx-40 p-14 ">
+      <div className="flex flex-col gap-4 mx-40 w-full p-14 ">
         
         {user_data?.role === "instructor" && (
           <div >
             <Dialog>
               <DialogTrigger>
-              <Button >Add Assignment</Button>
+              <Button className="bg-primary hover:bg-button_hover text-background" >Add Assignment</Button>
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>

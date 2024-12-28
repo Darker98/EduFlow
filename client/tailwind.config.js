@@ -14,6 +14,7 @@ export default {
 			},
 			colors: {
 				primary: '#4F46E5',
+				button_hover:'#4338ca',
 				secondary: '#9b96e8',
 				accent: '#655ee8',
 				background: '#fbfbfe',

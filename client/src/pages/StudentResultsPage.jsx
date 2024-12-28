@@ -1,13 +1,14 @@
-import React from "react";
-import StudentResults from "@/components/studentResults";
+import StudentResults from "@/components/StudentResults";
 import Layout from "@/components/Layout";
 
 function StudentResultsPage() {
     return (
-        <Layout>
-            <StudentResults />
-        </Layout>
-    );
+        <div>
+            <Layout>
+                <StudentResults />
+            </Layout>
+        </div>
+    )
 }
 
 export default StudentResultsPage;

@@ -58,14 +58,18 @@ function Login() {
         <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
             <div className="relative hidden h-full flex-col bg-primary p-10 text-background lg:flex dark:border-r">
                 <div className="relative z-20 flex items-center text-lg font-medium">
-                    <img
-                        src="/placeholder.svg?height=32&width=32"
-                        alt="EduFlow Logo"
-                        width={32}
-                        height={32}
-                        className="h-8 w-8 mr-2"
-                    />
+                  
                     EduFlow
+                </div>
+                <div className=" h-full flex flex-col justify-center items-center">
+                <img
+                        src="/eduflow_white.png"
+                        alt="EduFlow Logo"
+                        width={250}
+                        height={250}
+                        className=" mr-2 "
+                    />
+                    <p className="font-semibold">Where Tech Meets Education</p>
                 </div>
                 <div className="relative z-20 mt-auto">
                     <blockquote className="space-y-2">
