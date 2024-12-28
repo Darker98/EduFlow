@@ -8,7 +8,6 @@ import { persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
 import { BrowserRouter } from "react-router-dom";
 import { store } from "./redux/store";
-import { ThemeProvider } from "./components/theme-provider";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>

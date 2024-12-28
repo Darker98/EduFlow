@@ -1,21 +1,19 @@
-import React from "react";
-import { SidebarProvider, SidebarTrigger } from "./ui/sidebar";
-import { AppSidebar } from "./ui/app-sidebar";
-import { Separator } from "@/components/ui/separator";
-import Navbar from "./Navbar";
+import SidebarNav from "./SidebarNav"
+import TopNav from "./TopNav"
+import { SidebarProvider } from "@/components/ui/sidebar"
 
-const Layout = ({ children, pathname }) => {
-  return (
-    <SidebarProvider>
-      
-      <AppSidebar />
-      <main className="p-2 flex-grow ">
-        <Navbar pathname={pathname}/>
-        {children}
-        </main>
-      
-    </SidebarProvider>
-  );
-};
+function Layout({ children }) {
+    return (
+        <SidebarProvider>
+            <div className="min-h-screen w-full bg-gradient-to-br from-purple-50 via-white to-blue-50">
+                <TopNav />
+                <div className="flex">
+                    <SidebarNav />
+                    <main className="flex justify-center w-full px-4 pb-8">{children}</main>
+                </div>
+            </div>
+        </SidebarProvider>
+    )
+}
 
 export default Layout;

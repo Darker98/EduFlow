@@ -5,7 +5,7 @@ export default {
 	theme: {
 		extend: {
 			translate: {
-				'half': '-50%',
+				half: '-50%'
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -13,6 +13,11 @@ export default {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			colors: {
+				primary: '#4F46E5',
+				secondary: '#9b96e8',
+				accent: '#655ee8',
+				background: '#fbfbfe',
+				text: '#0d0c17',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',

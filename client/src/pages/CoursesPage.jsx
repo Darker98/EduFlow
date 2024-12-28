@@ -1,14 +1,14 @@
-import Home from "@/components/Home";
+import CoursesList from "@/components/CoursesList";
 import Layout from "@/components/Layout";
 
-function HomePage() {
+function CoursesPage() {
     return (
         <div>
             <Layout>
-                <Home />
+                <CoursesList />
             </Layout>
         </div>
     )
 }
 
-export default HomePage;
+export default CoursesPage;
