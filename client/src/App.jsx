@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import CreateProfilePage from './pages/CreateProfilePage';
 import { Routes, Route, Navigate } from "react-router-dom";
 import Attendance from "./pages/Attendance";
+import StudentResultsPage from "./pages/StudentResultsPage";
 import Results from "./pages/Results";
 import Classwork from "./pages/Classwork";
 import ViewStudents from "./pages/ViewStudents";
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="/room/:id" element={<Room />} />
           <Route path="/attendance" element={<Attendance />} />
           <Route path="/result" element={<Results />} />
+          <Route path="/student/result" element={<StudentResultsPage />} />
           <Route path="/classwork" element={<Classwork />} />
           <Route path="/view-students" element={<ViewStudents />} />
           <Route path="/view-instructor" element={<ViewInstructor />} />
