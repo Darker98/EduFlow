@@ -14,7 +14,7 @@ export const uploadSubmission = async (studentID, assignmentID) => {
 
     const { data: record, error: entryError } = await supabase
         .from('submissions')
-        .insert([{ student_id: studentID, assignment_id: assignment_id }]);
+        .insert([{ student_id: studentID, assignment_id: assignmentID }]);
 
     if (entryError) throw new Error(error.message);
 }

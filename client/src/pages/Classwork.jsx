@@ -25,6 +25,7 @@ import {
 } from "@radix-ui/react-collapsible";
 import {useState, useEffect} from 'react';
 import { NavLink } from "react-router-dom";
+import {UploadComponent} from '@/components/UploadComponent'
 
 
 const Classwork = () => {
@@ -47,7 +48,9 @@ const Classwork = () => {
   const [dueDate, setDueDate] = useState();
   const [setVisibleDate] = useState(getCurrentDate());
   const [file, setFile] = useState();
+  const [submissionFile, setSubmissionFile] = useState(); 
   const [assignments, setAsssignments] = useState([]);
+  
   const dispatch = useDispatch();
 
   const handleAddAssignment = async (e) => {
@@ -112,6 +115,42 @@ const Classwork = () => {
     setDueDate('');
     setFile('');
   };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); 
+    console.log(submissionFile);
+    e.preventDefault();
+    try{
+      dispatch(setLoading());
+       const form_data = new FormData();
+       form_data.append('file', files[0]); // Only handling a single file submission
+  
+       form_data.append('studentId', user_data.id);
+        
+        const res = await axios.post('http://localhost:3000/assignments/create', form_data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        dispatch(hideLoading());
+        if(res.data.success){
+          toast({
+            title: 'Assignment Created',
+            description: 'Assignment has been created successfully',
+            variant: 'default'
+          })
+        }
+      }
+      catch(err){
+        dispatch(hideLoading());
+        console.log(err);
+        toast({
+          title: 'Error',
+          description: err.response.data.message,
+          variant: 'destructive'
+        })
+      }
+  }
 
   return (
     <Layout pathname={"Classwork"}>
@@ -227,6 +266,27 @@ const Classwork = () => {
                  
                   </div>
                  
+                 <div>
+                  {user_data?.role === 'student' && (
+                      <Dialog>
+                        <DialogTrigger>
+                      <Button>Submit Assignment</Button>
+                      </DialogTrigger>
+                      <DialogContent >
+                        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                      <Input type='file'  onChange={(e) => setSubmissionFile(e.target.files[0])} />
+                      <div className="flex justify-end">
+                         
+                          <Button type = 'submit'>
+                            Add Assignment
+                          </Button>
+                        </div>
+                        </form>
+                      </DialogContent>
+                      </Dialog>
+                  )}
+                 </div>
+
                 </div>
               </CollapsibleContent>
             </Collapsible>
