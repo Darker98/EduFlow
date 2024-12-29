@@ -1,5 +1,12 @@
 import supabase from './createClient.js';
 
+// Assign marks to multiple students for a given assignment and room
+export const assignMarksForAllStudents = async (studentGrades, assignmentId, roomId) => {
+    for (let { studentId, marks } of studentGrades) {
+        await assignMarks(studentId, roomId, assignmentId, marks);
+    }
+};
+
 // Assign marks to a student for an assignment
 export const assignMarks = async (studentId, roomId, assignmentId, marks) => {
     // Add a new grade entry
