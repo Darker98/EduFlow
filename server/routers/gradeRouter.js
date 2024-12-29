@@ -4,9 +4,12 @@ import {
     handleGetMarks,
     handleUpdateMarks,
     handleDeleteMarks,
+    handleAllStudentsMarks
 } from '../controllers/gradeController.js';
 
 const router = express.Router();
+
+router.post('/assign/all', handleAllStudentsMarks);
 
 // Route to assign marks to a student for an assignment
 router.post('/assign', handleAssignMarks);

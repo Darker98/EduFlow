@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import {useState, useEffect} from 'react'
+import axios from 'axios'
 
 export default function StudentResults() {
     const resultsData = [

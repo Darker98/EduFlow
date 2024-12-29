@@ -116,18 +116,17 @@ const Classwork = () => {
     setFile('');
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e, assignmentId) => {
     e.preventDefault(); 
-    console.log(submissionFile);
-    e.preventDefault();
     try{
+      console.log(submissionFile);
       dispatch(setLoading());
-       const form_data = new FormData();
-      // form_data.append('file', files[0]); // Only handling a single file submission
-  
-       form_data.append('studentId', user_data.id);
+      const form_data = new FormData();
+      form_data.append('file', submissionFile); // Only handling a single file submission
+      form_data.append('assignmentID', assignmentId);
+       form_data.append('studentID', user_data.id);
         
-        const res = await axios.post('http://localhost:3000/assignments/create', form_data, {
+        const res = await axios.post('http://localhost:3000/submission/upload', form_data, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
@@ -135,15 +134,14 @@ const Classwork = () => {
         dispatch(hideLoading());
         if(res.data.success){
           toast({
-            title: 'Assignment Created',
-            description: 'Assignment has been created successfully',
+            title: 'Assignment Submitted',
+            description: 'Assignment has been submitted successfully',
             variant: 'default'
           })
         }
       }
       catch(err){
         dispatch(hideLoading());
-        console.log(err);
         toast({
           title: 'Error',
           description: err.response.data.message,
@@ -227,8 +225,8 @@ const Classwork = () => {
          
         </div>)}
         
-        <div className=" flex flex-col  gap-4 p-1 my-10">
-          {assignments.map((item, index) => (
+        <div className=" flex flex-col gap-4 p-1 my-10">
+          {assignments.length > 0 ? assignments.map((item, index) => (
             <Collapsible
               key={index}
               className="hover:shadow-2xl transition duration-300 gap-5 border border-grey p-5 rounded-xl"
@@ -273,7 +271,7 @@ const Classwork = () => {
                       <Button>Submit Assignment</Button>
                       </DialogTrigger>
                       <DialogContent >
-                        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+                        <form onSubmit={(e) => handleSubmit(e, item.id)} className="flex flex-col gap-5">
                       <Input type='file'  onChange={(e) => setSubmissionFile(e.target.files[0])} />
                       <div className="flex justify-end">
                          
@@ -290,7 +288,7 @@ const Classwork = () => {
                 </div>
               </CollapsibleContent>
             </Collapsible>
-          ))}
+          )): (<p>{user_data.role === 'instructor' ? "Press the button above to add assignments" : "No assignments"}</p>)}
         </div>
       </div>
     </Layout>

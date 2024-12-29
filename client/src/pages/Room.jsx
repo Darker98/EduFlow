@@ -216,7 +216,7 @@ const Room = () => {
                   <NavLink to='/student/attendance'>View Attendance</NavLink>
                   </>  
                   )}
-                
+                  <NavLink to='/instructor/results'>View Submissions</NavLink>
                 </ul>
                 {user_data?.role === "instructor" && (
                   <div>

@@ -120,45 +120,50 @@ useEffect(() => {
                         </div>
                     </CardContent>
                 </Card>
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-2">
-                            <div className="p-2 bg-blue-100 rounded-lg">
-                                <Clock className="h-6 w-6 text-blue-600" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Study Hours</p>
-                                <h3 className="text-2xl font-bold">17.5</h3>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-2">
-                            <div className="p-2 bg-green-100 rounded-lg">
-                                <GraduationCap className="h-6 w-6 text-green-600" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Avg. Grade</p>
-                                <h3 className="text-2xl font-bold">85%</h3>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardContent className="p-6">
-                        <div className="flex items-center gap-2">
-                            <div className="p-2 bg-yellow-100 rounded-lg">
-                                <Trophy className="h-6 w-6 text-yellow-600" />
-                            </div>
-                            <div>
-                                <p className="text-sm text-gray-500">Achievements</p>
-                                <h3 className="text-2xl font-bold">12</h3>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+                {user_data.role === 'student' ? (
+                    <>
+                       <Card>
+                       <CardContent className="p-6">
+                           <div className="flex items-center gap-2">
+                               <div className="p-2 bg-blue-100 rounded-lg">
+                                   <Clock className="h-6 w-6 text-blue-600" />
+                               </div>
+                               <div>
+                                   <p className="text-sm text-gray-500">Study Hours</p>
+                                   <h3 className="text-2xl font-bold">17.5</h3>
+                               </div>
+                           </div>
+                       </CardContent>
+                   </Card>
+                   <Card>
+                       <CardContent className="p-6">
+                           <div className="flex items-center gap-2">
+                               <div className="p-2 bg-green-100 rounded-lg">
+                                   <GraduationCap className="h-6 w-6 text-green-600" />
+                               </div>
+                               <div>
+                                   <p className="text-sm text-gray-500">Avg. Grade</p>
+                                   <h3 className="text-2xl font-bold">85%</h3>
+                               </div>
+                           </div>
+                       </CardContent>
+                   </Card>
+                   <Card>
+                       <CardContent className="p-6">
+                           <div className="flex items-center gap-2">
+                               <div className="p-2 bg-yellow-100 rounded-lg">
+                                   <Trophy className="h-6 w-6 text-yellow-600" />
+                               </div>
+                               <div>
+                                   <p className="text-sm text-gray-500">Achievements</p>
+                                   <h3 className="text-2xl font-bold">12</h3>
+                               </div>
+                           </div>
+                       </CardContent>
+                   </Card>
+                </>
+                ) : (null)}
+             
             </div>
 
             {/* Activity Graph */}

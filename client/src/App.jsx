@@ -7,8 +7,6 @@ import AboutPage from "@/pages/AboutPage";
 import CoursesPage from "@/pages/CoursesPage";
 import StudentAttendancePage from "@/pages/StudentAttendancePage";
 import InstructorAttendancePage from "@/pages/InstructorAttendancePage";
-import ViewStudents from "./pages/ViewStudents";
-import ViewInstructor from "./pages/ViewInstructor";
 import Spinner from "@/components/Spinner";
 import Room from "./pages/Room";
 import EnrolledStudentsPage from "./pages/EnrolledStudentsPage";

@@ -30,7 +30,7 @@ export const createProfile = async (profileData, file, role) => {
 
 };
 
-export const getProfile = async (id, role, pfp_id) => {
+export const getProfile = async (id, role) => {
     let tableName;
     if (role === "student") {
         tableName = "student";
@@ -46,16 +46,10 @@ export const getProfile = async (id, role, pfp_id) => {
         .eq('id', id)
         .single();
 
-    const { data: publicUrl}  = supabase
-        .storage
-        .from('profile-pictures')
-        .getPublicUrl(`${pfp_id}.jpeg`);
-
-        data.pfp_url = publicUrl.publicUrl;
 
     if (error) throw new Error(error.message);
     
-    return { data};
+    return data;
 };
 
 export const updateProfile = async (profileData, role) => {

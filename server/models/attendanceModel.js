@@ -30,22 +30,22 @@ export const getAttendanceData = async (student_id, room_id) => {
     // Fetch attendance data for the given student and session IDs
     const { data: attendanceData, error: attendanceError } = await supabase
         .from('student_attendance')
-        .select('attended')
+        .select('created_at, attended')
         .eq('student_id', student_id)
         .in('session_id', sessionIds);
 
     if (attendanceError) throw new Error(attendanceError.message);
 
     // Calculate present and absent counts
-    const summary = 
-        [{name:"Present", total: attendanceData.filter(row => row.attended).length, color:"#1b8af3"},
-          {name:"Absent", total: attendanceData.filter(row => !row.attended).length, color:"#f31b1b"}  
-        ];
+    // const summary = 
+    //     [{name:"Present", total: attendanceData.filter(row => row.attended).length, color:"#1b8af3"},
+    //       {name:"Absent", total: attendanceData.filter(row => !row.attended).length, color:"#f31b1b"}  
+    //     ];
         // presents: attendanceData.filter(row => row.attended).length,
         // absences: attendanceData.filter(row => !row.attended).length
     
 
-    return summary;
+    return attendanceData;
 };
 
 export const updateAttendance = async (session_id, attendanceArray) => {

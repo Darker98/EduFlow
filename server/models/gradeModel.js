@@ -1,11 +1,25 @@
 import supabase from './createClient.js';
 
+// Assign marks to multiple students for a given assignment and room
+export const assignMarksForAllStudents = async (studentGrades, assignmentId, roomId) => {
+    for (let { studentId, marks } of studentGrades) {
+        await assignMarks(studentId, roomId, assignmentId, marks);
+    }
+};
+
+//Get marks of all the students
+export const getMarksForAllStudents = async (studentIds, roomId, assignmentId) => {
+    for (let studentId of studentIds){
+        await getMarks(studentId, roomId, assignmentId);
+    }
+}
+
 // Assign marks to a student for an assignment
 export const assignMarks = async (studentId, roomId, assignmentId, marks) => {
     // Add a new grade entry
     const { data: grade, error: gradeError } = await supabase
         .from('grade')
-        .insert([{ assignment_id: assignmentId, marks }])
+        .insert([{ assignment_id: assignmentId, grade:marks }])
         .select();
 
     if (gradeError) throw new Error(gradeError.message);

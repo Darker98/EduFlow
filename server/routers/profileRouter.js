@@ -16,7 +16,7 @@ const router = express.Router();
 router.post('/create', upload.single('pfpFile'), handleCreateProfile);
 
 // Route for getting a profile
-router.get('/get', handleGetProfile);
+router.post('/get', handleGetProfile);
 
 // Route for updating a profile
 router.put('/update', handleUpdateProfile);

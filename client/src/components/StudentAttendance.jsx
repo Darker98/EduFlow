@@ -1,13 +1,44 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { useEffect, useState } from "react"
+import { useSelector } from "react-redux"
+import axios from 'axios'
 
 export default function StudentAttendancePage() {
-    const attendanceData = [
-        { id: 1, date: "2023-06-01", status: "Present" },
-        { id: 2, date: "2023-06-08", status: "Absent" },
-        { id: 3, date: "2023-06-15", status: "Present" },
-        { id: 4, date: "2023-06-22", status: "Present" },
-    ]
+    const {user_data} = useSelector((state)=>state.user);
+    const {room_data} = useSelector((state) =>state.room);
+    const [attendanceData, setAttendanceData] = useState([]);
+    const [totalPresents, setTotalPresents] = useState(0);
+    const [totalAbsences, setTotalAbsences] = useState(0);
+  
+    useEffect(() => {
+        async function fetchAttendanceData() {
+            try{
+                const res = await axios.post("http://localhost:3000/attendance/summary", {
+                    student_id: user_data.id,
+                    room_id: room_data.id
+                })
+                if(res.data.success){
+                    setAttendanceData(res.data.data);
+                   
+                }
+            }
+            catch(err){
+                console.log(err);
+            }
+        }
+        if(user_data.role === "student")
+        fetchAttendanceData();
+    }, [])
+
+    useEffect(() => {
+        if (attendanceData.length > 0) {
+            const presentCount = attendanceData.filter(record => record.attended).length;
+            setTotalPresents(presentCount);
+            setTotalAbsences(attendanceData.length - presentCount);
+            
+        }
+    }, [attendanceData])
 
     return (
         <div className="container py-6">
@@ -19,11 +50,11 @@ export default function StudentAttendancePage() {
                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                             <div
                                 className="bg-purple-600 h-2.5 rounded-full"
-                                style={{ width: `${(3 / 4) * 100}%` }}
+                                style={{ width: `${(totalPresents / attendanceData?.length) * 100}%` }}
                             ></div>
                         </div>
                         <span className="text-sm text-gray-500">
-                            {((3 / 4) * 100).toFixed(2)}%
+                            {((totalPresents / attendanceData?.length) * 100).toFixed(2)}%
                         </span>
                     </TableCell>
                 </CardHeader>
@@ -36,13 +67,13 @@ export default function StudentAttendancePage() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {attendanceData.map((record) => (
-                                <TableRow key={record.id}>
-                                    <TableCell>{record.date}</TableCell>
+                            {attendanceData?.map((record, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>{record.created_at}</TableCell>
                                     <TableCell>
-                                        <span className={`px-2 py-1 rounded-full text-xs ${record.status === "Present" ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
+                                        <span className={`px-2 py-1 rounded-full text-xs ${record.attended ? "bg-green-100 text-green-500" : "bg-red-100 text-red-800"
                                             }`}>
-                                            {record.status}
+                                            {record.attended ? "Present" : "Absent"}
                                         </span>
                                     </TableCell>
                                 </TableRow>
