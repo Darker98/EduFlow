@@ -57,7 +57,7 @@ export default function StudentResults() {
                                 <TableRow key={result.id}>
                                     <TableCell>{result.assignment}</TableCell>
                                     <TableCell>{result.marks}</TableCell>
-                                    <TableCell>{result.maxScore}</TableCell>
+                                    <TableCell>100</TableCell>
                                     <TableCell>
                                         <div className="w-full bg-gray-200 rounded-full h-2.5">
                                             <div
@@ -66,7 +66,7 @@ export default function StudentResults() {
                                             ></div>
                                         </div>
                                         <span className="text-sm text-gray-500">
-                                            {((result.score / result.maxScore) * 100).toFixed(2)}%
+                                            {((result.marks / 100) * 100).toFixed(2)}%
                                         </span>
                                     </TableCell>
                                 </TableRow>
