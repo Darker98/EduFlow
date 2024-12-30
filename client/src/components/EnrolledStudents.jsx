@@ -57,17 +57,16 @@ export default function EnrolledStudents() {
     getStudents();
   }, []);
 
-  const handleKickStudent = async (studentId) => {
+  const handleKickStudent = async () => {
     try{
     dispatch(setLoading());
     const res = await axios.post('http://localhost:3000/enrollment/unenroll', {
-        student_id: studentId,
+        student_id: user_data.id,
         room_id: room_data.id
-    });``
+    });
     dispatch(hideLoading())
     if(res.data.success){
         setStudents(students.filter((student) => student.id !== user_data.id));
-        console.log('student id', studentId)
         toast({
             title:"Success",
             description:"Student unenrolled successfully",
@@ -94,8 +93,8 @@ export default function EnrolledStudents() {
   )
 
   const handleDeleteEnrollment = (studentId) => {
-    handleKickStudent(studentId);
-    //setStudents(students.filter((student) => student.id !== studentId))
+    handleKickStudent();
+    setStudents(students.filter((student) => student.id !== studentId))
   }
 
 
@@ -150,7 +149,7 @@ export default function EnrolledStudents() {
                         <AlertDialogHeader>
                           <AlertDialogTitle>Delete Enrollment</AlertDialogTitle>
                           <AlertDialogDescription>
-                            Are you sure you want to delete the enrollment for {student.name}? This action cannot be undone.
+                            Are you sure you want to delete the enrollment for {student.user_name}? This action cannot be undone.
                           </AlertDialogDescription>
                         </AlertDialogHeader>
                         <AlertDialogFooter>
