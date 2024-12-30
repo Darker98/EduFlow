@@ -39,7 +39,7 @@ function Login() {
           navigate('/home');
         }
         else {
-          navigate('/create/profile');
+          navigate('/create/profile', {state: email});
         }
       }
 

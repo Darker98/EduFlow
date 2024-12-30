@@ -15,6 +15,9 @@ export default function EditProfilePage() {
     const { toast } = useToast();
     const { user_id } = useSelector((state) => state.user);
     const dispatch = useDispatch();
+    const location = useLocation();
+    const {email} = location.state;
+
 
     const [username, setUsername] = useState('')
     const [firstName, setFirstName] = useState('')
@@ -48,6 +51,7 @@ export default function EditProfilePage() {
             formData.append("first_name", firstName);
             formData.append("last_name", lastName);
             formData.append("user_name", username);
+            formData.append("email", email);
             formData.append("date_of_birth", dateOfBirth);
             formData.append("pfpFile", profilePicture);
             formData.append("role", role);
@@ -134,6 +138,17 @@ export default function EditProfilePage() {
                                         value={username}
                                         onChange={(e) => setUsername(e.target.value)}
                                         required
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="username">Email</Label>
+                                    <Input
+                                        id="username"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        placeholder={email}
+                                        required
+                                        
                                     />
                                 </div>
                             </div>
