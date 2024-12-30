@@ -106,7 +106,7 @@ useEffect(() => {
             </div>
 
             {/* Stats Overview */}
-            <div className="grid gap-6 mb-8 md:grid-cols-4">
+            <div className="grid gap-6 mb-8 md:grid-cols-2">
                 <Card>
                     <CardContent className="p-6">
                         <div className="flex items-center gap-2">
@@ -114,7 +114,7 @@ useEffect(() => {
                                 <BookOpen className="h-6 w-6 text-purple-600" />
                             </div>
                             <div>
-                                <p className="text-sm text-gray-500">{user_data.role === 'instructor' ? (<span>Current Rooms</span>) : (<span>Enrolled Coureses</span>)}</p>
+                                <p className="text-sm text-gray-500">{user_data.role === 'instructor' ? (<span>Current Rooms</span>) : (<span>Enrolled Rooms</span>)}</p>
                                 <h3 className="text-2xl font-bold">{rooms.length}</h3>
                             </div>
                         </div>
@@ -122,19 +122,7 @@ useEffect(() => {
                 </Card>
                 {user_data.role === 'student' ? (
                     <>
-                       <Card>
-                       <CardContent className="p-6">
-                           <div className="flex items-center gap-2">
-                               <div className="p-2 bg-blue-100 rounded-lg">
-                                   <Clock className="h-6 w-6 text-blue-600" />
-                               </div>
-                               <div>
-                                   <p className="text-sm text-gray-500">Study Hours</p>
-                                   <h3 className="text-2xl font-bold">17.5</h3>
-                               </div>
-                           </div>
-                       </CardContent>
-                   </Card>
+                   
                    <Card>
                        <CardContent className="p-6">
                            <div className="flex items-center gap-2">
@@ -148,54 +136,18 @@ useEffect(() => {
                            </div>
                        </CardContent>
                    </Card>
-                   <Card>
-                       <CardContent className="p-6">
-                           <div className="flex items-center gap-2">
-                               <div className="p-2 bg-yellow-100 rounded-lg">
-                                   <Trophy className="h-6 w-6 text-yellow-600" />
-                               </div>
-                               <div>
-                                   <p className="text-sm text-gray-500">Achievements</p>
-                                   <h3 className="text-2xl font-bold">12</h3>
-                               </div>
-                           </div>
-                       </CardContent>
-                   </Card>
+                   
                 </>
                 ) : (null)}
              
             </div>
 
-            {/* Activity Graph */}
-            <Card className="mb-8">
-                <CardHeader>
-                    <CardTitle>Weekly Activity</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={activityData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="name" />
-                                <YAxis />
-                                <Tooltip />
-                                <Line
-                                    type="monotone"
-                                    dataKey="hours"
-                                    stroke="#655ee8"
-                                    strokeWidth={2}
-                                    dot={{ fill: '#4F46E5' }}
-                                />
-                            </LineChart>
-                        </ResponsiveContainer>
-                    </div>
-                </CardContent>
-            </Card>
+            
 
             {/* Enrolled Courses */}
             <Card>
                 <CardHeader>
-                    <CardTitle>{user_data?.role === "student" ? (<p>Enrolled Courese</p>) : (<p>Rooms Created</p>)}</CardTitle>
+                    <CardTitle>{user_data?.role === "student" ? (<p>Enrolled Rooms</p>) : (<p>Rooms Created</p>)}</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4">

@@ -57,16 +57,17 @@ export default function EnrolledStudents() {
     getStudents();
   }, []);
 
-  const handleKickStudent = async () => {
+  const handleKickStudent = async (studentId) => {
     try{
     dispatch(setLoading());
     const res = await axios.post('http://localhost:3000/enrollment/unenroll', {
-        student_id: user_data.id,
+        student_id: studentId,
         room_id: room_data.id
-    });
+    });``
     dispatch(hideLoading())
     if(res.data.success){
         setStudents(students.filter((student) => student.id !== user_data.id));
+        console.log('student id', studentId)
         toast({
             title:"Success",
             description:"Student unenrolled successfully",
@@ -93,8 +94,8 @@ export default function EnrolledStudents() {
   )
 
   const handleDeleteEnrollment = (studentId) => {
-    handleKickStudent();
-    setStudents(students.filter((student) => student.id !== studentId))
+    handleKickStudent(studentId);
+    //setStudents(students.filter((student) => student.id !== studentId))
   }
 
 

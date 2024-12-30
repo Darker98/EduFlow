@@ -209,6 +209,7 @@ export default function InstructorResultsPage() {
                                 <TableHeader>
                                     <TableRow className="bg-purple-50">
                                         <TableHead className="font-semibold">Student ID</TableHead>
+                                        <TableHead className="font-semibold">Submission URK</TableHead>
                                         <TableHead className="font-semibold">Student Name</TableHead>
                                         <TableHead className="font-semibold">Marks</TableHead>
                                     </TableRow>
@@ -217,6 +218,7 @@ export default function InstructorResultsPage() {
                                     {students.map((student) => (
                                         <TableRow key={student.id}>
                                             <TableCell className="font-medium">{student.id}</TableCell>
+                                            <a href={submissionUrls[0]} target="new" className="font-medium">View Submission</a>
                                             <TableCell>{student.first_name} {student.last_name}</TableCell>
                                             <TableCell>
                                                 {isEditing ? (

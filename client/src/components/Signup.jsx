@@ -115,10 +115,6 @@ function Signup() {
                                     </span>
                                 </div>
                             </div>
-                            <Button variant="outline" className="w-full">
-                                <FcGoogle className="mr-2" />
-                                Google
-                            </Button>
                             <div className="text-center text-sm">
                                 Already have an account?{" "}
                                 <Link to="/login" className="text-[#4F46E5] hover:text-[#4338CA]">

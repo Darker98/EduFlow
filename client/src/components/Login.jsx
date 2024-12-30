@@ -131,10 +131,10 @@ function Login() {
                                     </span>
                                 </div>
                             </div>
-                            <Button variant="outline" className="w-full">
+                            {/* <Button variant="outline" className="w-full">
                                 <FcGoogle className="mr-2" />
                                 Google
-                            </Button>
+                            </Button> */}
                             <div className="text-center text-sm">
                                 Don't have an account?{" "}
                                 <Link to="/signup" className="text-[#4F46E5] hover:text-[#4338CA]">
