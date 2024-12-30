@@ -35,17 +35,43 @@ export const assignMarks = async (studentId, roomId, assignmentId, marks) => {
     if (linkError) throw new Error(linkError.message);
 };
 
+// Get all marks for a particular room
+export const getAllMarks = async (studentId, roomId) => {
+    // Get the assignment IDs for the room
+    const { data: assignmentData, error } = await supabase
+        .from('assignment')
+        .select('id, title, max_marks')
+        .eq('room_id', roomId);
+
+    if (error) throw new Error(error.message);
+
+    const assignmentIds = assignmentData.map((record) => record.id);
+
+    // Retrieve marks for all assignments
+    const allMarks = [];
+    for (let assignmentId of assignmentIds) {
+        try {
+            const marks = await getMarks(studentId, roomId, assignmentId);
+            allMarks.push({ assignmentId, marks });
+        } catch (err) {
+            console.error(`Error retrieving marks for assignment ${assignmentId}: ${err.message}`);
+            allMarks.push({ assignmentId, marks: 0 }); // Push null if marks retrieval fails
+        }
+    }
+
+    return allMarks;
+};
+
 // Retrieve marks for a student for an assignment
 export const getMarks = async (studentId, roomId, assignmentId) => {
     // Find the enrollment ID for the student and room
     const { enrollmentId } = await getEnrollmentId(studentId, roomId);
 
-    if (enrollmentError) throw new Error(enrollmentError.message);
-
     // Find the grade linked to the enrollment and assignment
     const { data: gradeId, error: gradeError } = await supabase
         .from('enrollment_grade')
         .select('grade_id')
+        // .eq('assignment_id')
         .eq('enrollment_id', enrollmentId);
         
     if (gradeError) throw new Error(gradeError.message);
@@ -53,15 +79,14 @@ export const getMarks = async (studentId, roomId, assignmentId) => {
     const gradeIds = gradeId.map((record) => record.grade_id);
 
     // Get marks 
-    const { data: marks, error : newError } = await supabase
+    const { data, error : newError } = await supabase
         .from('grade')
         .select('grade')
         .in('grade_id', gradeIds)
         .eq('assignment_id', assignmentId);
 
     if (newError) throw new Error(error.message);
-
-    return marks;
+    return data[0].grade;
 };
 
 // Update marks for a student for an assignment
@@ -135,5 +160,5 @@ export const getEnrollmentId = async (studentId, roomId) => {
 
     if (error) throw new Error(error.message);
 
-    return enrollment.id;
+    return {enrollmentId:enrollment.id};
 };

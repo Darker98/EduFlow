@@ -24,9 +24,11 @@ import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { useDispatch } from "react-redux"
 import { setLoading, hideLoading } from "@/redux/features/loadingSlice"
+import { useNavigate } from "react-router-dom"
 
 export default function InstructorResultsPage() {
     const dispatch = useDispatch();
+    const navigate = useNavigate()
     const { toast } = useToast();
     const [students, setStudents] = useState([])
     const {room_data} = useSelector(state => state.room)
@@ -86,6 +88,7 @@ export default function InstructorResultsPage() {
                     description: "Results updated successfully.",
                     variant:"default"
                 })
+                navigate('/home')
             }
         } catch (err) {
             dispatch(hideLoading());

@@ -1,4 +1,4 @@
-import { assignMarks, getMarks, updateMarks, deleteMarks, assignMarksForAllStudents } from '../models/gradeModel.js';
+import { assignMarks, getMarks, getAllMarks,updateMarks, deleteMarks, assignMarksForAllStudents } from '../models/gradeModel.js';
 
 //Assign marks for all the students of a room
 export const handleAllStudentsMarks = async (req, res) => {
@@ -23,6 +23,16 @@ export const handleAssignMarks = async (req, res) => {
         res.status(400).json({ success: false, message: error.message });
     }
 };
+
+export const handleGetAllMarks = async (req, res) => {
+    try{
+        const {studentId, roomId} = req.body;
+        const marks = await getAllMarks(studentId, roomId)
+        res.status(200).json({ success: true, data: marks })
+    }catch(err){
+        res.status(400).json({success: false, message: err.message})
+    }
+}
 
 // Retrieve marks for a student for an assignment
 export const handleGetMarks = async (req, res) => {

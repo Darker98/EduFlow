@@ -272,12 +272,13 @@ const Classwork = () => {
                       </DialogTrigger>
                       <DialogContent >
                         <form onSubmit={(e) => handleSubmit(e, item.id)} className="flex flex-col gap-5">
-                      <Input type='file'  onChange={(e) => setSubmissionFile(e.target.files[0])} />
-                      <div className="flex justify-end">
+                      <Input accept='.pdf' type='file'  onChange={(e) => setSubmissionFile(e.target.files[0])} />
+                      <div className="flex gap-2 items-center justify-end">
                          
                           <Button type = 'submit'>
-                            Add Assignment
+                            Add Assignment 
                           </Button>
+                          {<span className="font-semibold text-red-800"> *pdf only </span>}
                         </div>
                         </form>
                       </DialogContent>

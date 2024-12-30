@@ -210,13 +210,17 @@ const Room = () => {
                   </Dialog>
                   )}
                   {user_data?.role === "instructor" ? (
+                    <>
                     <NavLink to='/view-students'>View Students</NavLink>
+                    <NavLink to='/instructor/results'>View Submissions</NavLink>
+                    </>
                   ) : (
                   <>
                   <NavLink to='/student/attendance'>View Attendance</NavLink>
+                  <NavLink to='/student/results'>View Results</NavLink>
                   </>  
                   )}
-                  <NavLink to='/instructor/results'>View Submissions</NavLink>
+                  
                 </ul>
                 {user_data?.role === "instructor" && (
                   <div>
