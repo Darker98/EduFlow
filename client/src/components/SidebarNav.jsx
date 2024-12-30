@@ -22,9 +22,7 @@ const navigationInstructor = [
 const navigationStudent = [
     { name: "Home", href: "/home", icon: Home },
     { name: "Profile", href: "/profile", icon: User2 },
-    { name: "Rooms", href: "/rooms", icon: GraduationCap },
-    { name: "Results", href: "/results", icon: BarChart3 },
-    { name: "Attendance", href: "/attendance", icon: Calendar },
+    { name: "Rooms", href: "/rooms", icon: GraduationCap }
 ]
 
 function SidebarNav() {
