@@ -1,16 +1,11 @@
-import Layout from "../components/Layout";
-import CreateProfileForm from "../components/CreateProfileForm";
+import CreateProfile from "@/components/CreateProfile";
 
-const EditProfilePage = () => {
-    return (
-        <div>
-            <Layout pathname={"Create Profile"}>
-                <div className="flex h-screen">
-                    <CreateProfileForm />
-                </div>
-            </Layout>
-        </div>
-    );
+function CreateProfilePage() {
+  return (
+    <div>
+      <CreateProfile />
+    </div>
+  );
 }
 
-export default EditProfilePage;
+export default CreateProfilePage;

@@ -1,7 +1,10 @@
 import supabase from './createClient.js';
+import { uploadProfilePicture, deleteProfilePicture } from './pfpModel.js';
 
-export const createProfile = async (profileData, role) => {
+export const createProfile = async (profileData, file, role) => {
+
     const { id, first_name, last_name, email, date_of_birth, user_name } = profileData;
+    const pfpFile = file;
 
     let tableName;
     if (role == "student") {
@@ -11,14 +14,20 @@ export const createProfile = async (profileData, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+     await uploadProfilePicture(pfpFile, id);
+//after storing the image in the storage, we will get the url which will be stored in the respective table using the user id as the image wil stored userid.jpeg
+   const { data: publicUrl}  = supabase
+   .storage
+   .from('profile-pictures')
+   .getPublicUrl(`${id}.jpeg`);
 
     const { data, error } = await supabase
         .from(tableName)
-        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name }])
+        .insert([{ id : id, first_name : first_name, last_name : last_name, email : email, date_of_birth : date_of_birth, user_name : user_name, pfp_url: publicUrl.publicUrl }]) //storing the profile url as soon as it is fetched
         .select();
-
     if (error) throw new Error(error.message);
-    return data;
+    return {...data[0], role}
+
 };
 
 export const getProfile = async (id, role) => {
@@ -31,18 +40,20 @@ export const getProfile = async (id, role) => {
         throw new Error("Incorrect role provided!");
     }
 
-    const { data, error } = await supabase
+    const {data,error} = await supabase
         .from(tableName)
         .select('*')
         .eq('id', id)
         .single();
 
+
     if (error) throw new Error(error.message);
+    
     return data;
 };
 
 export const updateProfile = async (profileData, role) => {
-    const { id, first_name, user_name, last_name, email, date_of_birth } = profileData;
+    const { id, first_name, user_name, last_name, email, date_of_birth, pfpFile } = profileData;
 
     let tableName;
     if (role === "student") {
@@ -53,10 +64,14 @@ export const updateProfile = async (profileData, role) => {
         throw new Error("Incorrect role provided!");
     }
 
+    if (pfpFile != null) await uploadProfilePicture(pfpFile, id);
+
     // Remove null or undefined values from the update object
     const updateData = Object.fromEntries(
-        Object.entries({ first_name : first_name, last_name : last_name, email : email, date_of_birth : 
-            date_of_birth, user_name : user_name })
+        Object.entries({
+            first_name: first_name, last_name: last_name, email: email, date_of_birth:
+                date_of_birth, user_name: user_name
+        })
             .filter(([_, value]) => value != null)
     );
 
@@ -83,6 +98,8 @@ export const deleteProfile = async (id, role) => {
     } else {
         throw new Error("Incorrect role provided!");
     }
+
+    await deleteProfilePicture(id);
 
     const { error } = await supabase
         .from(tableName)

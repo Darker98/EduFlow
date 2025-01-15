@@ -3,7 +3,6 @@ import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
 import { useState } from 'react';
 import { Input } from "@/components/ui/input"
-
 import {
     Select,
     SelectContent,
@@ -21,7 +20,6 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
-  import { useLocation } from 'react-router-dom';
 
 const students = [ {
   studentId:"464215",
@@ -61,17 +59,14 @@ const students = [ {
 ]
 
 const Results = () => {
-  const [marks, setMarks] = useState();
 
     const handleResult = (e) => {
         e.preventDefault();
     }
 
-    const {pathname} = useLocation();
   return (
     <div>
-      <Layout pathname={pathname}>
-        
+      <Layout pathname={"Results"}>
         <div>
           <div className=" my-5 rounded-lg p-3 text-center text-4xl font-bold bg-black text-white">
             <h1>Student Results</h1>
@@ -141,4 +136,4 @@ const Results = () => {
   )
 }
 
-export default Results
+export default Results;

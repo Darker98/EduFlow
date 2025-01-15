@@ -1,7 +1,6 @@
 import React from "react";
 import Layout from "@/components/Layout";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -11,7 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { useSelector } from "react-redux";
+import axios from 'axios'
+import { setLoading, hideLoading } from "@/redux/features/loadingSlice";
+import { useDispatch } from "react-redux";
 import {
   Select,
   SelectContent,
@@ -21,113 +25,78 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-const studnets = [
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464455",
-    name: " Jane Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "46125",
-    name: " Batman",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "566124",
-    name: "Marry Jane",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "561102",
-    name: "Dostevosky",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "Young Thug",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "393123",
-    name: "Cartel Member",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "49915",
-    name: "Nigga man",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-  {
-    studentId: "464215",
-    name: "John Doe",
-    classId: "CS101",
-    attendance: "Present",
-  },
-];
-
-const classes = [
-  { value: "cs101", label: "CS101" },
-  { value: "cs102", label: "CS102" },
-  { value: "cs103", label: "CS103" },
-  { value: "cs104", label: "CS104" },
-];
-
 const Attendance = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {toast} = useToast();
+  const {session_id} = useSelector((state) => state.session); 
   const [attendance, setAttendance] = useState();
-  const { pathname } = useLocation();
+  const [attendancesData, setAttendancesData] = useState([]);
+  const {room_data} = useSelector((state) => state.room);
+  const [attendanceArray, setAttendanceArray] = useState([]);
 
-  const handleAttendance = ()=>{
+  useEffect(() => {
+    async function getData(){
+      const res = await axios.post('http://localhost:3000/enrollment/students', {
+        room_id:room_data.id
+      });
+      if(res.data.success){
+        setAttendancesData(res.data.data);
+        setAttendanceArray(res.data.data.map((attendance)=>({student_id:attendance.id, attended:attendance.attended})))
+        console.log(res.data.data)
+      }
+    }
+    getData();
+  }, []);
 
+  const handleAttendance = async (e)=>{
+    e.preventDefault();
+    try{
+      dispatch(setLoading());
+      const res = await axios.post('http://localhost:3000/attendance/mark',{
+        session_id,
+        attendanceArray 
+      });
+      dispatch(hideLoading());
+      if(res.data.success){
+        toast({
+          title:"Success",
+          description:"Attendance marked successfully",
+          variant:"default"
+        })
+       navigate(`/room/${room_data.id}`);
+      }
+    }
+    catch(err){
+      dispatch(hideLoading());
+      console.log(err);
+      toast({
+        title:"Error",
+        description:err?.response?.data?.message,
+        variant:"destructive"
+      })
+    }
   }
+
+  const onSelect = (id,value)=>{
+    setAttendanceArray(pre=>pre.map((attendance)=>{
+      if(attendance.student_id === id){
+        return {...attendance, attended:value=='true'?true:false}
+      }
+      return attendance;
+    }))
+  }
+
 
   return (
     <div>
-      <Layout pathname={pathname}>
+      <Layout pathname={"Attendance"}>
         
         <div>
           <div className=" my-5 rounded-lg p-3 text-center text-4xl font-bold bg-black text-white">
             <h1>Student Attendance</h1>
           </div>
-          <div className=" mb-3 w-[200px]  ">
-
-          <Select >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Class" />
-            </SelectTrigger>
-            <SelectContent>
-            {classes.map((classItem) => (
-                <SelectItem value={classItem.value} key={classItem.value}>{classItem.label}</SelectItem>
-              ))}
-            </SelectContent>
-
-          </Select>
-            </div>
-          
+     
         <form onSubmit={handleAttendance}>
           <div className="">
             <Table>
@@ -138,10 +107,7 @@ const Attendance = () => {
                     Student Id
                   </TableHead>
                   <TableHead className="text-black font-bold">
-                    Student Name
-                  </TableHead>
-                  <TableHead className="text-black font-bold">
-                    Class Id
+                    Student 
                   </TableHead>
                   <TableHead className="text-black font-bold">
                     Attendance
@@ -149,20 +115,27 @@ const Attendance = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {studnets.map((student) => (
-                  <TableRow key={student.classId}>
-                    <TableCell>{student.studentId}</TableCell>
-                    <TableCell>{student.name}</TableCell>
-                    <TableCell>{student.classId}</TableCell>
+                {attendancesData.map((attendance) => (
+                  <TableRow key={attendance.id}>
+                    <TableCell>{attendance.id}</TableCell>
+                    <TableCell>
+                      <div className="flex gap-4 flex-col">
+                        <div className="h-16 w-16 border ">
+                        <img  className="h-16 w-16  bg-cover border shadow-lg" src={attendance.pfp_url} alt="picture" />
+                        </div>
+                        <div className="mx-2">
+                        {attendance.first_name} {attendance.last_name}
+                        </div>
+                      </div>
+                      </TableCell>
                     <TableCell className="text-right">
-                      <Select>
+                      <Select onValueChange={value=>onSelect(attendance.id, value)} >
                         <SelectTrigger>
                           <SelectValue placeholder="Attendance" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="present">Present</SelectItem>
-                          <SelectItem value="absent">Absent</SelectItem>
-                          <SelectItem value="leave">Leave</SelectItem>
+                          <SelectItem value={'true'}>Present</SelectItem>
+                          <SelectItem value={'false'}>Absent</SelectItem>
                         </SelectContent>
                       </Select>
                     </TableCell>

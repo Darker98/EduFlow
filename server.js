@@ -1,7 +1,13 @@
 import express from "express";
-import userRouter from "./server/routers/userRouter.js";
 import authRouter from "./server/routers/authRouter.js";
 import profileRouter from "./server/routers/profileRouter.js";
+import attendanceRouter from "./server/routers/attendanceRouter.js";
+import sessionRouter from "./server/routers/sessionRouter.js";
+import roomRouter from "./server/routers/roomRouter.js";
+import enrollmentRouter from "./server/routers/enrollmentRouter.js";
+import assignmentRouter from './server/routers/assignmentRouter.js';
+import gradeRouter from './server/routers/gradeRouter.js';
+import submissionRouter from './server/routers/submissionRouter.js';
 import cors from "cors";
 import dotenv from "dotenv";
 
@@ -21,8 +27,25 @@ app.use(express.json());
 // Base route for authentication
 app.use('/auth', authRouter);
 
+app.use('/attendance', attendanceRouter);
+
+app.use('/session', sessionRouter);
+
+app.use('/rooms', roomRouter);
+
+app.use('/enrollment', enrollmentRouter);
+
 // Base route for profiles
 app.use('/profile', profileRouter);
+
+
+app.use('/rooms',roomRouter);
+app.use('/enrollment',enrollmentRouter);
+
+app.use('/assignments', assignmentRouter); 
+app.use('/grades', gradeRouter);
+
+app.use('/submission',submissionRouter);
 
 // Default route for unknown endpoints
 app.use((req, res) => {
