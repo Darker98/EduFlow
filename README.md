@@ -1,6 +1,23 @@
 # EduFlow: Classroom Management System  
 
-EduFlow is a robust classroom management system designed to provide instructors with a seamless platform to manage their classes efficiently. It offers features for creating and managing rooms, assignments, attendance, and grading while enabling students to participate actively in their learning process.  
+EduFlow is a robust classroom management system designed to provide instructors with an seamless platform to manage their classes indepdently. It offers features for creating and managing rooms, assignments, attendance, and grading while enabling students to participate actively in their learning process and effortlessly track their progress.  
+
+---
+
+## Table of Contents  
+
+1. [Features](#features)  
+2. [Development Details](#development-details)  
+   - [Tech Stack](#tech-stack)  
+   - [Architecture](#architecture)  
+   - [Version Control](#version-control)  
+3. [Use Cases](#use-cases)  
+4. [Entity Relationship Diagram (ERD)](#entity-relationship-diagram-erd-overview)  
+5. [Server-Side Architecture](#server-side-architecture)  
+6. [Front-End Technologies](#front-end-technologies)  
+7. [Team Contributions](#team-contributions)  
+8. [Challenges Faced](#challenges-faced)  
+9. [Learning Outcomes](#learning-outcomes)  
 
 ---
 
